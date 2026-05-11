@@ -242,6 +242,7 @@
     <button class="tab" data-tab="catalog">📦 Catálogo</button>
     <button class="tab" data-tab="categories">🏷️ Categorías</button>
     <button class="tab" data-tab="history">📋 Historial</button>
+    <button class="tab" data-tab="print3d">🖨️ 3D Print</button>
     <button class="tab" data-tab="settings">⚙️ Ajustes</button>
   </div>
 
@@ -370,6 +371,145 @@
     <div class="card">
       <h2>📋 Cotizaciones Guardadas</h2>
       <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: 3D PRINT ========== -->
+  <div id="tab-print3d" class="tab-content hidden">
+    <div class="card">
+      <h2>🖨️ Cotizador 3D Print</h2>
+      <p style="font-size:13px;color:#64748b;margin:0 0 12px;">Calcula el costo de impresión por pieza: material + electricidad + mantenimiento + mano de obra + margen.</p>
+
+      <div class="form-grid">
+        <div>
+          <label>Nombre / descripción de la pieza</label>
+          <input type="text" id="p3dName" placeholder="Ej: Soporte para teléfono">
+        </div>
+        <div>
+          <label>Cantidad</label>
+          <input type="number" id="p3dQty" min="1" step="1" value="1">
+        </div>
+        <div>
+          <label>Impresora</label>
+          <select id="p3dPrinter"></select>
+        </div>
+        <div>
+          <label>Filamento</label>
+          <select id="p3dFilament"></select>
+        </div>
+        <div>
+          <label>Gramos de material</label>
+          <input type="number" id="p3dGrams" min="0" step="0.1" placeholder="Ej: 25">
+        </div>
+        <div>
+          <label>Horas de impresión</label>
+          <input type="number" id="p3dHours" min="0" step="0.1" placeholder="Ej: 2.5">
+        </div>
+        <div>
+          <label>Mano de obra (min)</label>
+          <input type="number" id="p3dLaborMin" min="0" step="1" placeholder="15">
+        </div>
+        <div>
+          <label>Tier de margen</label>
+          <select id="p3dMargin">
+            <option value="mayorista">Mayorista (27%)</option>
+            <option value="regular" selected>Regular (35%)</option>
+            <option value="retail">Retail (48%)</option>
+            <option value="custom">Custom...</option>
+          </select>
+        </div>
+        <div id="p3dCustomMarginWrap" class="hidden">
+          <label>Margen custom (%)</label>
+          <input type="number" id="p3dCustomMargin" min="0" step="0.1" placeholder="35">
+        </div>
+      </div>
+
+      <div id="p3dBreakdown" style="margin-top:16px;padding:12px;background:#f1f5f9;border-radius:8px;font-size:13px;line-height:1.8;">
+        <div style="color:#64748b;">Llena los campos para ver el desglose...</div>
+      </div>
+
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="calc3D()">🧮 Calcular</button>
+        <button class="btn btn-secondary" onclick="add3DToQuote()">➕ Añadir a Cotización</button>
+        <button class="btn btn-secondary" onclick="reset3DForm()">🔄 Limpiar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🧵 Filamentos</h2>
+      <p style="font-size:13px;color:#64748b;margin:0 0 12px;">Catálogo de filamentos disponibles. Edita precios desde aquí.</p>
+      <button class="btn btn-primary" onclick="openFilamentForm()" style="font-size:12px;padding:6px 12px;">+ Añadir filamento</button>
+      <div id="filamentsList" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>🖨️ Impresoras</h2>
+      <p style="font-size:13px;color:#64748b;margin:0 0 12px;">Configura watts y costo de mantenimiento por hora.</p>
+      <button class="btn btn-primary" onclick="openPrinterForm()" style="font-size:12px;padding:6px 12px;">+ Añadir impresora</button>
+      <div id="printersList" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>⚙️ Ajustes 3D</h2>
+      <div class="form-grid">
+        <div>
+          <label>Costo eléctrico ($/kWh)</label>
+          <input type="number" id="s3dKwh" min="0" step="0.01" onchange="save3DSetting('3d_electricity_rate', this.value)">
+        </div>
+        <div>
+          <label>Mano de obra ($/hora)</label>
+          <input type="number" id="s3dLabor" min="0" step="0.01" onchange="save3DSetting('3d_labor_rate', this.value)">
+        </div>
+        <div>
+          <label>Margen Mayorista (%)</label>
+          <input type="number" id="s3dMargMay" min="0" step="0.1" onchange="save3DSetting('3d_margin_mayorista', this.value/100)">
+        </div>
+        <div>
+          <label>Margen Regular (%)</label>
+          <input type="number" id="s3dMargReg" min="0" step="0.1" onchange="save3DSetting('3d_margin_regular', this.value/100)">
+        </div>
+        <div>
+          <label>Margen Retail (%)</label>
+          <input type="number" id="s3dMargRet" min="0" step="0.1" onchange="save3DSetting('3d_margin_retail', this.value/100)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: FILAMENT FORM ========== -->
+  <div id="filamentModal" class="modal-bg hidden">
+    <div class="modal">
+      <h3 id="filamentModalTitle">Añadir filamento</h3>
+      <div class="form-grid">
+        <div><label>Nombre</label><input type="text" id="flName" placeholder="Ej: PLA Basic"></div>
+        <div><label>Material</label><input type="text" id="flMaterial" placeholder="PLA, PETG, ABS..."></div>
+        <div><label>Color (opcional)</label><input type="text" id="flColor" placeholder="Rojo"></div>
+        <div><label>Marca</label><input type="text" id="flBrand" value="Bambu Lab"></div>
+        <div><label>$ por kg</label><input type="number" id="flPrice" min="0" step="0.01"></div>
+        <div><label>Densidad (g/cm³)</label><input type="number" id="flDensity" min="0" step="0.001" value="1.24"></div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="saveFilament()">Guardar</button>
+        <button class="btn btn-secondary" onclick="closeFilamentForm()">Cancelar</button>
+        <button class="btn btn-danger" id="flDeleteBtn" onclick="deleteFilament()" style="display:none;">🗑️ Borrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: PRINTER FORM ========== -->
+  <div id="printerModal" class="modal-bg hidden">
+    <div class="modal">
+      <h3 id="printerModalTitle">Añadir impresora</h3>
+      <div class="form-grid">
+        <div><label>Nombre</label><input type="text" id="prName" placeholder="Ej: Bambu Lab A1"></div>
+        <div><label>Watts</label><input type="number" id="prWatts" min="0" step="1" value="200"></div>
+        <div><label>Mantenimiento $/h</label><input type="number" id="prMaint" min="0" step="0.01" value="0.50"></div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="savePrinter()">Guardar</button>
+        <button class="btn btn-secondary" onclick="closePrinterForm()">Cancelar</button>
+        <button class="btn btn-danger" id="prDeleteBtn" onclick="deletePrinter()" style="display:none;">🗑️ Borrar</button>
+      </div>
     </div>
   </div>
 
@@ -794,6 +934,7 @@ function setupTabs() {
       document.getElementById('tab-' + target).classList.remove('hidden');
       if (target === 'history') renderHistory();
       if (target === 'settings') updateStats();
+      if (target === 'print3d') init3DTab();
     });
   });
 }
@@ -1742,6 +1883,355 @@ function formatDate(iso) {
 
 function escapeHtml(s) {
   return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ============================================================
+// ===== 3D PRINT MODULE =====
+// ============================================================
+let filaments3D = [];
+let printers3D = [];
+let settings3D = {
+  electricity_rate: 0.27,
+  labor_rate: 15,
+  default_labor_min: 15,
+  margin_mayorista: 0.27,
+  margin_regular: 0.35,
+  margin_retail: 0.48,
+};
+let edit3DContext = { filamentId: null, printerId: null };
+
+async function init3DTab() {
+  await loadFilaments();
+  await loadPrinters();
+  await load3DSettings();
+  renderFilamentsList();
+  renderPrintersList();
+  populate3DSelectors();
+  populate3DSettingsForm();
+  // Set default labor min
+  const laborEl = document.getElementById('p3dLaborMin');
+  if (laborEl && !laborEl.value) laborEl.value = settings3D.default_labor_min;
+  // Hook margin select
+  document.getElementById('p3dMargin').onchange = (e) => {
+    document.getElementById('p3dCustomMarginWrap').classList.toggle('hidden', e.target.value !== 'custom');
+  };
+  // Auto-calc on input change
+  ['p3dGrams','p3dHours','p3dLaborMin','p3dQty','p3dFilament','p3dPrinter','p3dMargin','p3dCustomMargin'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => calc3D(true));
+  });
+}
+
+async function loadFilaments() {
+  const { data, error } = await sb.from('filaments').select('*').eq('active', true).order('material').order('name');
+  if (error) { console.warn(error); filaments3D = []; return; }
+  filaments3D = data || [];
+}
+
+async function loadPrinters() {
+  const { data, error } = await sb.from('printers').select('*').eq('active', true).order('name');
+  if (error) { console.warn(error); printers3D = []; return; }
+  printers3D = data || [];
+}
+
+async function load3DSettings() {
+  const keys = ['3d_electricity_rate','3d_labor_rate','3d_default_labor_min','3d_margin_mayorista','3d_margin_regular','3d_margin_retail'];
+  const { data, error } = await sb.from('settings').select('*').in('key', keys);
+  if (error) { console.warn(error); return; }
+  for (const row of (data || [])) {
+    const short = row.key.replace(/^3d_/, '');
+    settings3D[short] = parseFloat(row.value);
+  }
+}
+
+async function save3DSetting(key, value) {
+  const v = parseFloat(value);
+  if (isNaN(v)) return;
+  // Upsert
+  const { error } = await sb.from('settings').upsert({ key, value: v });
+  if (error) { alert('Error guardando: ' + error.message); return; }
+  const short = key.replace(/^3d_/, '');
+  settings3D[short] = v;
+}
+
+function populate3DSettingsForm() {
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  set('s3dKwh', settings3D.electricity_rate);
+  set('s3dLabor', settings3D.labor_rate);
+  set('s3dMargMay', (settings3D.margin_mayorista * 100).toFixed(1));
+  set('s3dMargReg', (settings3D.margin_regular * 100).toFixed(1));
+  set('s3dMargRet', (settings3D.margin_retail * 100).toFixed(1));
+}
+
+function populate3DSelectors() {
+  const ps = document.getElementById('p3dPrinter');
+  if (ps) {
+    ps.innerHTML = '<option value="">-- Selecciona --</option>' +
+      printers3D.map(p => `<option value="${p.id}">${escapeHtml(p.name)} (${p.watts}W)</option>`).join('');
+  }
+  const fs = document.getElementById('p3dFilament');
+  if (fs) {
+    // Group by material
+    const groups = {};
+    for (const f of filaments3D) {
+      const key = f.material || 'Otros';
+      (groups[key] = groups[key] || []).push(f);
+    }
+    let html = '<option value="">-- Selecciona --</option>';
+    for (const m of Object.keys(groups).sort()) {
+      html += `<optgroup label="${escapeHtml(m)}">`;
+      html += groups[m].map(f => `<option value="${f.id}">${escapeHtml(f.name)} — $${parseFloat(f.price_per_kg).toFixed(2)}/kg</option>`).join('');
+      html += '</optgroup>';
+    }
+    fs.innerHTML = html;
+  }
+}
+
+function renderFilamentsList() {
+  const list = document.getElementById('filamentsList');
+  if (!list) return;
+  if (filaments3D.length === 0) { list.innerHTML = '<div class="empty-state">No hay filamentos.</div>'; return; }
+  list.innerHTML = filaments3D.map(f => `
+    <div class="item-row" style="cursor:pointer;" onclick="editFilament(${f.id})">
+      <div class="info">
+        <div class="name">${escapeHtml(f.name)} <span style="color:#64748b;font-weight:400;">— ${escapeHtml(f.material || '')}</span></div>
+        <div class="meta">$${parseFloat(f.price_per_kg).toFixed(2)}/kg • densidad ${parseFloat(f.density || 1.24).toFixed(3)}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderPrintersList() {
+  const list = document.getElementById('printersList');
+  if (!list) return;
+  if (printers3D.length === 0) { list.innerHTML = '<div class="empty-state">No hay impresoras.</div>'; return; }
+  list.innerHTML = printers3D.map(p => `
+    <div class="item-row" style="cursor:pointer;" onclick="editPrinter(${p.id})">
+      <div class="info">
+        <div class="name">${escapeHtml(p.name)}</div>
+        <div class="meta">${p.watts}W • $${parseFloat(p.maintenance_per_hour).toFixed(2)}/h mantenimiento</div>
+      </div>
+    </div>`).join('');
+}
+
+function openFilamentForm() {
+  edit3DContext.filamentId = null;
+  document.getElementById('filamentModalTitle').textContent = 'Añadir filamento';
+  document.getElementById('flName').value = '';
+  document.getElementById('flMaterial').value = '';
+  document.getElementById('flColor').value = '';
+  document.getElementById('flBrand').value = 'Bambu Lab';
+  document.getElementById('flPrice').value = '';
+  document.getElementById('flDensity').value = '1.24';
+  document.getElementById('flDeleteBtn').style.display = 'none';
+  document.getElementById('filamentModal').classList.remove('hidden');
+}
+
+function editFilament(id) {
+  const f = filaments3D.find(x => x.id === id);
+  if (!f) return;
+  edit3DContext.filamentId = id;
+  document.getElementById('filamentModalTitle').textContent = 'Editar filamento';
+  document.getElementById('flName').value = f.name || '';
+  document.getElementById('flMaterial').value = f.material || '';
+  document.getElementById('flColor').value = f.color || '';
+  document.getElementById('flBrand').value = f.brand || 'Bambu Lab';
+  document.getElementById('flPrice').value = f.price_per_kg;
+  document.getElementById('flDensity').value = f.density;
+  document.getElementById('flDeleteBtn').style.display = '';
+  document.getElementById('filamentModal').classList.remove('hidden');
+}
+
+function closeFilamentForm() { document.getElementById('filamentModal').classList.add('hidden'); }
+
+async function saveFilament() {
+  const row = {
+    name: document.getElementById('flName').value.trim(),
+    material: document.getElementById('flMaterial').value.trim(),
+    color: document.getElementById('flColor').value.trim() || null,
+    brand: document.getElementById('flBrand').value.trim() || 'Bambu Lab',
+    price_per_kg: parseFloat(document.getElementById('flPrice').value) || 0,
+    density: parseFloat(document.getElementById('flDensity').value) || 1.24,
+    active: true,
+  };
+  if (!row.name) { alert('Nombre requerido'); return; }
+  let res;
+  if (edit3DContext.filamentId) {
+    res = await sb.from('filaments').update(row).eq('id', edit3DContext.filamentId);
+  } else {
+    res = await sb.from('filaments').insert(row);
+  }
+  if (res.error) { alert('Error: ' + res.error.message); return; }
+  await loadFilaments();
+  renderFilamentsList();
+  populate3DSelectors();
+  closeFilamentForm();
+}
+
+async function deleteFilament() {
+  if (!edit3DContext.filamentId) return;
+  if (!confirm('¿Borrar este filamento?')) return;
+  const { error } = await sb.from('filaments').delete().eq('id', edit3DContext.filamentId);
+  if (error) { alert('Error: ' + error.message); return; }
+  await loadFilaments();
+  renderFilamentsList();
+  populate3DSelectors();
+  closeFilamentForm();
+}
+
+function openPrinterForm() {
+  edit3DContext.printerId = null;
+  document.getElementById('printerModalTitle').textContent = 'Añadir impresora';
+  document.getElementById('prName').value = '';
+  document.getElementById('prWatts').value = '200';
+  document.getElementById('prMaint').value = '0.50';
+  document.getElementById('prDeleteBtn').style.display = 'none';
+  document.getElementById('printerModal').classList.remove('hidden');
+}
+
+function editPrinter(id) {
+  const p = printers3D.find(x => x.id === id);
+  if (!p) return;
+  edit3DContext.printerId = id;
+  document.getElementById('printerModalTitle').textContent = 'Editar impresora';
+  document.getElementById('prName').value = p.name || '';
+  document.getElementById('prWatts').value = p.watts;
+  document.getElementById('prMaint').value = p.maintenance_per_hour;
+  document.getElementById('prDeleteBtn').style.display = '';
+  document.getElementById('printerModal').classList.remove('hidden');
+}
+
+function closePrinterForm() { document.getElementById('printerModal').classList.add('hidden'); }
+
+async function savePrinter() {
+  const row = {
+    name: document.getElementById('prName').value.trim(),
+    watts: parseInt(document.getElementById('prWatts').value) || 200,
+    maintenance_per_hour: parseFloat(document.getElementById('prMaint').value) || 0,
+    active: true,
+  };
+  if (!row.name) { alert('Nombre requerido'); return; }
+  let res;
+  if (edit3DContext.printerId) {
+    res = await sb.from('printers').update(row).eq('id', edit3DContext.printerId);
+  } else {
+    res = await sb.from('printers').insert(row);
+  }
+  if (res.error) { alert('Error: ' + res.error.message); return; }
+  await loadPrinters();
+  renderPrintersList();
+  populate3DSelectors();
+  closePrinterForm();
+}
+
+async function deletePrinter() {
+  if (!edit3DContext.printerId) return;
+  if (!confirm('¿Borrar esta impresora?')) return;
+  const { error } = await sb.from('printers').delete().eq('id', edit3DContext.printerId);
+  if (error) { alert('Error: ' + error.message); return; }
+  await loadPrinters();
+  renderPrintersList();
+  populate3DSelectors();
+  closePrinterForm();
+}
+
+function get3DInputs() {
+  const filId = parseInt(document.getElementById('p3dFilament').value);
+  const prtId = parseInt(document.getElementById('p3dPrinter').value);
+  const fil = filaments3D.find(f => f.id === filId);
+  const prt = printers3D.find(p => p.id === prtId);
+  const grams = parseFloat(document.getElementById('p3dGrams').value) || 0;
+  const hours = parseFloat(document.getElementById('p3dHours').value) || 0;
+  const laborMin = parseFloat(document.getElementById('p3dLaborMin').value) || 0;
+  const qty = parseInt(document.getElementById('p3dQty').value) || 1;
+  const marginTier = document.getElementById('p3dMargin').value;
+  let margin = settings3D[`margin_${marginTier}`];
+  if (marginTier === 'custom') {
+    margin = (parseFloat(document.getElementById('p3dCustomMargin').value) || 0) / 100;
+  }
+  return { fil, prt, grams, hours, laborMin, qty, margin, marginTier };
+}
+
+function compute3D(inp) {
+  if (!inp.fil || !inp.prt) return null;
+  const materialCost = (inp.grams / 1000) * parseFloat(inp.fil.price_per_kg);
+  const elecCost = inp.hours * (parseFloat(inp.prt.watts) / 1000) * settings3D.electricity_rate;
+  const maintCost = inp.hours * parseFloat(inp.prt.maintenance_per_hour);
+  const laborCost = (inp.laborMin / 60) * settings3D.labor_rate;
+  const baseCost = materialCost + elecCost + maintCost + laborCost;
+  const subtotal = baseCost * inp.qty;
+  const profit = subtotal * inp.margin;
+  const total = subtotal + profit;
+  const unitPrice = inp.qty > 0 ? total / inp.qty : 0;
+  return { materialCost, elecCost, maintCost, laborCost, baseCost, subtotal, profit, total, unitPrice };
+}
+
+function calc3D(silent) {
+  const inp = get3DInputs();
+  const box = document.getElementById('p3dBreakdown');
+  if (!inp.fil || !inp.prt) {
+    if (!silent) alert('Selecciona impresora y filamento');
+    box.innerHTML = '<div style="color:#64748b;">Selecciona impresora y filamento para calcular...</div>';
+    return null;
+  }
+  if (inp.grams <= 0 && inp.hours <= 0) {
+    box.innerHTML = '<div style="color:#64748b;">Ingresa gramos y/o horas...</div>';
+    return null;
+  }
+  const r = compute3D(inp);
+  const fmt = v => '$' + v.toFixed(2);
+  box.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;">
+      <div>🧵 Material (${inp.grams}g de ${escapeHtml(inp.fil.name)}):</div><div style="text-align:right;font-family:monospace;">${fmt(r.materialCost)}</div>
+      <div>⚡ Electricidad (${inp.hours}h × ${inp.prt.watts}W × ${fmt(settings3D.electricity_rate)}/kWh):</div><div style="text-align:right;font-family:monospace;">${fmt(r.elecCost)}</div>
+      <div>🔧 Mantenimiento (${inp.hours}h × ${fmt(parseFloat(inp.prt.maintenance_per_hour))}/h):</div><div style="text-align:right;font-family:monospace;">${fmt(r.maintCost)}</div>
+      <div>👨‍💼 Mano de obra (${inp.laborMin}min × ${fmt(settings3D.labor_rate)}/h):</div><div style="text-align:right;font-family:monospace;">${fmt(r.laborCost)}</div>
+      <div style="border-top:1px solid #cbd5e1;padding-top:6px;"><b>Costo por unidad:</b></div><div style="text-align:right;font-family:monospace;border-top:1px solid #cbd5e1;padding-top:6px;">${fmt(r.baseCost)}</div>
+      <div>× Cantidad: ${inp.qty}</div><div style="text-align:right;font-family:monospace;">${fmt(r.subtotal)}</div>
+      <div>📈 Margen (${(inp.margin*100).toFixed(1)}% — ${inp.marginTier}):</div><div style="text-align:right;font-family:monospace;">${fmt(r.profit)}</div>
+      <div style="border-top:2px solid #1e3a8a;padding-top:8px;font-size:16px;"><b>TOTAL:</b></div><div style="text-align:right;font-family:monospace;border-top:2px solid #1e3a8a;padding-top:8px;font-size:16px;color:#1e3a8a;"><b>${fmt(r.total)}</b></div>
+      <div style="color:#64748b;">→ Precio por pieza:</div><div style="text-align:right;font-family:monospace;color:#64748b;">${fmt(r.unitPrice)}</div>
+    </div>`;
+  return { inp, r };
+}
+
+async function add3DToQuote() {
+  const res = calc3D();
+  if (!res) return;
+  const { inp, r } = res;
+  const name = (document.getElementById('p3dName').value || '').trim() || `Impresión 3D (${inp.fil.name})`;
+  const desc = `Impresión 3D — ${inp.fil.name} | ${inp.grams}g • ${inp.hours}h • ${escapeHtml(inp.prt.name)} | margen ${(inp.margin*100).toFixed(0)}% (${inp.marginTier})`;
+  const item = {
+    id: 'p3d-' + Date.now(),
+    name,
+    description: desc,
+    desc,
+    qty: inp.qty,
+    price: r.unitPrice,
+    unit: 'c/u',
+    type: 'service',
+    categoryId: 'cat-3d',
+  };
+  // Push into the current quote items
+  if (typeof quoteItems !== 'undefined' && Array.isArray(quoteItems)) {
+    quoteItems.push(item);
+  } else if (typeof window.quoteItems !== 'undefined') {
+    window.quoteItems.push(item);
+  }
+  if (typeof renderQuoteItems === 'function') renderQuoteItems();
+  if (typeof saveCurrentQuote === 'function') saveCurrentQuote();
+  // Switch to quote tab
+  const tabBtn = document.querySelector('.tab[data-tab="quote"]');
+  if (tabBtn) tabBtn.click();
+  alert(`✅ Añadido a la cotización: ${name} — $${r.unitPrice.toFixed(2)} c/u (×${inp.qty})`);
+}
+
+function reset3DForm() {
+  ['p3dName','p3dGrams','p3dHours','p3dCustomMargin'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('p3dQty').value = '1';
+  document.getElementById('p3dLaborMin').value = settings3D.default_labor_min;
+  document.getElementById('p3dMargin').value = 'regular';
+  document.getElementById('p3dCustomMarginWrap').classList.add('hidden');
+  document.getElementById('p3dBreakdown').innerHTML = '<div style="color:#64748b;">Llena los campos para ver el desglose...</div>';
 }
 </script>
 
