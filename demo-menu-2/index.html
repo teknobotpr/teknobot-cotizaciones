@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Café Cordillera — Menú</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: #f8f5f0;
+      color: #2c2416;
+      font-family: 'Inter', system-ui, sans-serif;
+      user-select: none;
+    }
+
+    .stage {
+      width: 100%; height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      position: relative;
+    }
+
+    /* Left: branding + category */
+    .side {
+      background: #2c2416;
+      color: #e8dcc4;
+      display: flex; flex-direction: column;
+      padding: 5vh 4vw;
+      justify-content: space-between;
+      position: relative;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .brand-mark {
+      width: 6vh; height: 6vh; border-radius: 50%;
+      background: linear-gradient(135deg, #c4a574 0%, #8b6f47 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3vh; color: #2c2416; font-weight: 700;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .brand-text .name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.2vh; font-weight: 500;
+      letter-spacing: 2px;
+      color: #f8f5f0;
+    }
+    .brand-text .tag {
+      font-size: 1.2vh; letter-spacing: 4px; color: #8b6f47;
+      text-transform: uppercase; margin-top: 2px;
+    }
+
+    .category-display {
+      animation: catFade 0.8s ease;
+    }
+    @keyframes catFade {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .cat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5vh; color: #c4a574;
+      font-style: italic; letter-spacing: 3px;
+    }
+    .cat-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 9vh; line-height: 1;
+      font-weight: 400;
+      color: #f8f5f0;
+      margin-top: 1vh;
+      letter-spacing: -1px;
+    }
+    .cat-line {
+      width: 8vw; height: 2px;
+      background: #c4a574;
+      margin: 3vh 0;
+    }
+    .cat-desc {
+      font-size: 2vh; line-height: 1.7;
+      color: #c4a574; font-weight: 300;
+      max-width: 30vw;
+    }
+
+    .side-footer {
+      display: flex; justify-content: space-between; align-items: end;
+    }
+    .side-footer .info-block {
+      font-size: 1.4vh; color: #8b6f47;
+      letter-spacing: 2px; text-transform: uppercase;
+      line-height: 1.8;
+    }
+    .pagination {
+      display: flex; gap: 8px;
+    }
+    .pagination .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #4a3d28;
+      transition: all 0.5s ease;
+    }
+    .pagination .dot.active {
+      width: 32px; border-radius: 4px;
+      background: #c4a574;
+    }
+
+    /* Right: items list */
+    .items-side {
+      background: #f8f5f0;
+      padding: 6vh 5vw 5vh;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .items-side::before {
+      content: '';
+      position: absolute;
+      top: 5vh; right: 4vw;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14vh;
+      color: rgba(196, 165, 116, 0.15);
+      font-style: italic;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .items-list {
+      flex: 1;
+      display: flex; flex-direction: column;
+      gap: 3vh;
+      padding-top: 2vh;
+    }
+    .menu-item {
+      display: grid;
+      grid-template-columns: 8vh 1fr auto;
+      gap: 2vw;
+      align-items: center;
+      padding-bottom: 2.5vh;
+      border-bottom: 1px solid rgba(139, 111, 71, 0.2);
+      animation: itemFade 0.6s ease;
+      animation-fill-mode: both;
+    }
+    .menu-item:nth-child(1) { animation-delay: 0.1s; }
+    .menu-item:nth-child(2) { animation-delay: 0.2s; }
+    .menu-item:nth-child(3) { animation-delay: 0.3s; }
+    .menu-item:nth-child(4) { animation-delay: 0.4s; }
+    .menu-item:nth-child(5) { animation-delay: 0.5s; }
+    .menu-item:nth-child(6) { animation-delay: 0.6s; }
+    @keyframes itemFade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .menu-item .img-wrap {
+      width: 8vh; height: 8vh;
+      border-radius: 50%;
+      overflow: hidden;
+      background-size: cover; background-position: center;
+      border: 2px solid #c4a574;
+    }
+    .menu-item .item-text {
+      display: flex; flex-direction: column;
+      gap: 4px;
+    }
+    .menu-item .item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8vh; font-weight: 600;
+      color: #2c2416;
+      letter-spacing: 0.5px;
+    }
+    .menu-item .item-desc {
+      font-size: 1.5vh;
+      color: #8b6f47;
+      line-height: 1.5;
+      font-weight: 300;
+    }
+    .menu-item .item-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.2vh; font-weight: 500;
+      color: #2c2416;
+      position: relative;
+    }
+    .menu-item .item-price::before {
+      content: '$';
+      font-size: 1.6vh; vertical-align: super;
+      color: #8b6f47; margin-right: 2px;
+    }
+
+    /* Demo controls */
+    .demo-controls {
+      position: fixed; bottom: 12px; right: 12px;
+      background: rgba(44, 36, 22, 0.9); padding: 10px;
+      border-radius: 8px;
+      opacity: 0; transition: opacity 0.3s;
+      z-index: 100; font-size: 11px;
+    }
+    body:hover .demo-controls { opacity: 1; }
+    .demo-controls button {
+      background: #c4a574; color: #2c2416; border: none;
+      padding: 5px 10px; border-radius: 4px; margin: 2px;
+      cursor: pointer; font-weight: 600; font-size: 10px;
+    }
+    .demo-controls .label {
+      color: #c4a574; font-size: 9px; margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="side">
+    <div class="brand">
+      <div class="brand-mark">C</div>
+      <div class="brand-text">
+        <div class="name">Café Cordillera</div>
+        <div class="tag">Especialidad · Adjuntas</div>
+      </div>
+    </div>
+
+    <div class="category-display" id="catDisplay">
+      <div class="cat-num" id="catNum">No. 01 — De la casa</div>
+      <h1 class="cat-name" id="catName">Espresso</h1>
+      <div class="cat-line"></div>
+      <p class="cat-desc" id="catDesc">Granos de altura, tostado artesanal, preparado con técnica europea.</p>
+    </div>
+
+    <div class="side-footer">
+      <div class="info-block">
+        Tel · 787 555 0199<br>
+        Carr 123, Adjuntas, PR<br>
+        Mar–Dom · 7am–6pm
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+  <div class="items-side">
+    <div class="items-list" id="itemsList"></div>
+  </div>
+</div>
+
+<div class="demo-controls">
+  <div class="label">⚙️ Demo</div>
+  <button onclick="prevCat()">◀</button>
+  <button onclick="nextCat()">▶</button>
+  <button onclick="toggleAuto()" id="autoBtn">Pausar</button>
+  <button onclick="toggleFullscreen()">⛶</button>
+</div>
+
+<script>
+const MENU = [
+  {
+    no: 'No. 01 — De la casa',
+    name: 'Espresso',
+    desc: 'Granos de altura, tostado artesanal, preparado con técnica europea.',
+    items: [
+      { name: 'Espresso Solo', price: 3.5, desc: '30ml, doble extracción.', img: 'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=400&q=80' },
+      { name: 'Doppio', price: 4.5, desc: 'Espresso doble en taza pequeña.', img: 'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=400&q=80' },
+      { name: 'Macchiato', price: 4.0, desc: 'Espresso con espuma de leche.', img: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&q=80' },
+      { name: 'Cortadito', price: 4.5, desc: 'Espresso con leche evaporada al estilo boricua.', img: 'https://images.unsplash.com/photo-1545665225-b23b99e4d45e?w=400&q=80' },
+      { name: 'Ristretto', price: 4.0, desc: '20ml, sabor concentrado.', img: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=400&q=80' },
+    ]
+  },
+  {
+    no: 'No. 02 — Métodos de filtro',
+    name: 'Pour Over',
+    desc: 'Café preparado en V60, Chemex o French Press. Notas más limpias.',
+    items: [
+      { name: 'V60', price: 5.5, desc: 'Filtro de cono japonés. Notas brillantes y limpias.', img: 'https://images.unsplash.com/photo-1502462041640-b3d7e50d0662?w=400&q=80' },
+      { name: 'Chemex', price: 6.5, desc: 'Café para dos. Cuerpo medio, dulzura natural.', img: 'https://images.unsplash.com/photo-1610632380989-680fe40816c6?w=400&q=80' },
+      { name: 'French Press', price: 5.0, desc: 'Inmersión completa. Cuerpo robusto, aceitoso.', img: 'https://images.unsplash.com/photo-1525088549743-13ea8b6d4cac?w=400&q=80' },
+      { name: 'Cold Brew', price: 5.5, desc: '12h de extracción en frío. Suave y dulce.', img: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80' },
+      { name: 'Aeropress', price: 5.0, desc: 'Presión manual. Limpio como filtro, intenso como espresso.', img: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&q=80' },
+    ]
+  },
+  {
+    no: 'No. 03 — Con leche',
+    name: 'Leche y Arte',
+    desc: 'Bebidas con leche entera, oat o almond. Latte art incluido.',
+    items: [
+      { name: 'Cappuccino', price: 5.0, desc: 'Espresso con espuma de leche aireada.', img: 'https://images.unsplash.com/photo-1572286258217-215cf8e9d99f?w=400&q=80' },
+      { name: 'Latte', price: 5.5, desc: 'Espresso con leche vaporizada y poca espuma.', img: 'https://images.unsplash.com/photo-1561882468-9110e03e0f78?w=400&q=80' },
+      { name: 'Flat White', price: 5.5, desc: 'Microespuma sedosa. Más espresso, menos leche.', img: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=400&q=80' },
+      { name: 'Mocha', price: 6.0, desc: 'Latte con chocolate belga y crema.', img: 'https://images.unsplash.com/photo-1517959105821-eaf2591984ca?w=400&q=80' },
+      { name: 'Cortado Coquí', price: 5.0, desc: 'Cortado boricua con leche de coco local.', img: 'https://images.unsplash.com/photo-1542990253-a781e04c0082?w=400&q=80' },
+    ]
+  },
+  {
+    no: 'No. 04 — Acompañamientos',
+    name: 'Repostería',
+    desc: 'Hecho en casa cada mañana. Sin preservativos.',
+    items: [
+      { name: 'Croissant Mantequilla', price: 4.0, desc: 'Hojaldre francés clásico.', img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&q=80' },
+      { name: 'Quesito', price: 3.5, desc: 'Pasta hojaldrada con queso crema.', img: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=400&q=80' },
+      { name: 'Brownie de Chocolate', price: 4.5, desc: 'Chocolate 70% y nueces.', img: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&q=80' },
+      { name: 'Mallorca Tradicional', price: 4.0, desc: 'Pan dulce boricua con azúcar en polvo.', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80' },
+      { name: 'Tarta de Limón', price: 5.5, desc: 'Base de almendra, crema de limón meyer.', img: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=80' },
+    ]
+  }
+];
+
+const ROTATION_MS = 10000;
+let currentIdx = 0;
+let autoTimer = null;
+let isAuto = true;
+
+function render() {
+  const cat = MENU[currentIdx];
+  document.getElementById('catNum').textContent = cat.no;
+  document.getElementById('catName').textContent = cat.name;
+  document.getElementById('catDesc').textContent = cat.desc;
+  // Force re-animation
+  const catEl = document.getElementById('catDisplay');
+  catEl.style.animation = 'none';
+  void catEl.offsetWidth;
+  catEl.style.animation = 'catFade 0.8s ease';
+
+  // Pagination
+  const pag = document.getElementById('pagination');
+  pag.innerHTML = MENU.map((_, i) => `<div class="dot ${i === currentIdx ? 'active' : ''}"></div>`).join('');
+
+  // Items
+  const list = document.getElementById('itemsList');
+  list.innerHTML = cat.items.map(it => `
+    <div class="menu-item">
+      <div class="img-wrap" style="background-image:url('${it.img}')"></div>
+      <div class="item-text">
+        <div class="item-name">${it.name}</div>
+        <div class="item-desc">${it.desc}</div>
+      </div>
+      <div class="item-price">${it.price.toFixed(2)}</div>
+    </div>
+  `).join('');
+}
+
+function nextCat() { currentIdx = (currentIdx + 1) % MENU.length; render(); }
+function prevCat() { currentIdx = (currentIdx - 1 + MENU.length) % MENU.length; render(); }
+function startAuto() {
+  stopAuto();
+  autoTimer = setInterval(nextCat, ROTATION_MS);
+  isAuto = true;
+  const btn = document.getElementById('autoBtn'); if (btn) btn.textContent = 'Pausar';
+}
+function stopAuto() {
+  if (autoTimer) clearInterval(autoTimer);
+  autoTimer = null; isAuto = false;
+  const btn = document.getElementById('autoBtn'); if (btn) btn.textContent = 'Auto';
+}
+function toggleAuto() { if (isAuto) stopAuto(); else startAuto(); }
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') { nextCat(); if(isAuto) startAuto(); }
+  if (e.key === 'ArrowLeft')  { prevCat(); if(isAuto) startAuto(); }
+  if (e.key === ' ') { e.preventDefault(); toggleAuto(); }
+  if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+});
+
+render(); startAuto();
+</script>
+
+</body>
+</html>
