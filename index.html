@@ -1618,7 +1618,8 @@ function generatePDF() {
   ['• 50% al aceptar la cotización y comenzar el proyecto',
    '• 50% al completar la instalación y entrega',
    '• Cotización válida por 30 días desde la fecha emitida',
-   '• Garantía de 90 días en mano de obra'].forEach(t => { doc.text(t, margin, y); y += 12; });
+   '• Garantía de 15 días en mano de obra',
+   '• No hay garantía de equipos por fluctuaciones de voltaje'].forEach(t => { doc.text(t, margin, y); y += 12; });
   y += 18;
 
   if (y > 700) { doc.addPage(); y = margin + 100; }
