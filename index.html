@@ -709,11 +709,10 @@ function toRow(store, val) {
     };
   }
   if (store === 'categories') {
-    return { id: v.id, name: v.name, color: v.color || null };
+    return { id: v.id, name: v.name, icon: v.color || v.icon || null };
   }
   if (store === 'quotes') {
-    return {
-      id: v.id,
+    const row = {
       client: v.clientName || null,
       project: v.projectName || null,
       address: v.clientAddress || null,
@@ -723,10 +722,10 @@ function toRow(store, val) {
       notes: v.projectNotes || null,
       items: v.items || [],
       apply_ivu: !!v.applyIVU,
-      total: Number(v.total) || 0,
       saved_at: v.savedAt || new Date().toISOString(),
-      created_at: v.createdAt || null,
     };
+    if (v.id != null) row.id = v.id;
+    return row;
   }
   if (store === 'settings') {
     return { key: v.key, value: v.value ?? null };
@@ -744,17 +743,20 @@ function fromRow(store, row) {
     };
   }
   if (store === 'categories') {
-    return { id: row.id, name: row.name, color: row.color };
+    return { id: row.id, name: row.name, color: row.icon || row.color || null };
   }
   if (store === 'quotes') {
+    // Recompute total from items since the column doesn't exist server-side.
+    const items = row.items || [];
+    const total = items.reduce((s, it) => s + (Number(it.qty)||0) * (Number(it.price)||0), 0);
     return {
       id: row.id,
       clientName: row.client, projectName: row.project,
       clientAddress: row.address, clientContact: row.contact,
       quoteDate: row.quote_date, quoteNum: row.quote_num,
-      projectNotes: row.notes, items: row.items || [],
-      applyIVU: !!row.apply_ivu, total: Number(row.total) || 0,
-      savedAt: row.saved_at, createdAt: row.created_at,
+      projectNotes: row.notes, items,
+      applyIVU: !!row.apply_ivu, total,
+      savedAt: row.saved_at, createdAt: row.saved_at,
     };
   }
   if (store === 'settings') {
@@ -1463,24 +1465,48 @@ async function saveQuoteToHistory() {
   };
   delete record.editingId;
 
-  if (editingQuoteId) {
-    // UPDATE existing
-    record.id = editingQuoteId;
-    const existing = await dbGet('quotes', editingQuoteId);
-    if (existing && existing.createdAt) record.createdAt = existing.createdAt;
-    else record.createdAt = record.savedAt;
-    await dbPut('quotes', record);
-    alert('✓ Cotización actualizada');
-  } else {
-    // CREATE new
-    record.createdAt = record.savedAt;
-    const id = await dbPut('quotes', record);
-    editingQuoteId = id;
-    updateEditingUI();
-    alert('✓ Cotización guardada');
+  try {
+    if (editingQuoteId) {
+      // UPDATE existing
+      record.id = editingQuoteId;
+      const existing = await dbGet('quotes', editingQuoteId);
+      if (existing && existing.createdAt) record.createdAt = existing.createdAt;
+      else record.createdAt = record.savedAt;
+      await dbPut('quotes', record);
+      alert('✓ Cotización actualizada');
+    } else {
+      // CREATE new
+      record.createdAt = record.savedAt;
+      const id = await dbPut('quotes', record);
+      editingQuoteId = id;
+      updateEditingUI();
+      alert('✓ Cotización guardada');
+    }
+    // Also save client to clients table if it's new
+    try { await upsertClientFromQuote(record); } catch (e) { console.warn('client upsert', e); }
+    await saveCurrentQuote();
+    renderHistory();
+  } catch (err) {
+    console.error('saveQuoteToHistory error:', err);
+    alert('❌ Error al guardar: ' + (err.message || err));
   }
-  await saveCurrentQuote();
-  renderHistory();
+}
+
+async function upsertClientFromQuote(record) {
+  const name = (record.clientName || '').trim();
+  if (!name) return;
+  // Look up existing by lowercased name
+  const { data: existing } = await sb.from('clients').select('id').ilike('name', name).limit(1);
+  const row = {
+    name,
+    address: record.clientAddress || null,
+    contact: record.clientContact || null,
+  };
+  if (existing && existing.length > 0) {
+    await sb.from('clients').update(row).eq('id', existing[0].id);
+  } else {
+    await sb.from('clients').insert(row);
+  }
 }
 
 async function saveQuoteAsNew() {
@@ -1502,11 +1528,17 @@ async function saveQuoteAsNew() {
   };
   delete record.editingId;
   delete record.id;
-  const newId = await dbPut('quotes', record);
-  editingQuoteId = newId;
-  updateEditingUI();
-  await saveCurrentQuote();
-  alert('✓ Copia guardada como cotización nueva');
+  try {
+    const newId = await dbPut('quotes', record);
+    editingQuoteId = newId;
+    updateEditingUI();
+    try { await upsertClientFromQuote(record); } catch (e) { console.warn('client upsert', e); }
+    await saveCurrentQuote();
+    alert('✓ Copia guardada como cotización nueva');
+  } catch (err) {
+    console.error('saveQuoteAsNew error:', err);
+    alert('❌ Error al guardar: ' + (err.message || err));
+  }
   renderHistory();
 }
 
