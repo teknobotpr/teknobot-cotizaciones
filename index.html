@@ -998,26 +998,47 @@ async function deleteCategory(id) {
 
 // ===== QUOTE ITEMS =====
 // ===== CLIENT PICKER (existing) =====
-function getUniqueClients() {
-  return dbAll('quotes').then(quotes => {
-    const map = new Map(); // key: lowercased name → most recent client info
+async function getUniqueClients() {
+  // 1) Pull clients from dedicated clients table (imported from Faturator)
+  const map = new Map(); // key: lowercased name → client info
+  try {
+    const { data: rows, error } = await sb.from('clients').select('*').order('name');
+    if (!error && rows) {
+      for (const r of rows) {
+        const name = (r.name || '').trim();
+        if (!name) continue;
+        const key = name.toLowerCase();
+        map.set(key, {
+          name,
+          address: r.address || '',
+          contact: [r.contact, r.phone].filter(Boolean).join(' • ') || r.phone || '',
+          _date: r.updated_at || r.created_at || '',
+        });
+      }
+    }
+  } catch (e) { console.warn('clients table read failed', e); }
+
+  // 2) Augment / override with anything seen in past quotes (more recent wins)
+  try {
+    const quotes = await dbAll('quotes');
     for (const q of quotes) {
-      const name = (q.clientName || '').trim();
+      const name = (q.clientName || q.client || '').trim();
       if (!name) continue;
       const key = name.toLowerCase();
       const prev = map.get(key);
-      const date = q.savedAt || q.createdAt || '';
-      if (!prev || date > prev._date) {
+      const date = q.savedAt || q.createdAt || q.saved_at || '';
+      if (!prev || (date && date > (prev._date || ''))) {
         map.set(key, {
           name,
-          address: q.clientAddress || '',
-          contact: q.clientContact || '',
+          address: q.clientAddress || q.address || (prev && prev.address) || '',
+          contact: q.clientContact || q.contact || (prev && prev.contact) || '',
           _date: date,
         });
       }
     }
-    return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'es'));
-  });
+  } catch (e) { console.warn('quotes read for clients failed', e); }
+
+  return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'es'));
 }
 
 async function openClientPicker() {
