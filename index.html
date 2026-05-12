@@ -276,8 +276,15 @@
           <input type="date" id="quoteDate">
         </div>
         <div>
-          <label>Cotización #</label>
-          <input type="text" id="quoteNum">
+          <label>Tipo de documento</label>
+          <div class="toggle-group">
+            <label><input type="radio" name="docType" value="quote" checked> Cotización</label>
+            <label><input type="radio" name="docType" value="invoice"> Factura</label>
+          </div>
+        </div>
+        <div>
+          <label id="quoteNumLabel">Cotización #</label>
+          <input type="text" id="quoteNum" placeholder="Ej: COT-0001">
         </div>
       </div>
       <div style="margin-top:10px;">
@@ -722,6 +729,7 @@ function toRow(store, val) {
       notes: v.projectNotes || null,
       items: v.items || [],
       apply_ivu: !!v.applyIVU,
+      doc_type: v.docType || 'quote',
       saved_at: v.savedAt || new Date().toISOString(),
     };
     if (v.id != null) row.id = v.id;
@@ -755,7 +763,8 @@ function fromRow(store, row) {
       clientAddress: row.address, clientContact: row.contact,
       quoteDate: row.quote_date, quoteNum: row.quote_num,
       projectNotes: row.notes, items,
-      applyIVU: !!row.apply_ivu, total,
+      applyIVU: !!row.apply_ivu, docType: row.doc_type || 'quote',
+      total,
       savedAt: row.saved_at, createdAt: row.saved_at,
     };
   }
