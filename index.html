@@ -881,6 +881,13 @@ window.addEventListener('DOMContentLoaded', async () => {
       if (e.target.id === 'projectName' || e.target.id === 'quoteNum') updateEditingUI();
     }
   });
+  // Update quote number label when document type changes
+  document.querySelectorAll('input[name="docType"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const isInvoice = document.querySelector('input[name="docType"]:checked').value === 'invoice';
+      document.getElementById('quoteNumLabel').textContent = isInvoice ? 'Factura #' : 'Cotización #';
+    });
+  });
   // Allow Enter in login modal to submit
   ['loginEmail','loginPassword'].forEach(id => {
     document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
@@ -1389,6 +1396,7 @@ function updateTotals() {
 let editingQuoteId = null; // when set, we're editing an existing quote
 
 function getCurrentQuote() {
+  const docType = document.querySelector('input[name="docType"]:checked')?.value || 'quote';
   return {
     clientName: document.getElementById('clientName').value,
     projectName: document.getElementById('projectName').value,
@@ -1398,6 +1406,7 @@ function getCurrentQuote() {
     quoteNum: document.getElementById('quoteNum').value,
     projectNotes: document.getElementById('projectNotes').value,
     applyIVU: document.getElementById('applyIVU').checked,
+    docType,
     items: quoteItems,
     editingId: editingQuoteId,
   };
