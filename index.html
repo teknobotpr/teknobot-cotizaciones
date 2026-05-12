@@ -1646,14 +1646,15 @@ function generatePDF() {
   doc.text('Ponce, PR  •  teknobotpr@gmail.com', margin + 65, y + 38);
   doc.text('facebook.com/teknobotpr', margin + 65, y + 50);
 
+  const isInvoice = data.docType === 'invoice';
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(30, 58, 138);
-  doc.text('COTIZACIÓN', W - margin, y + 22, { align: 'right' });
+  doc.text(isInvoice ? 'FACTURA' : 'COTIZACIÓN', W - margin, y + 22, { align: 'right' });
   doc.setFontSize(9);
   doc.setTextColor(100, 116, 139);
   doc.text(`Fecha: ${formatDate(data.quoteDate)}`, W - margin, y + 38, { align: 'right' });
-  doc.text(`No. ${data.quoteNum}`, W - margin, y + 50, { align: 'right' });
+  doc.text(`${isInvoice ? 'Factura #' : 'Cotización #'} ${data.quoteNum}`, W - margin, y + 50, { align: 'right' });
   y += 80;
 
   doc.setDrawColor(30, 58, 138);
