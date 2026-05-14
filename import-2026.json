@@ -1,0 +1,3233 @@
+{
+  "type": "teknobot_full_backup",
+  "version": 2,
+  "exportedAt": "2026-05-04T00:34:44.700Z",
+  "note": "Importado del backup Faturator del 2026-05-03 — 2026 solo.",
+  "categories": [
+    {
+      "id": "cat-net",
+      "name": "Redes",
+      "color": "#2563eb"
+    },
+    {
+      "id": "cat-cam",
+      "name": "Cámaras",
+      "color": "#dc2626"
+    },
+    {
+      "id": "cat-cable",
+      "name": "Cableado",
+      "color": "#ea580c"
+    },
+    {
+      "id": "cat-rack",
+      "name": "Racks",
+      "color": "#7c3aed"
+    },
+    {
+      "id": "cat-svc",
+      "name": "Servicios",
+      "color": "#16a34a"
+    },
+    {
+      "id": "cat-soporte",
+      "name": "Soporte",
+      "color": "#0891b2"
+    },
+    {
+      "id": "cat-otros",
+      "name": "Otros",
+      "color": "#64748b"
+    }
+  ],
+  "products": [
+    {
+      "name": "5 Port Gigabit switch",
+      "sku": "IMP-1",
+      "categoryId": "cat-net",
+      "price": 20,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "5 Port Gigabit switch"
+    },
+    {
+      "name": "HDMI to lan  max 100ft",
+      "sku": "IMP-2",
+      "categoryId": "cat-otros",
+      "price": 20,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "HDMI to lan  max 100ft"
+    },
+    {
+      "name": "Support Visit",
+      "sku": "IMP-3",
+      "categoryId": "cat-soporte",
+      "price": 45,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Support Visit"
+    },
+    {
+      "name": "Install Camera services and PTZ configuration",
+      "sku": "IMP-4",
+      "categoryId": "cat-cam",
+      "price": 600,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install Camera services and PTZ configuration"
+    },
+    {
+      "name": "HD Camera  2MP",
+      "sku": "IMP-5",
+      "categoryId": "cat-otros",
+      "price": 35,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "HD Camera  2MP"
+    },
+    {
+      "name": "HD Balum",
+      "sku": "IMP-6",
+      "categoryId": "cat-cam",
+      "price": 12,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "HD Balum"
+    },
+    {
+      "name": "UTP Cable",
+      "sku": "IMP-8",
+      "categoryId": "cat-cable",
+      "price": 10,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "UTP Cable"
+    },
+    {
+      "name": "UHD Camera 4k",
+      "sku": "IMP-9",
+      "categoryId": "cat-otros",
+      "price": 65,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "UHD Camera 4k"
+    },
+    {
+      "name": "16 Chan DVR HD up to 5K",
+      "sku": "IMP-10",
+      "categoryId": "cat-otros",
+      "price": 295,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "16 Chan DVR HD up to 5K"
+    },
+    {
+      "name": "OOSSXX 8 5MP Bullet 130⁰ POE 4TB",
+      "sku": "IMP-12",
+      "categoryId": "cat-cam",
+      "price": 550,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "OOSSXX 8 5MP Bullet 130⁰ POE 4TB"
+    },
+    {
+      "name": "OOSSXX 4 5MP 8CHN NVR 2TB",
+      "sku": "IMP-13",
+      "categoryId": "cat-cam",
+      "price": 350,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "OOSSXX 4 5MP 8CHN NVR 2TB"
+    },
+    {
+      "name": "OOSSXX DVR 8 CHN BNC/IP",
+      "sku": "IMP-14",
+      "categoryId": "cat-otros",
+      "price": 90,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "OOSSXX DVR 8 CHN BNC/IP"
+    },
+    {
+      "name": "OOSSXX 4 4K Cam 8CHN POE IP",
+      "sku": "IMP-15",
+      "categoryId": "cat-cam",
+      "price": 375,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "OOSSXX 4 4K Cam 8CHN POE IP"
+    },
+    {
+      "name": "4 CAMERA INSTALL AND REMOTE ACCESS",
+      "sku": "IMP-16",
+      "categoryId": "cat-svc",
+      "price": 275,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "4 CAMERA INSTALL AND REMOTE ACCESS"
+    },
+    {
+      "name": "6 CAMERA INSTALL AND REMOTE ACCESS",
+      "sku": "IMP-17",
+      "categoryId": "cat-svc",
+      "price": 380,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "6 CAMERA INSTALL AND REMOTE ACCESS"
+    },
+    {
+      "name": "8 CAMERA INSTALL AND REMOTE ACCESS",
+      "sku": "IMP-18",
+      "categoryId": "cat-svc",
+      "price": 550,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "8 CAMERA INSTALL AND REMOTE ACCESS"
+    },
+    {
+      "name": "16 CAMERA INSTALL AND REMOTE ACCESS",
+      "sku": "IMP-19",
+      "categoryId": "cat-svc",
+      "price": 840,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "16 CAMERA INSTALL AND REMOTE ACCESS"
+    },
+    {
+      "name": "Remote Configuration",
+      "sku": "IMP-20",
+      "categoryId": "cat-svc",
+      "price": 75,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Remote Configuration"
+    },
+    {
+      "name": "OOSSXX 16 4K CAM 4TB HDD",
+      "sku": "IMP-21",
+      "categoryId": "cat-cam",
+      "price": 1500,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "OOSSXX 16 4K CAM 4TB HDD"
+    },
+    {
+      "name": "OOSSXX Junction Box pkt2",
+      "sku": "IMP-22",
+      "categoryId": "cat-otros",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "OOSSXX Junction Box pkt2"
+    },
+    {
+      "name": "Power supply box 18 chn 20A",
+      "sku": "IMP-23",
+      "categoryId": "cat-otros",
+      "price": 75,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Power supply box 18 chn 20A"
+    },
+    {
+      "name": "OOSSXX 8 4K CAM 8CHN NVR 4TB",
+      "sku": "IMP-24",
+      "categoryId": "cat-cam",
+      "price": 415,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "OOSSXX 8 4K CAM 8CHN NVR 4TB"
+    },
+    {
+      "name": "RJ45 connectors",
+      "sku": "IMP-25",
+      "categoryId": "cat-cable",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "RJ45 connectors"
+    },
+    {
+      "name": "LAN BOX CAT 6",
+      "sku": "IMP-26",
+      "categoryId": "cat-cable",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "LAN BOX CAT 6"
+    },
+    {
+      "name": "BATTERY BACKUP 1350VA",
+      "sku": "IMP-27",
+      "categoryId": "cat-otros",
+      "price": 195,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "BATTERY BACKUP 1350VA"
+    },
+    {
+      "name": "12 CAMERA JUNTION BOX",
+      "sku": "IMP-28",
+      "categoryId": "cat-otros",
+      "price": 180.54,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "12 CAMERA JUNTION BOX"
+    },
+    {
+      "name": "METAL CABLE RACEWAY",
+      "sku": "IMP-29",
+      "categoryId": "cat-cable",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "METAL CABLE RACEWAY"
+    },
+    {
+      "name": "Metal wall plates",
+      "sku": "IMP-30",
+      "categoryId": "cat-otros",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Metal wall plates"
+    },
+    {
+      "name": "HD Balum",
+      "sku": "IMP-31",
+      "categoryId": "cat-cam",
+      "price": 10,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "HD Balum"
+    },
+    {
+      "name": "Se verificó tada la cableria y cámaras y estan funcionando.…",
+      "sku": "IMP-32",
+      "categoryId": "cat-cam",
+      "price": 0,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Se verificó tada la cableria y cámaras y estan funcionando. El problema estaba en los los conectores de video y se reemplazaron todos y se dejaron viendo las 8 cámaras."
+    },
+    {
+      "name": "Battery Backup 1250va",
+      "sku": "IMP-33",
+      "categoryId": "cat-otros",
+      "price": 225,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Battery Backup 1250va"
+    },
+    {
+      "name": "Electric super service cable. Price depending per feet use.",
+      "sku": "IMP-34",
+      "categoryId": "cat-cable",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Electric super service cable. Price depending per feet use."
+    },
+    {
+      "name": "Install description:\nInstall all cameras with anti tefth cab…",
+      "sku": "IMP-35",
+      "categoryId": "cat-cable",
+      "price": 0,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Install description:\nInstall all cameras with anti tefth cable. Configure to exiting account. Connect all cameras power cord to battery backup."
+    },
+    {
+      "name": "Cableria eléctrica y conectores seccobra adicional dependien…",
+      "sku": "IMP-36",
+      "categoryId": "cat-cable",
+      "price": 0,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Cableria eléctrica y conectores seccobra adicional dependiendo de cuanto se necesite."
+    },
+    {
+      "name": "Dindong",
+      "sku": "IMP-37",
+      "categoryId": "cat-otros",
+      "price": 33.42,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Dindong"
+    },
+    {
+      "name": "RJ45 Lan Jack",
+      "sku": "IMP-38",
+      "categoryId": "cat-cable",
+      "price": 10,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "RJ45 Lan Jack"
+    },
+    {
+      "name": "OOSSXX 6 Camera Full HD 5MP",
+      "sku": "IMP-39",
+      "categoryId": "cat-otros",
+      "price": 3.8,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "OOSSXX 6 Camera Full HD 5MP"
+    },
+    {
+      "name": "Reolink 4k 8cams 16ch",
+      "sku": "IMP-40",
+      "categoryId": "cat-otros",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Reolink 4k 8cams 16ch"
+    },
+    {
+      "name": "MONITOR 22\"",
+      "sku": "IMP-41",
+      "categoryId": "cat-otros",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "MONITOR 22\""
+    },
+    {
+      "name": "NVR 16 chan hybrib bnc IP",
+      "sku": "IMP-42",
+      "categoryId": "cat-cam",
+      "price": 425,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "NVR 16 chan hybrib bnc IP"
+    },
+    {
+      "name": "Install NVR services",
+      "sku": "IMP-43",
+      "categoryId": "cat-cam",
+      "price": 125,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Install NVR services"
+    },
+    {
+      "name": "Support visit configuration",
+      "sku": "IMP-44",
+      "categoryId": "cat-soporte",
+      "price": 45,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Support visit configuration"
+    },
+    {
+      "name": "4 Amp Power supply",
+      "sku": "IMP-45",
+      "categoryId": "cat-otros",
+      "price": 28,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "4 Amp Power supply"
+    },
+    {
+      "name": "Bnc and power connectos",
+      "sku": "IMP-46",
+      "categoryId": "cat-otros",
+      "price": 5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Bnc and power connectos"
+    },
+    {
+      "name": "Wifi router configuration",
+      "sku": "IMP-47",
+      "categoryId": "cat-net",
+      "price": 0,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Wifi router configuration"
+    },
+    {
+      "name": "DVR 5MP 32Ch + 8IP CH, H265,  10TB max, NDAA Complant, Audio…",
+      "sku": "IMP-48",
+      "categoryId": "cat-otros",
+      "price": 675,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "DVR 5MP 32Ch + 8IP CH, H265,  10TB max, NDAA Complant, Audio by Coaxitron"
+    },
+    {
+      "name": "4TB HDD 1yr waran",
+      "sku": "IMP-49",
+      "categoryId": "cat-otros",
+      "price": 165,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "4TB HDD 1yr waran"
+    },
+    {
+      "name": "DVR 4CH ssd integrate",
+      "sku": "IMP-50",
+      "categoryId": "cat-otros",
+      "price": 185,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "DVR 4CH ssd integrate"
+    },
+    {
+      "name": "Se corrigieron los mangos de exterior e interior de las puer…",
+      "sku": "IMP-51",
+      "categoryId": "cat-soporte",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Se corrigieron los mangos de exterior e interior de las puertas principales con un tornillo pasante y tuercas. Se ajustó con los tornillos prisioneros y se verificaron las puertas a corregir para la próxima visita."
+    },
+    {
+      "name": "Power supply change",
+      "sku": "IMP-52",
+      "categoryId": "cat-svc",
+      "price": 15,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Power supply change"
+    },
+    {
+      "name": "Epcom Turbo HD 4k 16 Ch DVR Tvi,Ahd,Cvbs",
+      "sku": "IMP-53",
+      "categoryId": "cat-otros",
+      "price": 425,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Epcom Turbo HD 4k 16 Ch DVR Tvi,Ahd,Cvbs"
+    },
+    {
+      "name": "LTE Tmobile Router 5G Wifi 6",
+      "sku": "IMP-54",
+      "categoryId": "cat-net",
+      "price": 100,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "LTE Tmobile Router 5G Wifi 6"
+    },
+    {
+      "name": "Electric repair services",
+      "sku": "IMP-55",
+      "categoryId": "cat-svc",
+      "price": 230,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Electric repair services"
+    },
+    {
+      "name": "Pvc 10' tube, 3 outlet, red, black, white 40' LB and connect…",
+      "sku": "IMP-56",
+      "categoryId": "cat-otros",
+      "price": 70,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Pvc 10' tube, 3 outlet, red, black, white 40' LB and connector"
+    },
+    {
+      "name": "Wifi/lan indoor 7\" Monitor station Toush",
+      "sku": "IMP-57",
+      "categoryId": "cat-net",
+      "price": 155,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Wifi/lan indoor 7\" Monitor station Toush"
+    },
+    {
+      "name": "ip Intercom indoor Poe",
+      "sku": "IMP-58",
+      "categoryId": "cat-net",
+      "price": 155,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "ip Intercom indoor Poe"
+    },
+    {
+      "name": "9 Port POe manage switch",
+      "sku": "IMP-59",
+      "categoryId": "cat-net",
+      "price": 175,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "9 Port POe manage switch"
+    },
+    {
+      "name": "Reyee AP AX300 2260",
+      "sku": "IMP-60",
+      "categoryId": "cat-net",
+      "price": 165,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Reyee AP AX300 2260"
+    },
+    {
+      "name": "Reyee Router Gateway 5G multiple ssid",
+      "sku": "IMP-61",
+      "categoryId": "cat-net",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Reyee Router Gateway 5G multiple ssid"
+    },
+    {
+      "name": "Security Box",
+      "sku": "IMP-62",
+      "categoryId": "cat-otros",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Security Box"
+    },
+    {
+      "name": "Solar panels install with  charger controller. Replace fuse…",
+      "sku": "IMP-63",
+      "categoryId": "cat-svc",
+      "price": 0,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Solar panels install with  charger controller. Replace fuse 60Amp for 100Amp. Install PC to inverter."
+    },
+    {
+      "name": "Box 4x4x4, 3 curvas pvc 3/4\", 2 tubos pvc 10', 1 LL 3/4\", Ou…",
+      "sku": "IMP-64",
+      "categoryId": "cat-cam",
+      "price": 145,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Box 4x4x4, 3 curvas pvc 3/4\", 2 tubos pvc 10', 1 LL 3/4\", Outlet con switch, Caja de 4x4 exterior con tapa doble, conector para camara."
+    },
+    {
+      "name": "Instalacion de tuberia para camara exterior, reset a grabado…",
+      "sku": "IMP-65",
+      "categoryId": "cat-cam",
+      "price": 160,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Instalacion de tuberia para camara exterior, reset a grabadora y router para coneccion al internet y verificacion de TV en exterior."
+    },
+    {
+      "name": "Ajustes de todas las puertas de madera y aluminio. Se coloca…",
+      "sku": "IMP-66",
+      "categoryId": "cat-svc",
+      "price": 375,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Ajustes de todas las puertas de madera y aluminio. Se colocaron tornillos en goznes que le faltaban, se cortaron las puertas del pasillo hacia recepción, baño de damas del call center. Baño de damas del pasillo se cambio la perilla y se ajustó el pestillo. Puerta devla cobacha se le desgastó la madera para ajuste en marco."
+    },
+    {
+      "name": "Magnet lock 600LB+buzzer, 2 beepers, power supply, key swich…",
+      "sku": "IMP-67",
+      "categoryId": "cat-otros",
+      "price": 1.75,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Magnet lock 600LB+buzzer, 2 beepers, power supply, key swich and smart release."
+    },
+    {
+      "name": "L Bracket",
+      "sku": "IMP-68",
+      "categoryId": "cat-otros",
+      "price": 30,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "L Bracket"
+    },
+    {
+      "name": "Flex tile install",
+      "sku": "IMP-69",
+      "categoryId": "cat-svc",
+      "price": 3,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Flex tile install"
+    },
+    {
+      "name": "Epcom 8 chan POE cameras and nvr, 1TB Hdd",
+      "sku": "IMP-70",
+      "categoryId": "cat-cam",
+      "price": 890,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Epcom 8 chan POE cameras and nvr, 1TB Hdd"
+    },
+    {
+      "name": "Epcom alarm no contract requietment.",
+      "sku": "IMP-71",
+      "categoryId": "cat-otros",
+      "price": 325,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Epcom alarm no contract requietment."
+    },
+    {
+      "name": "Alarm configuration",
+      "sku": "IMP-72",
+      "categoryId": "cat-svc",
+      "price": 150,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Alarm configuration"
+    },
+    {
+      "name": "Se removio televisor existemte y se instaló en la parte de f…",
+      "sku": "IMP-73",
+      "categoryId": "cat-cable",
+      "price": 75,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Se removio televisor existemte y se instaló en la parte de fuera y en la parte de adentro se instaló bracket con televisor de 43\". Se conectó tv por bluethooth al amplificador de música y se le instaló cable de rca para el bajo. Se activó cuenta youtube premium para amboa TV."
+    },
+    {
+      "name": "RCA Cable 12'",
+      "sku": "IMP-74",
+      "categoryId": "cat-cable",
+      "price": 15,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "RCA Cable 12'"
+    },
+    {
+      "name": "Bnc",
+      "sku": "IMP-75",
+      "categoryId": "cat-otros",
+      "price": 1,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Bnc"
+    },
+    {
+      "name": "Se reemplazaron 10 cámaras con DVR y diaco de 2TB, se instal…",
+      "sku": "IMP-76",
+      "categoryId": "cat-cam",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Se reemplazaron 10 cámaras con DVR y diaco de 2TB, se instaló y configuró todo el sistema de alarma tanto para el afea de la cocina como para la barra. Se instaló cajón de seguridad para guardar  el modem de internet, grabadora y battery backup. Se configuraron ambos equipos a los celulares y se dejaron funcionando. Garantia de equipo 1año replacer plug and play."
+    },
+    {
+      "name": "Monitor LCD 43\" Mount for 32\" to 55\" and mount for 13\" to 27…",
+      "sku": "IMP-77",
+      "categoryId": "cat-otros",
+      "price": 228.58,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Monitor LCD 43\" Mount for 32\" to 55\" and mount for 13\" to 27\""
+    },
+    {
+      "name": "Acces Point RAP 2200E",
+      "sku": "IMP-78",
+      "categoryId": "cat-otros",
+      "price": 133.8,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Acces Point RAP 2200E"
+    },
+    {
+      "name": "Monitor 22\" with rack, 2x HDMI 6'ft and 1 HDMI 50'ft. HDMI 1…",
+      "sku": "IMP-79",
+      "categoryId": "cat-rack",
+      "price": 2.09,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Monitor 22\" with rack, 2x HDMI 6'ft and 1 HDMI 50'ft. HDMI 1@2 splitter."
+    },
+    {
+      "name": "Deposit $350",
+      "sku": "IMP-80",
+      "categoryId": "cat-otros",
+      "price": -350,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Deposit $350"
+    },
+    {
+      "name": "Tirada de cableria para punto de acceso en area del Salón ba…",
+      "sku": "IMP-81",
+      "categoryId": "cat-cable",
+      "price": 475,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Tirada de cableria para punto de acceso en area del Salón barra grande con instalación de access point, instalación de tubo pendant para 2 monitores mas instalación de TV en pared de 43\". Instalación de cable para segundo piso con punto de acceso."
+    },
+    {
+      "name": "Tubo pendant",
+      "sku": "IMP-82",
+      "categoryId": "cat-otros",
+      "price": 35.64,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Tubo pendant"
+    },
+    {
+      "name": "Ubiquity Cube Access Point",
+      "sku": "IMP-83",
+      "categoryId": "cat-net",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Ubiquity Cube Access Point"
+    },
+    {
+      "name": "Deposit $350",
+      "sku": "IMP-84",
+      "categoryId": "cat-otros",
+      "price": -350,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Deposit $350"
+    },
+    {
+      "name": "Instalación y configuración del sistema de Aldelo. Configura…",
+      "sku": "IMP-85",
+      "categoryId": "cat-cable",
+      "price": 175,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Instalación y configuración del sistema de Aldelo. Configuración de printer por lan con switch de 5 puertos y dos cables de lan."
+    },
+    {
+      "name": "NVR Poe 16 channels 4k max HDD 2x 6TB",
+      "sku": "IMP-86",
+      "categoryId": "cat-cam",
+      "price": 358,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "NVR Poe 16 channels 4k max HDD 2x 6TB"
+    },
+    {
+      "name": "Dome IP 8MP Pooe Dual Light",
+      "sku": "IMP-87",
+      "categoryId": "cat-cam",
+      "price": 155,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Dome IP 8MP Pooe Dual Light"
+    },
+    {
+      "name": "Full Kit Point To Point 5GHZ 5KM antenas",
+      "sku": "IMP-88",
+      "categoryId": "cat-otros",
+      "price": 243,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Full Kit Point To Point 5GHZ 5KM antenas"
+    },
+    {
+      "name": "6 Port Poe switch managament",
+      "sku": "IMP-89",
+      "categoryId": "cat-net",
+      "price": 100,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "6 Port Poe switch managament"
+    },
+    {
+      "name": "Install Servcices: Reemplazo de grabadora analoga por grabad…",
+      "sku": "IMP-90",
+      "categoryId": "cat-cam",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install Servcices: Reemplazo de grabadora analoga por grabadora ip. Reemplazo de camaras por IP, instalacion de cableria para azotea con red ip para exterder la red. Anadir camaras en el are de la piscina y patio del area de banos. Instalacion de nuevos intercom en ambas salidas a la playa con camara y acceso controlado en ambos portones."
+    },
+    {
+      "name": "Curve Monitor 49\" 3840 x 1080",
+      "sku": "IMP-91",
+      "categoryId": "cat-otros",
+      "price": 15537,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Curve Monitor 49\" 3840 x 1080"
+    },
+    {
+      "name": "Lan Box weather prof",
+      "sku": "IMP-92",
+      "categoryId": "cat-cable",
+      "price": 230,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Lan Box weather prof"
+    },
+    {
+      "name": "Mini PC 8GB Ram 256M.2",
+      "sku": "IMP-93",
+      "categoryId": "cat-otros",
+      "price": 400,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Mini PC 8GB Ram 256M.2"
+    },
+    {
+      "name": "Base para cámara",
+      "sku": "IMP-94",
+      "categoryId": "cat-cam",
+      "price": 35,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Base para cámara"
+    },
+    {
+      "name": "Micelaneas:ejmp\nConectores, empates, cajas, tuberia tornillo…",
+      "sku": "IMP-95",
+      "categoryId": "cat-cable",
+      "price": 400,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Micelaneas:ejmp\nConectores, empates, cajas, tuberia tornillos etc."
+    },
+    {
+      "name": "Electric Strike exterior. (Cerraduras de portones para la pl…",
+      "sku": "IMP-96",
+      "categoryId": "cat-otros",
+      "price": 180,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Electric Strike exterior. (Cerraduras de portones para la playa)"
+    },
+    {
+      "name": "Acceso de cada apartamento hacia los portones de la playa y…",
+      "sku": "IMP-97",
+      "categoryId": "cat-net",
+      "price": 5625,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Acceso de cada apartamento hacia los portones de la playa y portón principal. Todos deben ir conectados en la misma red para tener un control total de todos los accesos. Instalación de intercoms en todos los apartamentes con puntos de acceso (wifi) en cada piso del edificio la cual estaran atachados a una red privada y única."
+    },
+    {
+      "name": "Switch 42 Ports",
+      "sku": "IMP-98",
+      "categoryId": "cat-net",
+      "price": 3100,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Switch 42 Ports"
+    },
+    {
+      "name": "Turbo E8 Color",
+      "sku": "IMP-99",
+      "categoryId": "cat-otros",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Turbo E8 Color"
+    },
+    {
+      "name": "HDMI Cable 50'",
+      "sku": "IMP-100",
+      "categoryId": "cat-cable",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "HDMI Cable 50'"
+    },
+    {
+      "name": "Remote DVR configuration on PC",
+      "sku": "IMP-101",
+      "categoryId": "cat-otros",
+      "price": 55,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Remote DVR configuration on PC"
+    },
+    {
+      "name": "171' feet Lan cable",
+      "sku": "IMP-102",
+      "categoryId": "cat-cable",
+      "price": 0.85,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "171' feet Lan cable"
+    },
+    {
+      "name": "Lqn cable install services",
+      "sku": "IMP-103",
+      "categoryId": "cat-cable",
+      "price": 125,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Lqn cable install services"
+    },
+    {
+      "name": "HDMI to lan extender",
+      "sku": "IMP-104",
+      "categoryId": "cat-otros",
+      "price": 75,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "HDMI to lan extender"
+    },
+    {
+      "name": "coax cable",
+      "sku": "IMP-105",
+      "categoryId": "cat-cable",
+      "price": 55,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "coax cable"
+    },
+    {
+      "name": "BNC connectors",
+      "sku": "IMP-106",
+      "categoryId": "cat-otros",
+      "price": 15,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "BNC connectors"
+    },
+    {
+      "name": "Deposot",
+      "sku": "IMP-107",
+      "categoryId": "cat-svc",
+      "price": -350,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Deposot"
+    },
+    {
+      "name": "remove 16 cameras and magnet",
+      "sku": "IMP-108",
+      "categoryId": "cat-svc",
+      "price": 250,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "remove 16 cameras and magnet"
+    },
+    {
+      "name": "13 cameras install",
+      "sku": "IMP-109",
+      "categoryId": "cat-svc",
+      "price": 730,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "13 cameras install"
+    },
+    {
+      "name": "4k DVR HD  Turbo",
+      "sku": "IMP-110",
+      "categoryId": "cat-otros",
+      "price": 465,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "4k DVR HD  Turbo"
+    },
+    {
+      "name": "Balum",
+      "sku": "IMP-111",
+      "categoryId": "cat-svc",
+      "price": 0.1,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Balum"
+    },
+    {
+      "name": "2k HD camera",
+      "sku": "IMP-112",
+      "categoryId": "cat-otros",
+      "price": 65,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "2k HD camera"
+    },
+    {
+      "name": "Bepper",
+      "sku": "IMP-113",
+      "categoryId": "cat-otros",
+      "price": 35,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Bepper"
+    },
+    {
+      "name": "Doble relay",
+      "sku": "IMP-114",
+      "categoryId": "cat-otros",
+      "price": 15,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Doble relay"
+    },
+    {
+      "name": "Push buttom",
+      "sku": "IMP-115",
+      "categoryId": "cat-otros",
+      "price": 7,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Push buttom"
+    },
+    {
+      "name": "Z and L Braket",
+      "sku": "IMP-116",
+      "categoryId": "cat-otros",
+      "price": 20,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Z and L Braket"
+    },
+    {
+      "name": "Magnet install",
+      "sku": "IMP-117",
+      "categoryId": "cat-svc",
+      "price": 150,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Magnet install"
+    },
+    {
+      "name": "Key switch",
+      "sku": "IMP-118",
+      "categoryId": "cat-net",
+      "price": 18,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Key switch"
+    },
+    {
+      "name": "Instalación de audio a 6 Televisores por hdmi extender con c…",
+      "sku": "IMP-119",
+      "categoryId": "cat-net",
+      "price": 475,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "Instalación de audio a 6 Televisores por hdmi extender con cqble de lan. Configuración a matrix switch de 8 antradas 8 salidas. Se anclaron 2 televisores de 75 en el area de la terraza."
+    },
+    {
+      "name": "500 deposit",
+      "sku": "IMP-120",
+      "categoryId": "cat-svc",
+      "price": -500,
+      "unit": "c/u",
+      "type": "service",
+      "desc": "500 deposit"
+    },
+    {
+      "name": "Power supply with battery 12v 4 amp",
+      "sku": "IMP-121",
+      "categoryId": "cat-otros",
+      "price": 65,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Power supply with battery 12v 4 amp"
+    },
+    {
+      "name": "HDD Sata 2TB",
+      "sku": "IMP-122",
+      "categoryId": "cat-otros",
+      "price": 83,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "HDD Sata 2TB"
+    },
+    {
+      "name": "Caja PVC",
+      "sku": "IMP-123",
+      "categoryId": "cat-otros",
+      "price": 1.4,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Caja PVC"
+    },
+    {
+      "name": "Door Closer Aluminum",
+      "sku": "IMP-124",
+      "categoryId": "cat-otros",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Door Closer Aluminum"
+    },
+    {
+      "name": "4k DVR 8ch 8mp +8ip AF5307842",
+      "sku": "IMP-125",
+      "categoryId": "cat-otros",
+      "price": 195.3,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "4k DVR 8ch 8mp +8ip AF5307842"
+    },
+    {
+      "name": "PIG TAIL CONNECTORS",
+      "sku": "IMP-126",
+      "categoryId": "cat-otros",
+      "price": 0.45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "PIG TAIL CONNECTORS"
+    },
+    {
+      "name": "POWER STRIP 6 OUTLETS",
+      "sku": "IMP-127",
+      "categoryId": "cat-soporte",
+      "price": 9,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "POWER STRIP 6 OUTLETS"
+    },
+    {
+      "name": "Istall Services",
+      "sku": "IMP-128",
+      "categoryId": "cat-svc",
+      "price": 750,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Istall Services"
+    },
+    {
+      "name": "Tax",
+      "sku": "IMP-129",
+      "categoryId": "cat-otros",
+      "price": 130.68,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Tax"
+    },
+    {
+      "name": "Deposit",
+      "sku": "IMP-130",
+      "categoryId": "cat-otros",
+      "price": -650,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Deposit"
+    },
+    {
+      "name": "Plastic 2x4\" Box",
+      "sku": "IMP-131",
+      "categoryId": "cat-otros",
+      "price": 3.5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Plastic 2x4\" Box"
+    },
+    {
+      "name": "PVC 1/2 Tibe 10'",
+      "sku": "IMP-132",
+      "categoryId": "cat-otros",
+      "price": 12,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "PVC 1/2 Tibe 10'"
+    },
+    {
+      "name": "LB PVC",
+      "sku": "IMP-133",
+      "categoryId": "cat-otros",
+      "price": 6.6,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "LB PVC"
+    },
+    {
+      "name": "LL PVC",
+      "sku": "IMP-134",
+      "categoryId": "cat-otros",
+      "price": 6.5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "LL PVC"
+    },
+    {
+      "name": "Curva PVC 1/2\"",
+      "sku": "IMP-135",
+      "categoryId": "cat-otros",
+      "price": 5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Curva PVC 1/2\""
+    },
+    {
+      "name": "Micelaneos, conectores, Grapas, tornillos, Tapas ciegas",
+      "sku": "IMP-136",
+      "categoryId": "cat-cable",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Micelaneos, conectores, Grapas, tornillos, Tapas ciegas"
+    },
+    {
+      "name": "43\" LCD Monitor with bracket mount.",
+      "sku": "IMP-137",
+      "categoryId": "cat-otros",
+      "price": 265,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "43\" LCD Monitor with bracket mount."
+    },
+    {
+      "name": "Battery Backup 650VA",
+      "sku": "IMP-138",
+      "categoryId": "cat-otros",
+      "price": 79,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Battery Backup 650VA"
+    },
+    {
+      "name": "Support Visit",
+      "sku": "IMP-139",
+      "categoryId": "cat-soporte",
+      "price": 75,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Support Visit"
+    },
+    {
+      "name": "Repair service",
+      "sku": "IMP-140",
+      "categoryId": "cat-svc",
+      "price": 25,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Repair service"
+    },
+    {
+      "name": "Solar Cam",
+      "sku": "IMP-141",
+      "categoryId": "cat-cam",
+      "price": 30,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Solar Cam"
+    },
+    {
+      "name": "Lithium Battery camera",
+      "sku": "IMP-142",
+      "categoryId": "cat-otros",
+      "price": 2.5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Lithium Battery camera"
+    },
+    {
+      "name": "Install and configure 3 camera services and 1 camera repair.",
+      "sku": "IMP-143",
+      "categoryId": "cat-svc",
+      "price": 100,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install and configure 3 camera services and 1 camera repair."
+    },
+    {
+      "name": "12v battery for bepper",
+      "sku": "IMP-144",
+      "categoryId": "cat-otros",
+      "price": 2.5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "12v battery for bepper"
+    },
+    {
+      "name": "EV8008TURBOD\n8MP DVR",
+      "sku": "IMP-145",
+      "categoryId": "cat-otros",
+      "price": 241.96,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "EV8008TURBOD\n8MP DVR"
+    },
+    {
+      "name": "Cam Turbo C 5MP",
+      "sku": "IMP-146",
+      "categoryId": "cat-cam",
+      "price": 47.93,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Cam Turbo C 5MP"
+    },
+    {
+      "name": "Balum",
+      "sku": "IMP-147",
+      "categoryId": "cat-otros",
+      "price": 6.69,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Balum"
+    },
+    {
+      "name": "Balum",
+      "sku": "IMP-148",
+      "categoryId": "cat-otros",
+      "price": 6.69,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Balum"
+    },
+    {
+      "name": "Install Cam service",
+      "sku": "IMP-149",
+      "categoryId": "cat-cam",
+      "price": 125,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install Cam service"
+    },
+    {
+      "name": "1 Año de garantia en grabadora y camara de seguridad.",
+      "sku": "IMP-150",
+      "categoryId": "cat-cam",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "1 Año de garantia en grabadora y camara de seguridad."
+    },
+    {
+      "name": "Mini pc",
+      "sku": "IMP-151",
+      "categoryId": "cat-otros",
+      "price": 365,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Mini pc"
+    },
+    {
+      "name": "Toush Monitor",
+      "sku": "IMP-152",
+      "categoryId": "cat-otros",
+      "price": 145,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Toush Monitor"
+    },
+    {
+      "name": "Tsp100 lan thermal printer",
+      "sku": "IMP-153",
+      "categoryId": "cat-otros",
+      "price": 385,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Tsp100 lan thermal printer"
+    },
+    {
+      "name": "Cable lan and install services",
+      "sku": "IMP-154",
+      "categoryId": "cat-cable",
+      "price": 565,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Cable lan and install services"
+    },
+    {
+      "name": "Keyboard Moue",
+      "sku": "IMP-155",
+      "categoryId": "cat-otros",
+      "price": 55,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Keyboard Moue"
+    },
+    {
+      "name": "Printer lan cable",
+      "sku": "IMP-156",
+      "categoryId": "cat-cable",
+      "price": 15,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Printer lan cable"
+    },
+    {
+      "name": "Garantia de equipos 1 año con manofactura (Desperfectos de f…",
+      "sku": "IMP-157",
+      "categoryId": "cat-otros",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Garantia de equipos 1 año con manofactura (Desperfectos de fabrica. No aplica a fluctuaciones de voltaje o daños por caidas."
+    },
+    {
+      "name": "Thermal paper box  50 rolls.",
+      "sku": "IMP-158",
+      "categoryId": "cat-otros",
+      "price": 70,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Thermal paper box  50 rolls."
+    },
+    {
+      "name": "Cotización es vijente por 30 dias.",
+      "sku": "IMP-159",
+      "categoryId": "cat-otros",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Cotización es vijente por 30 dias."
+    },
+    {
+      "name": "Instalación y configuración de 12 cámaras solares con 2 esta…",
+      "sku": "IMP-160",
+      "categoryId": "cat-cam",
+      "price": 950,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Instalación y configuración de 12 cámaras solares con 2 estaciones discos duros y aplicación web. Configuración de wifi mesh. Instalación y configuración de antena Starlink para activación del proveedor de internet."
+    },
+    {
+      "name": "Se habilito disco de backup para guardar documentos de todas…",
+      "sku": "IMP-161",
+      "categoryId": "cat-otros",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Se habilito disco de backup para guardar documentos de todas las computadoras mas el servidor. Se le brindó disc cleanup para todas las computaforas y se verifico la red."
+    },
+    {
+      "name": "Epcom NVR 16CH PoE, 4K",
+      "sku": "IMP-162",
+      "categoryId": "cat-cam",
+      "price": 425,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Epcom NVR 16CH PoE, 4K"
+    },
+    {
+      "name": "EYEBALL IP 2MP/FIXED LENS 2.8MM /30MTS IR +20 MTS WHITE LIGH…",
+      "sku": "IMP-163",
+      "categoryId": "cat-otros",
+      "price": 90,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "EYEBALL IP 2MP/FIXED LENS 2.8MM /30MTS IR +20 MTS WHITE LIGHT/IP67/SENSEPLUS LITE/BUILT-IN MIC"
+    },
+    {
+      "name": "Newlink Cat6 Exterior - Unshielded - Negro",
+      "sku": "IMP-164",
+      "categoryId": "cat-cable",
+      "price": 210,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Newlink Cat6 Exterior - Unshielded - Negro"
+    },
+    {
+      "name": "UPS 1500VA/900W 4 outputs, 1 protected",
+      "sku": "IMP-165",
+      "categoryId": "cat-otros",
+      "price": 170,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "UPS 1500VA/900W 4 outputs, 1 protected"
+    },
+    {
+      "name": "De utilizar equipo adicional o aparece algun vicio oculto se…",
+      "sku": "IMP-166",
+      "categoryId": "cat-otros",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "De utilizar equipo adicional o aparece algun vicio oculto se añadira a la factura."
+    },
+    {
+      "name": "4 MP IP PTZ Dome with 4 MP Panoramic Camera, 25X Zoom, 100 m…",
+      "sku": "IMP-167",
+      "categoryId": "cat-cam",
+      "price": 645,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "4 MP IP PTZ Dome with 4 MP Panoramic Camera, 25X Zoom, 100 m IR, IP66, WDR, PoE+, Audio Input-Output and Alarm, Ultra Low Illumination"
+    },
+    {
+      "name": "E3KTURBOC 5MP Camera",
+      "sku": "IMP-168",
+      "categoryId": "cat-otros",
+      "price": 70,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "E3KTURBOC 5MP Camera"
+    },
+    {
+      "name": "EV40 16TURBOD 16 Ch Dvr",
+      "sku": "IMP-169",
+      "categoryId": "cat-otros",
+      "price": 280,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "EV40 16TURBOD 16 Ch Dvr"
+    },
+    {
+      "name": "DX36015X PTZ 1080 15x Optical zoom",
+      "sku": "IMP-170",
+      "categoryId": "cat-cam",
+      "price": 425,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "DX36015X PTZ 1080 15x Optical zoom"
+    },
+    {
+      "name": "RGEST350V2 P2P antenas kit",
+      "sku": "IMP-171",
+      "categoryId": "cat-otros",
+      "price": 250,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "RGEST350V2 P2P antenas kit"
+    },
+    {
+      "name": "RGES209GCP 9 port switch manage",
+      "sku": "IMP-172",
+      "categoryId": "cat-net",
+      "price": 175,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "RGES209GCP 9 port switch manage"
+    },
+    {
+      "name": "RGES206GCP 6 port switch",
+      "sku": "IMP-173",
+      "categoryId": "cat-net",
+      "price": 110,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "RGES206GCP 6 port switch"
+    },
+    {
+      "name": "Newlink Cat6 Exterior - Unshielded - Negro",
+      "sku": "IMP-174",
+      "categoryId": "cat-cable",
+      "price": 215,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Newlink Cat6 Exterior - Unshielded - Negro"
+    },
+    {
+      "name": "Depósito $75 para cambio de disco duro.",
+      "sku": "IMP-175",
+      "categoryId": "cat-otros",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Depósito $75 para cambio de disco duro."
+    },
+    {
+      "name": "Junson Box 4x4",
+      "sku": "IMP-176",
+      "categoryId": "cat-otros",
+      "price": 22,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Junson Box 4x4"
+    },
+    {
+      "name": "Todo trabajo que exeda de  $1500 o mas requiere un 50% de de…",
+      "sku": "IMP-177",
+      "categoryId": "cat-svc",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Todo trabajo que exeda de  $1500 o mas requiere un 50% de depósito para separar los equipos a instalar."
+    },
+    {
+      "name": "Epcom 16 Chanel DVR 1080 lite",
+      "sku": "IMP-178",
+      "categoryId": "cat-otros",
+      "price": 325,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Epcom 16 Chanel DVR 1080 lite"
+    },
+    {
+      "name": "SSD 512 GB Sata3",
+      "sku": "IMP-179",
+      "categoryId": "cat-otros",
+      "price": 95,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "SSD 512 GB Sata3"
+    },
+    {
+      "name": "Install services",
+      "sku": "IMP-180",
+      "categoryId": "cat-svc",
+      "price": 85,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install services"
+    },
+    {
+      "name": "Fix 2 cameran and reconfigure p2p access.",
+      "sku": "IMP-181",
+      "categoryId": "cat-otros",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Fix 2 cameran and reconfigure p2p access."
+    },
+    {
+      "name": "Invoice 6023",
+      "sku": "IMP-182",
+      "categoryId": "cat-otros",
+      "price": 277.17,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Invoice 6023"
+    },
+    {
+      "name": "Tapa stailess steal con caja de 1\" para empates",
+      "sku": "IMP-183",
+      "categoryId": "cat-otros",
+      "price": 17.71,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Tapa stailess steal con caja de 1\" para empates"
+    },
+    {
+      "name": "Magnet lock 600LBS",
+      "sku": "IMP-184",
+      "categoryId": "cat-otros",
+      "price": 50,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Magnet lock 600LBS"
+    },
+    {
+      "name": "Llave desactivadora (CocaCola)",
+      "sku": "IMP-185",
+      "categoryId": "cat-otros",
+      "price": 15,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Llave desactivadora (CocaCola)"
+    },
+    {
+      "name": "Outlet multiplug",
+      "sku": "IMP-186",
+      "categoryId": "cat-otros",
+      "price": 10,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Outlet multiplug"
+    },
+    {
+      "name": "Exit no toush buttom",
+      "sku": "IMP-187",
+      "categoryId": "cat-otros",
+      "price": 13.5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Exit no toush buttom"
+    },
+    {
+      "name": "Standalone exterior Keypad 125khz",
+      "sku": "IMP-188",
+      "categoryId": "cat-otros",
+      "price": 95,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Standalone exterior Keypad 125khz"
+    },
+    {
+      "name": "Black Buzzer",
+      "sku": "IMP-189",
+      "categoryId": "cat-otros",
+      "price": 2.5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Black Buzzer"
+    },
+    {
+      "name": "Exit white buttom",
+      "sku": "IMP-190",
+      "categoryId": "cat-otros",
+      "price": 3,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Exit white buttom"
+    },
+    {
+      "name": "cameras lan cable drops",
+      "sku": "IMP-191",
+      "categoryId": "cat-cable",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "cameras lan cable drops"
+    },
+    {
+      "name": "3 Metal Box, 3 stainless faceplate, 2 raceway 8'",
+      "sku": "IMP-192",
+      "categoryId": "cat-otros",
+      "price": 78.52,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "3 Metal Box, 3 stainless faceplate, 2 raceway 8'"
+    },
+    {
+      "name": "Instalacion de magneto en puerta posterior con boton de sali…",
+      "sku": "IMP-193",
+      "categoryId": "cat-cam",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Instalacion de magneto en puerta posterior con boton de salida no toush, keypad inteligente por app de Tuya smart, boton para timbre y llave desactivadora de corriente. Se instalaron 4 camaras de seguridad y una de ellas se removio del area de caja para colocarla fuera encima de la puerta exterior y se insralo una nueva en ares de caja. Se montaron tiradores de puerta, uno en la puerta de salida posterior y otra en la puerta que da hacia la caja. Se conectaron 2 camaras a la grabadora existente una en el area de la bobeda y la otra arriba de la puerta exterior ya que solo tenia disponible 2 canales de 8 que tiene."
+    },
+    {
+      "name": "REGG105GWX AX3000 BUSSINESS VPN ROUTER",
+      "sku": "IMP-194",
+      "categoryId": "cat-net",
+      "price": 180,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "REGG105GWX AX3000 BUSSINESS VPN ROUTER"
+    },
+    {
+      "name": "RGES209GCP 9 PORT POE+ SWITCH MANAGEMENT 120W",
+      "sku": "IMP-195",
+      "categoryId": "cat-net",
+      "price": 200,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "RGES209GCP 9 PORT POE+ SWITCH MANAGEMENT 120W"
+    },
+    {
+      "name": "Se verificó red y se encontró que tenian un switch de 10/100…",
+      "sku": "IMP-196",
+      "categoryId": "cat-cam",
+      "price": 425,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Se verificó red y se encontró que tenian un switch de 10/100MBs y un solo internet conectado ya que contaban con 2. Se procedio a instalar antena de Starlink y se reemplazo sitch 10/100mps por switch poe de 9 puertos de 1Gps para estabilizar la red. Tambien se instalo un router bussiness con capacidad para recibir 4 proveedores de red, las cuales se le instalo como primordial el starlink y secundario el aeronet y se activo el balanceo de cargas y la red se estabilizo con exito. Se removieron 4 camaras de siguridad del area exterior de las oficinas y despues que terminaron las labores de lijar el gypson se procedieron a instalar de nuevo."
+    },
+    {
+      "name": "DVR 16CH  +8iP",
+      "sku": "IMP-197",
+      "categoryId": "cat-otros",
+      "price": 325,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "DVR 16CH  +8iP"
+    },
+    {
+      "name": "Install services 2 cameras with lan cable and p2p.",
+      "sku": "IMP-198",
+      "categoryId": "cat-cable",
+      "price": 175,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install services 2 cameras with lan cable and p2p."
+    },
+    {
+      "name": "Junson Box",
+      "sku": "IMP-199",
+      "categoryId": "cat-otros",
+      "price": 18,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Junson Box"
+    },
+    {
+      "name": "Seagate 2TB 7200 RPM 512e SAS 12Gb 2.5\"",
+      "sku": "IMP-200",
+      "categoryId": "cat-otros",
+      "price": 185,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Seagate 2TB 7200 RPM 512e SAS 12Gb 2.5\""
+    },
+    {
+      "name": "Tapo 4K Outdoor Pan/Tilt Wireless Security Camera - Battery…",
+      "sku": "IMP-201",
+      "categoryId": "cat-rack",
+      "price": 220,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Tapo 4K Outdoor Pan/Tilt Wireless Security Camera - Battery with Solar Charging, 360° Motion Track, 24/7"
+    },
+    {
+      "name": "Tapo CentralHub for Smart Home Devices – Connect up to 16 Ta…",
+      "sku": "IMP-202",
+      "categoryId": "cat-otros",
+      "price": 185,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Tapo CentralHub for Smart Home Devices – Connect up to 16 Tapo Cameras & 64 Sub-G Sensors, 16GB Built-in Storage + 2.5'' SATA Expandable Storage"
+    },
+    {
+      "name": "Install Services",
+      "sku": "IMP-203",
+      "categoryId": "cat-svc",
+      "price": 425,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install Services"
+    },
+    {
+      "name": "Install camera services",
+      "sku": "IMP-204",
+      "categoryId": "cat-svc",
+      "price": 1375,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install camera services"
+    },
+    {
+      "name": "Move sensor battery",
+      "sku": "IMP-205",
+      "categoryId": "cat-otros",
+      "price": 2.5,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Move sensor battery"
+    },
+    {
+      "name": "RCA Mic",
+      "sku": "IMP-206",
+      "categoryId": "cat-otros",
+      "price": 17,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "RCA Mic"
+    },
+    {
+      "name": "Access Control support visit repair",
+      "sku": "IMP-207",
+      "categoryId": "cat-soporte",
+      "price": 45,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Access Control support visit repair"
+    },
+    {
+      "name": "Se tiró cableria y se instaló micrófono para granadora exist…",
+      "sku": "IMP-208",
+      "categoryId": "cat-cable",
+      "price": 165,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Se tiró cableria y se instaló micrófono para granadora existente. se instaló panel de alarma con 2 contactos un sensor de movimiento, parlante exterior y keypad. se configuró equipo en la cuenta de hikconnect y se dejó funcionando."
+    },
+    {
+      "name": "8kW inverter",
+      "sku": "IMP-209",
+      "categoryId": "cat-otros",
+      "price": 2200,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "8kW inverter"
+    },
+    {
+      "name": "15kwh Falicity lifePo4",
+      "sku": "IMP-210",
+      "categoryId": "cat-otros",
+      "price": 2800,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "15kwh Falicity lifePo4"
+    },
+    {
+      "name": "JA solar 545w panel",
+      "sku": "IMP-211",
+      "categoryId": "cat-otros",
+      "price": 155,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "JA solar 545w panel"
+    },
+    {
+      "name": "Install Services",
+      "sku": "IMP-212",
+      "categoryId": "cat-svc",
+      "price": 2500,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Install Services"
+    },
+    {
+      "name": "Bose Professional FreeSpace IZA 2120-HZ Zone Amplifier",
+      "sku": "IMP-213",
+      "categoryId": "cat-otros",
+      "price": 1100,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Bose Professional FreeSpace IZA 2120-HZ Zone Amplifier"
+    },
+    {
+      "name": "Satellite Subwoofer",
+      "sku": "IMP-214",
+      "categoryId": "cat-otros",
+      "price": 535,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Satellite Subwoofer"
+    },
+    {
+      "name": "Satellite speakers bose",
+      "sku": "IMP-215",
+      "categoryId": "cat-otros",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Satellite speakers bose"
+    },
+    {
+      "name": "Audio Install services",
+      "sku": "IMP-216",
+      "categoryId": "cat-svc",
+      "price": 600,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Audio Install services"
+    },
+    {
+      "name": "Cable box, connectors and mics.",
+      "sku": "IMP-217",
+      "categoryId": "cat-cable",
+      "price": 350,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Cable box, connectors and mics."
+    },
+    {
+      "name": "Zone volume controller",
+      "sku": "IMP-218",
+      "categoryId": "cat-otros",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Zone volume controller"
+    },
+    {
+      "name": "Xk84dl hdd inclued",
+      "sku": "IMP-219",
+      "categoryId": "cat-otros",
+      "price": 545.24,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Xk84dl hdd inclued"
+    },
+    {
+      "name": "Lan Cable box 1000 exterior",
+      "sku": "IMP-220",
+      "categoryId": "cat-cable",
+      "price": 255.55,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Lan Cable box 1000 exterior"
+    },
+    {
+      "name": "HDD laptop install and OS configuration",
+      "sku": "IMP-221",
+      "categoryId": "cat-svc",
+      "price": 110,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "HDD laptop install and OS configuration"
+    },
+    {
+      "name": "Remote service 3 PC",
+      "sku": "IMP-222",
+      "categoryId": "cat-svc",
+      "price": 25,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Remote service 3 PC"
+    },
+    {
+      "name": "Se realizó instación de disco duro ssd mas sistema operativo…",
+      "sku": "IMP-223",
+      "categoryId": "cat-cam",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Se realizó instación de disco duro ssd mas sistema operativo para laptop mas la configuración del programa CCS para configurar cámaras remotas para los Claro. Y se brindó mantenimiendo remoto para optimizar y limpiar data almacenada a computadoras de la farmacia."
+    },
+    {
+      "name": "P2P antena + router confifuration.",
+      "sku": "IMP-224",
+      "categoryId": "cat-net",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "P2P antena + router confifuration."
+    },
+    {
+      "name": "Camera install services",
+      "sku": "IMP-225",
+      "categoryId": "cat-svc",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Camera install services"
+    },
+    {
+      "name": "Lan cable",
+      "sku": "IMP-226",
+      "categoryId": "cat-cable",
+      "price": 25,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Lan cable"
+    },
+    {
+      "name": "Se realizó instalación de antenas Ruijie punto a punto desde…",
+      "sku": "IMP-227",
+      "categoryId": "cat-cam",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Se realizó instalación de antenas Ruijie punto a punto desde la farmacia hacia parking de empleados. se utilizó cable lan cat 6 exterior y se contectó un router con una caja de exterior para instalar el mismo y se modificó la corriente para que el receptáculo quedara dentro de la misma. Se instalaron 3 cámaras wifi solar al area del parkin y se conectaron al router instalado en el lugar."
+    },
+    {
+      "name": "Metal camera box",
+      "sku": "IMP-228",
+      "categoryId": "cat-otros",
+      "price": 18,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Metal camera box"
+    },
+    {
+      "name": "Dvr 8bchannels",
+      "sku": "IMP-229",
+      "categoryId": "cat-otros",
+      "price": 150,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Dvr 8bchannels"
+    },
+    {
+      "name": "1TB hdd",
+      "sku": "IMP-230",
+      "categoryId": "cat-otros",
+      "price": 110,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "1TB hdd"
+    },
+    {
+      "name": "Se reparó cableria en el techo con 2 junson box de exterior…",
+      "sku": "IMP-231",
+      "categoryId": "cat-cam",
+      "price": 0,
+      "unit": "c/u",
+      "type": "equipment",
+      "desc": "Se reparó cableria en el techo con 2 junson box de exterior para habilitar camara de parillo lateral exterior y càmara de cocina. se cambiaron balum en ambos extremos. Se instalaron 3 cables con 3 camaras nuevas. Una para el cooler una para el frezzer y una exterior para mirar desde arriba el restaurante. Se cambiaron balum para corregir problemas en cámaras mas se instaló y configuró grabadora 8 canales para las nuevas cámaras mas plataforma remota."
+    }
+  ],
+  "quotes": [
+    {
+      "clientName": "Claro Cotto Laurel",
+      "clientAddress": "Ponce",
+      "clientContact": "Angel · 787-675-9000",
+      "quoteDate": "2026-04-30",
+      "quoteNum": "IMP-58",
+      "projectName": "Factura #58",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "HDD laptop install and OS configuration",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 155
+        },
+        {
+          "name": "Remote service 3 PC",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 3,
+          "price": 25
+        },
+        {
+          "name": "Se realizó instación de disco duro ssd mas sistema operativo para laptop mas la ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 0
+        }
+      ],
+      "total": 230,
+      "savedAt": "2026-04-30T16:00:00.000Z",
+      "createdAt": "2026-04-30T16:00:00.000Z"
+    },
+    {
+      "clientName": "Farmacia los Reyes",
+      "clientAddress": "Juana Diaz",
+      "clientContact": "Angel · +1 (787) 675-9000",
+      "quoteDate": "2026-04-30",
+      "quoteNum": "IMP-59",
+      "projectName": "Factura #59",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "P2P antena + router configuration.",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 250
+        },
+        {
+          "name": "Camera install services",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 155
+        },
+        {
+          "name": "Lan cable cat6",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 25
+        },
+        {
+          "name": "Se realizó instalación de antenas Ruijie punto a punto desde la farmacia hacia p",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 0
+        }
+      ],
+      "total": 455,
+      "savedAt": "2026-04-30T16:00:00.000Z",
+      "createdAt": "2026-04-30T16:00:00.000Z"
+    },
+    {
+      "clientName": "Rincon Argentino",
+      "clientAddress": "Ponce",
+      "clientContact": "Martin · +1 (787) 217-4234",
+      "quoteDate": "2026-04-30",
+      "quoteNum": "IMP-60",
+      "projectName": "Factura #60",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Junson Box 4x4",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 22
+        },
+        {
+          "name": "HD Balum",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 5,
+          "price": 12
+        },
+        {
+          "name": "Install Services new cameras",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 450
+        },
+        {
+          "name": "Repair service cable conecction",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 25
+        },
+        {
+          "name": "2k HD camera",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 3,
+          "price": 65
+        },
+        {
+          "name": "Metal camera box",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 3,
+          "price": 18
+        },
+        {
+          "name": "Dvr 8 channels",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 225
+        },
+        {
+          "name": "Se reparó cableria en el techo con 2 junson box de exterior para habilitar camar",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 0
+        },
+        {
+          "name": "Lan cable",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 3,
+          "price": 25
+        }
+      ],
+      "total": 1128,
+      "savedAt": "2026-04-30T16:00:00.000Z",
+      "createdAt": "2026-04-30T16:00:00.000Z"
+    },
+    {
+      "clientName": "",
+      "clientAddress": "",
+      "clientContact": "",
+      "quoteDate": "2026-04-28",
+      "quoteNum": "IMP-57",
+      "projectName": "Factura #57",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Xk84dl hdd inclued",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 545.24
+        },
+        {
+          "name": "Install services",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 575
+        },
+        {
+          "name": "Lan Cable box 1000 cat6",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 255.55
+        },
+        {
+          "name": "Junson Box",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 6,
+          "price": 7
+        },
+        {
+          "name": "MONITOR 22\"",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 123.77
+        }
+      ],
+      "total": 1541.56,
+      "savedAt": "2026-04-28T16:00:00.000Z",
+      "createdAt": "2026-04-28T16:00:00.000Z"
+    },
+    {
+      "clientName": "De Jesus Rest",
+      "clientAddress": "Ponce",
+      "clientContact": "Felipe · 939-276-5943",
+      "quoteDate": "2026-03-30",
+      "quoteNum": "IMP-26",
+      "projectName": "Factura #26",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Bose Professional FreeSpace IZA 2120-HZ Zone Amplifier",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 1100
+        },
+        {
+          "name": "Satellite Subwoofer",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 535
+        },
+        {
+          "name": "Satellite speakers bose",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 150
+        },
+        {
+          "name": "Audio Install services",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 600
+        },
+        {
+          "name": "Cable box, connectors and mics.",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 350
+        },
+        {
+          "name": "Zone volume controller",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 0
+        }
+      ],
+      "total": 3420,
+      "savedAt": "2026-03-30T16:00:00.000Z",
+      "createdAt": "2026-03-30T16:00:00.000Z"
+    },
+    {
+      "clientName": "Miguel Cafetín 4 Calles",
+      "clientAddress": "Ponce",
+      "clientContact": "(787) 613-2384",
+      "quoteDate": "2026-03-24",
+      "quoteNum": "IMP-56",
+      "projectName": "Factura #56",
+      "projectNotes": "Cables, tuberias y micelaneos se añaden a la factura a la factura final.",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "8kW inverter",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 2200
+        },
+        {
+          "name": "15kwh Falicity lifePo4",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 2800
+        },
+        {
+          "name": "JA solar 545w panel",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 6,
+          "price": 155
+        },
+        {
+          "name": "Breaker circuit panel 16 single 8 doble. ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 180
+        },
+        {
+          "name": "Install Services",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 2500
+        }
+      ],
+      "total": 8610,
+      "savedAt": "2026-03-24T16:00:00.000Z",
+      "createdAt": "2026-03-24T16:00:00.000Z"
+    },
+    {
+      "clientName": "Claro Centro del Sur",
+      "clientAddress": "Ponce",
+      "clientContact": "Angel · +1 (787) 675-9000",
+      "quoteDate": "2026-03-14",
+      "quoteNum": "IMP-55",
+      "projectName": "Factura #55",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Move sensor battery ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 2.5
+        },
+        {
+          "name": "RCA Mic",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 17
+        },
+        {
+          "name": "Access Control support visit repair",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 45
+        },
+        {
+          "name": "Se tiró cableria y se instaló micrófono para granadora existente. se instaló pan",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 165
+        }
+      ],
+      "total": 232,
+      "savedAt": "2026-03-14T16:00:00.000Z",
+      "createdAt": "2026-03-14T16:00:00.000Z"
+    },
+    {
+      "clientName": "Claro Cotto Laurel",
+      "clientAddress": "Ponce",
+      "clientContact": "Angel · (787) 675-9000",
+      "quoteDate": "2026-03-09",
+      "quoteNum": "IMP-53",
+      "projectName": "Factura #53",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Magnet lock 600LBS",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 50
+        },
+        {
+          "name": "Llave desactivadora (CocaCola)",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 15
+        },
+        {
+          "name": "Outlet multiplug",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 10
+        },
+        {
+          "name": "HD Balum",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 4,
+          "price": 12
+        },
+        {
+          "name": "Exit no toush buttom",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 13.5
+        },
+        {
+          "name": "Standalone exterior Keypad 125khz",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 95
+        },
+        {
+          "name": "Black Buzzer",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 2.5
+        },
+        {
+          "name": "Exit white buttom",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 3
+        },
+        {
+          "name": "cameras lan cable drops",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 45
+        },
+        {
+          "name": "3 Metal Box, 3 stainless faceplate, 2 raceway 8' ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 78.52
+        },
+        {
+          "name": "Instalacion de magneto en puerta posterior con boton de salida no touch, keypad ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 455
+        }
+      ],
+      "total": 815.52,
+      "savedAt": "2026-03-09T16:00:00.000Z",
+      "createdAt": "2026-03-09T16:00:00.000Z"
+    },
+    {
+      "clientName": "Mi Compra",
+      "clientAddress": "Guancha Ponce",
+      "clientContact": "Jean · 787-709-5834",
+      "quoteDate": "2026-03-09",
+      "quoteNum": "IMP-54",
+      "projectName": "Factura #54",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "REGG105GWX AX3000 BUSSINESS VPN ROUTER",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 180
+        },
+        {
+          "name": "RGES209GCP 9 PORT POE+ SWITCH MANAGEMENT 120W",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 200
+        },
+        {
+          "name": "Se verificó red y se encontró que tenian un switch de 10/100MBs y un solo intern",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 425
+        }
+      ],
+      "total": 805,
+      "savedAt": "2026-03-09T16:00:00.000Z",
+      "createdAt": "2026-03-09T16:00:00.000Z"
+    },
+    {
+      "clientName": "El Sitio",
+      "clientAddress": "Ponce",
+      "clientContact": "Wilmarie · 939-313-7050",
+      "quoteDate": "2026-03-09",
+      "quoteNum": "IMP-22",
+      "projectName": "Factura #22",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "DVR 16CH  +8iP ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 325
+        },
+        {
+          "name": "HD Balum",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 3,
+          "price": 10
+        },
+        {
+          "name": "E3KTURBOC 5MP Camera",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 55
+        },
+        {
+          "name": "cameras lan cable drops",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 45
+        },
+        {
+          "name": "Install services 2 cameras with lan cable and p2p.",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 200
+        },
+        {
+          "name": "Junson Box 4x4",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 22
+        }
+      ],
+      "total": 777,
+      "savedAt": "2026-03-09T16:00:00.000Z",
+      "createdAt": "2026-03-09T16:00:00.000Z"
+    },
+    {
+      "clientName": "Jorge",
+      "clientAddress": "Ponce",
+      "clientContact": "787-421-0792",
+      "quoteDate": "2026-03-09",
+      "quoteNum": "IMP-23",
+      "projectName": "Factura #23",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "EV8008TURBOD\n8MP DVR",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 275
+        },
+        {
+          "name": "E3KTURBOC 5MP Camera",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 6,
+          "price": 70
+        },
+        {
+          "name": "4 Amp Power supply",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 28
+        },
+        {
+          "name": "4TB HDD 1yr waran",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 165
+        },
+        {
+          "name": "Cable lan and install services",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 565
+        },
+        {
+          "name": "LAN BOX CAT 6",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 150
+        },
+        {
+          "name": "Junson Box",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 6,
+          "price": 18
+        }
+      ],
+      "total": 1739,
+      "savedAt": "2026-03-09T16:00:00.000Z",
+      "createdAt": "2026-03-09T16:00:00.000Z"
+    },
+    {
+      "clientName": "Jorge",
+      "clientAddress": "Ponce",
+      "clientContact": "787-421-0792",
+      "quoteDate": "2026-03-09",
+      "quoteNum": "IMP-24",
+      "projectName": "Factura #24",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Seagate 2TB 7200 RPM 512e SAS 12Gb 2.5\"",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 185
+        },
+        {
+          "name": "Tapo 4K Outdoor Pan/Tilt Wireless Security Camera - Battery with Solar Charging,",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 6,
+          "price": 220
+        },
+        {
+          "name": "Tapo CentralHub for Smart Home Devices – Connect up to 16 Tapo Cameras & 64 Sub-",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 185
+        },
+        {
+          "name": "Install Services ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 425
+        }
+      ],
+      "total": 2115,
+      "savedAt": "2026-03-09T16:00:00.000Z",
+      "createdAt": "2026-03-09T16:00:00.000Z"
+    },
+    {
+      "clientName": "Umami Rest",
+      "clientAddress": "Guanica",
+      "clientContact": "Felix · 939-265-3956",
+      "quoteDate": "2026-03-09",
+      "quoteNum": "IMP-25",
+      "projectName": "Factura #25",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "16 Chan DVR HD up to 5K",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 295
+        },
+        {
+          "name": "E3KTURBOC 5MP Camera",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 10,
+          "price": 70
+        },
+        {
+          "name": "Lan Box weather prof",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 250
+        },
+        {
+          "name": "Junson Box 4x4",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 10,
+          "price": 22
+        },
+        {
+          "name": "HD Balum",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 10,
+          "price": 12
+        },
+        {
+          "name": "Power supply box 18 chn 20A ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 125
+        },
+        {
+          "name": "Battery Backup 1250va",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 225
+        },
+        {
+          "name": "4TB HDD 1yr waran",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 165
+        },
+        {
+          "name": "MONITOR 22\"",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 150
+        },
+        {
+          "name": "Security Box ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 150
+        },
+        {
+          "name": "Install camera services",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 1375
+        }
+      ],
+      "total": 3775,
+      "savedAt": "2026-03-09T16:00:00.000Z",
+      "createdAt": "2026-03-09T16:00:00.000Z"
+    },
+    {
+      "clientName": "Edwin X. Iglesias",
+      "clientAddress": "Ponce",
+      "clientContact": "(787) 379-4571",
+      "quoteDate": "2026-02-13",
+      "quoteNum": "IMP-3",
+      "projectName": "Factura #3",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Install Cam service",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 250
+        },
+        {
+          "name": "Invoice 6023",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 277.17
+        },
+        {
+          "name": "Tapa stailess steal con caja de 1\" para empates",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 17.71
+        }
+      ],
+      "total": 544.8800000000001,
+      "savedAt": "2026-02-13T16:00:00.000Z",
+      "createdAt": "2026-02-13T16:00:00.000Z"
+    },
+    {
+      "clientName": "Domplines Express",
+      "clientAddress": "Ponce",
+      "clientContact": "",
+      "quoteDate": "2026-02-06",
+      "quoteNum": "IMP-52",
+      "projectName": "Factura #52",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Fix 2 cameran and reconfigure p2p access.",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 45
+        }
+      ],
+      "total": 45,
+      "savedAt": "2026-02-06T16:00:00.000Z",
+      "createdAt": "2026-02-06T16:00:00.000Z"
+    },
+    {
+      "clientName": "Cortes Uniforms",
+      "clientAddress": "",
+      "clientContact": "Marier Rivera",
+      "quoteDate": "2026-02-03",
+      "quoteNum": "IMP-51",
+      "projectName": "Factura #51",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "SSD 512 GB Sata3 ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 95
+        },
+        {
+          "name": "Install services:\nInstalación de sistema operativo windows 11 e aplicaciones.",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 85
+        }
+      ],
+      "total": 180,
+      "savedAt": "2026-02-03T16:00:00.000Z",
+      "createdAt": "2026-02-03T16:00:00.000Z"
+    },
+    {
+      "clientName": "Zoom Moda",
+      "clientAddress": "Ponce ",
+      "clientContact": "Marwan Said · +1 (787) 371-7071",
+      "quoteDate": "2026-01-21",
+      "quoteNum": "IMP-21",
+      "projectName": "Factura #21",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Epcom 16 Chanel DVR 1080 lite",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 325
+        },
+        {
+          "name": "Turbo E8 Color",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 65
+        },
+        {
+          "name": "HDD Sata 2TB",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 135
+        },
+        {
+          "name": "LAN BOX CAT 6 1000ft",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 225
+        },
+        {
+          "name": "Install Cameras services and p2p configuration and cable management.",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 650
+        },
+        {
+          "name": "De utilizar equipo adicional o aparece algun vicio oculto se añadira a la factur",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 0
+        }
+      ],
+      "total": 1465,
+      "savedAt": "2026-01-21T16:00:00.000Z",
+      "createdAt": "2026-01-21T16:00:00.000Z"
+    },
+    {
+      "clientName": "Cortes Uniforms",
+      "clientAddress": "",
+      "clientContact": "Marier Rivera",
+      "quoteDate": "2026-01-20",
+      "quoteNum": "IMP-49",
+      "projectName": "Factura #49",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "Depósito $75 para cambio de disco duro.",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 0
+        }
+      ],
+      "total": 0,
+      "savedAt": "2026-01-20T16:00:00.000Z",
+      "createdAt": "2026-01-20T16:00:00.000Z"
+    },
+    {
+      "clientName": "Conttinental National",
+      "clientAddress": "Ponce PR",
+      "clientContact": "Natalia Diou · 346-780-5502 · natalia.diou@cottonteam.com",
+      "quoteDate": "2026-01-07",
+      "quoteNum": "IMP-48",
+      "projectName": "Factura #48",
+      "projectNotes": "",
+      "applyIVU": false,
+      "items": [
+        {
+          "name": "E3KTURBOC 5MP Camera",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 23,
+          "price": 70
+        },
+        {
+          "name": "EV40 16TURBOD 16 Ch Dvr",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 280
+        },
+        {
+          "name": "DX36015X PTZ 1080 15x Optical zoom",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 3,
+          "price": 425
+        },
+        {
+          "name": "BATTERY BACKUP 1500VA",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 195
+        },
+        {
+          "name": "Power supply box 18 chn 20A ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 100
+        },
+        {
+          "name": "RGEST350V2 P2P antenas kit",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 250
+        },
+        {
+          "name": "RGES209GCP 9 port switch manage",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 175
+        },
+        {
+          "name": "RGES206GCP 6 port switch",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 2,
+          "price": 110
+        },
+        {
+          "name": "Newlink Cat6 Exterior - Unshielded - Negro",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 10,
+          "price": 215
+        },
+        {
+          "name": "Install Cam service",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 8200
+        },
+        {
+          "name": "HD Balum",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 23,
+          "price": 12
+        },
+        {
+          "name": "Junson Box 4x4",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 23,
+          "price": 22
+        },
+        {
+          "name": "De utilizar equipo adicional o aparece algun vicio oculto se añadira a la factur",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 0
+        },
+        {
+          "name": "Todo trabajo que exeda de  $1500 o mas requiere un 50% de depósito para separar ",
+          "sku": "",
+          "unit": "c/u",
+          "type": "equipment",
+          "qty": 1,
+          "price": 0
+        }
+      ],
+      "total": 15867,
+      "savedAt": "2026-01-07T16:00:00.000Z",
+      "createdAt": "2026-01-07T16:00:00.000Z"
+    }
+  ]
+}

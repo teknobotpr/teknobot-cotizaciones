@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Digital LIVE — Teknobot</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0a0a0a; color: #fff;
+      user-select: none;
+    }
+    .header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 10vh; min-height: 80px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+      border-bottom: 4px solid var(--accent, #d97706);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4vw; z-index: 10;
+    }
+    .logo { display: flex; align-items: center; gap: 16px; }
+    .logo-icon { font-size: 5vh; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-name {
+      font-size: 3.5vh; font-weight: 800; letter-spacing: 1px;
+      color: #fbbf24; text-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+    }
+    .logo-sub { font-size: 1.6vh; color: #9ca3af; letter-spacing: 3px; text-transform: uppercase; }
+    .live-indicator {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 999px;
+      background: rgba(16, 185, 129, 0.2); color: #10b981;
+      font-size: 1.4vh; font-weight: 700; letter-spacing: 1px;
+      margin-top: 4px;
+    }
+    .live-indicator::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: #10b981; animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+    .category-pills { display: flex; gap: 12px; }
+    .pill {
+      padding: 0.8vh 1.6vw; border-radius: 999px;
+      font-size: 1.8vh; font-weight: 600;
+      background: rgba(255,255,255,0.05);
+      color: #6b7280;
+      transition: all 0.5s ease;
+    }
+    .pill.active {
+      background: var(--accent, #d97706); color: #fff;
+      box-shadow: 0 0 20px rgba(217, 119, 6, 0.5);
+    }
+    .main {
+      position: fixed; top: 10vh; left: 0; right: 0; bottom: 5vh;
+      padding: 3vh 4vw; overflow: hidden;
+    }
+    .category-title {
+      font-size: 5vh; font-weight: 800;
+      color: #fbbf24; margin-bottom: 2vh;
+      text-align: center; letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: slideDown 0.8s ease;
+    }
+    .category-icon { font-size: 6vh; margin-right: 12px; }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2vh 2vw; height: calc(100% - 8vh);
+    }
+    .item-card {
+      background: linear-gradient(135deg, #1f1f1f 0%, #2a1c10 100%);
+      border-radius: 16px; overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+      animation: fadeUp 0.6s ease both;
+    }
+    .item-card:nth-child(1) { animation-delay: 0.1s; }
+    .item-card:nth-child(2) { animation-delay: 0.2s; }
+    .item-card:nth-child(3) { animation-delay: 0.3s; }
+    .item-card:nth-child(4) { animation-delay: 0.4s; }
+    .item-card:nth-child(5) { animation-delay: 0.5s; }
+    .item-card:nth-child(6) { animation-delay: 0.6s; }
+    .item-image {
+      flex: 1; background-size: cover; background-position: center;
+      position: relative; min-height: 0;
+    }
+    .item-price {
+      position: absolute; top: 12px; right: 12px;
+      background: var(--accent, #d97706);
+      padding: 6px 14px; border-radius: 12px;
+      font-size: 2.4vh; font-weight: 800; color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .badge {
+      position: absolute; top: 12px; left: 12px;
+      padding: 4px 10px; border-radius: 8px;
+      font-size: 1.2vh; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: #fff;
+      transform: rotate(-3deg);
+    }
+    .badge.popular { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+    .badge.new { background: #10b981; }
+    .item-info { padding: 1.6vh 1.4vw; }
+    .item-name { font-size: 2.2vh; font-weight: 700; color: #fbbf24; margin-bottom: 4px; }
+    .item-desc { font-size: 1.4vh; color: #9ca3af; line-height: 1.4; }
+    .grid.featured { grid-template-columns: 1.5fr 1fr 1fr; grid-template-rows: 1fr 1fr; }
+    .grid.featured .item-card:first-child { grid-row: 1 / 3; }
+    .grid.featured .item-card:first-child .item-name { font-size: 3vh; }
+    .grid.featured .item-card:first-child .item-desc { font-size: 1.7vh; }
+    .grid.featured .item-card:first-child .item-price { font-size: 3.2vh; padding: 8px 18px; }
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 5vh; min-height: 40px;
+      background: var(--accent, #d97706);
+      display: flex; align-items: center; overflow: hidden;
+    }
+    .ticker {
+      display: flex; gap: 6vw;
+      animation: tickerScroll 50s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker > span { font-size: 1.8vh; font-weight: 600; color: #fff; padding: 0 2vw; }
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .loading {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #0a0a0a; z-index: 100;
+      font-size: 3vh; color: #fbbf24;
+    }
+    .spinner {
+      width: 60px; height: 60px;
+      border: 4px solid rgba(251, 191, 36, 0.2);
+      border-top-color: #fbbf24;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Update flash */
+    .update-flash {
+      position: fixed; top: 12vh; right: 4vw;
+      padding: 12px 20px;
+      background: rgba(16, 185, 129, 0.95);
+      color: white; border-radius: 12px;
+      font-size: 1.6vh; font-weight: 700;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      z-index: 20;
+      animation: flashIn 0.4s ease, flashOut 0.4s ease 3s forwards;
+    }
+    @keyframes flashIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes flashOut { to { opacity: 0; transform: translateY(-20px); } }
+
+    .error {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; background: #0a0a0a;
+      color: #ef4444; font-size: 2vh; text-align: center; padding: 4vh;
+    }
+  </style>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  Cargando menú…
+</div>
+
+<div id="app" style="display:none;">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon" id="brandEmoji">🐸</div>
+      <div class="logo-text">
+        <div class="logo-name" id="brandName">El Coquí Bistró</div>
+        <div class="logo-sub" id="brandTagline">Cocina Boricua · Ponce, PR</div>
+        <div class="live-indicator">LIVE · Sincronizado</div>
+      </div>
+    </div>
+    <div class="category-pills" id="pills"></div>
+  </div>
+
+  <div class="main">
+    <div class="category-title" id="catTitle">
+      <span class="category-icon" id="catIcon">🌅</span>
+      <span id="catName">Desayunos</span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="footer">
+    <div class="ticker" id="ticker"></div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const SUPABASE_URL = 'https://kiauzuhwgbsupoxtmkes.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpYXV6dWh3Z2JzdXBveHRta2VzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNjc3NzgsImV4cCI6MjA5Mzk0Mzc3OH0.ftbtRZVeLYItWo9TSTSUF8mB-wjkLDH0fwj1UCYwHxE';
+// Venue ID from URL query (?venue=demo-coqui) or default
+const params = new URLSearchParams(location.search);
+const VENUE_ID = params.get('venue') || 'demo-coqui';
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ===== STATE =====
+let venue = null;
+let categories = [];      // {id, name, icon, sort_order, featured}
+let itemsByCat = {};      // { categoryId: [item, item, ...] }
+let currentIdx = 0;
+let rotationTimer = null;
+
+// ===== LOAD =====
+async function loadAll() {
+  try {
+    const { data: v, error: ev } = await sb.from('venues').select('*').eq('id', VENUE_ID).single();
+    if (ev) throw ev;
+    venue = v;
+
+    const { data: cats, error: ec } = await sb.from('menu_categories')
+      .select('*').eq('venue_id', VENUE_ID).eq('active', true).order('sort_order');
+    if (ec) throw ec;
+    categories = cats;
+
+    const { data: items, error: ei } = await sb.from('menu_items')
+      .select('*').eq('venue_id', VENUE_ID).eq('active', true).order('sort_order');
+    if (ei) throw ei;
+    itemsByCat = {};
+    for (const it of items) {
+      (itemsByCat[it.category_id] = itemsByCat[it.category_id] || []).push(it);
+    }
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    applyBranding();
+    if (currentIdx >= categories.length) currentIdx = 0;
+    render();
+    startRotation();
+  } catch (e) {
+    document.getElementById('loading').innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:6vh;margin-bottom:2vh;">⚠️</div>
+        <div>Error al cargar el menú</div>
+        <div style="font-size:1.6vh;color:#9ca3af;margin-top:1vh;">${e.message || e}</div>
+      </div>`;
+  }
+}
+
+function applyBranding() {
+  if (!venue) return;
+  document.documentElement.style.setProperty('--accent', venue.primary_color || '#d97706');
+  document.getElementById('brandEmoji').textContent = venue.brand_emoji || '🍽️';
+  document.getElementById('brandName').textContent = venue.name || '';
+  document.getElementById('brandTagline').textContent = venue.tagline || '';
+  document.title = (venue.name || 'Menú') + ' — Live';
+
+  // Ticker
+  const ticker = venue.ticker || [];
+  const html = ticker.map(t => `<span>${escapeHtml(t)}</span>`).join('');
+  document.getElementById('ticker').innerHTML = html + html; // duplicate for seamless loop
+}
+
+function render() {
+  if (!categories.length) {
+    document.getElementById('grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#9ca3af;padding:4vh;">No hay categorías activas.</div>';
+    return;
+  }
+  const cat = categories[currentIdx % categories.length];
+  // Pills
+  document.getElementById('pills').innerHTML = categories.map((c, i) =>
+    `<div class="pill ${i === currentIdx ? 'active' : ''}">${c.icon || ''} ${escapeHtml(c.name)}</div>`
+  ).join('');
+  // Title (re-trigger animation)
+  document.getElementById('catIcon').textContent = cat.icon || '';
+  document.getElementById('catName').textContent = cat.name;
+  const titleEl = document.getElementById('catTitle');
+  titleEl.style.animation = 'none';
+  void titleEl.offsetWidth;
+  titleEl.style.animation = 'slideDown 0.8s ease';
+  // Grid
+  const items = itemsByCat[cat.id] || [];
+  const grid = document.getElementById('grid');
+  grid.className = 'grid' + (cat.featured ? ' featured' : '');
+  if (!items.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#9ca3af;padding:4vh;">No hay items en esta categoría.</div>';
+    return;
+  }
+  grid.innerHTML = items.slice(0, 6).map(it => `
+    <div class="item-card">
+      <div class="item-image" style="background-image:url('${escapeAttr(it.image_url)}')">
+        ${it.badge ? `<div class="badge ${it.badge}">${badgeLabel(it.badge)}</div>` : ''}
+        <div class="item-price">$${(parseFloat(it.price)||0).toFixed(2)}</div>
+      </div>
+      <div class="item-info">
+        <div class="item-name">${escapeHtml(it.name)}</div>
+        <div class="item-desc">${escapeHtml(it.description || '')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function badgeLabel(b) {
+  return ({ popular: '🔥 POPULAR', new: '✨ NUEVO', spicy: '🌶️ PICANTE' })[b] || b.toUpperCase();
+}
+
+function nextCat() {
+  currentIdx = (currentIdx + 1) % Math.max(categories.length, 1);
+  render();
+}
+
+function startRotation() {
+  if (rotationTimer) clearInterval(rotationTimer);
+  const ms = (venue && venue.rotation_ms) || 12000;
+  rotationTimer = setInterval(nextCat, ms);
+}
+
+// ===== REALTIME =====
+function setupRealtime() {
+  const channel = sb.channel('menu-' + VENUE_ID)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'menu_items', filter: `venue_id=eq.${VENUE_ID}` },
+      (payload) => handleChange('items', payload))
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'menu_categories', filter: `venue_id=eq.${VENUE_ID}` },
+      (payload) => handleChange('categories', payload))
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'venues', filter: `id=eq.${VENUE_ID}` },
+      (payload) => handleChange('venue', payload))
+    .subscribe((status) => {
+      console.log('Realtime status:', status);
+    });
+}
+
+let refreshDebounce = null;
+function handleChange(kind, payload) {
+  console.log('change:', kind, payload);
+  showFlash(`Actualizado: ${kind}`);
+  // Debounce: if many changes come at once, reload once after 800ms
+  if (refreshDebounce) clearTimeout(refreshDebounce);
+  refreshDebounce = setTimeout(() => {
+    loadAll();
+  }, 800);
+}
+
+function showFlash(text) {
+  // Remove existing flash
+  const existing = document.querySelector('.update-flash');
+  if (existing) existing.remove();
+  const div = document.createElement('div');
+  div.className = 'update-flash';
+  div.textContent = '✓ ' + text;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3500);
+}
+
+// ===== UTILS =====
+function escapeHtml(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') { nextCat(); startRotation(); }
+  if (e.key === 'ArrowLeft')  {
+    currentIdx = (currentIdx - 1 + categories.length) % Math.max(categories.length, 1);
+    render(); startRotation();
+  }
+  if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+// ===== BOOT =====
+loadAll();
+setupRealtime();
+</script>
+
+</body>
+</html>

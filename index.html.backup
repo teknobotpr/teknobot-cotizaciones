@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teknobot — Cotizaciones</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+    min-height: 100vh;
+    color: #0f172a;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
+  .hero {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  .hero img { width: 60px; height: auto; }
+  .hero h1 { margin: 0; font-size: 22px; color: #1e3a8a; }
+  .hero p { margin: 2px 0 0; color: #64748b; font-size: 12px; }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: white;
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    overflow-x: auto;
+  }
+  .tab {
+    flex: 1;
+    min-width: 110px;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.15s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .tab.active { background: #1e3a8a; color: white; }
+  .tab:hover:not(.active) { background: #eef2ff; color: #1e3a8a; }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+  .card h2 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    color: #1e3a8a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #eef2ff;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  label { display: block; font-size: 11px; color: #64748b; margin-bottom: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, textarea, select {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #f8fafc;
+    transition: all 0.15s;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  textarea { resize: vertical; min-height: 50px; }
+  .btn {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .btn-primary { background: #2563eb; color: white; }
+  .btn-primary:hover { background: #1e40af; }
+  .btn-secondary { background: #eef2ff; color: #1e3a8a; }
+  .btn-secondary:hover { background: #c7d2fe; }
+  .btn-danger { background: #fee2e2; color: #b91c1c; padding: 7px 11px; }
+  .btn-danger:hover { background: #fecaca; }
+  .btn-success {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    font-size: 15px;
+    padding: 12px 24px;
+  }
+  .btn-success:hover { background: linear-gradient(135deg, #16a34a, #15803d); }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .total-card { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; }
+  .total-card h2 { color: white; border-color: rgba(255,255,255,0.2); }
+  .total-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 15px; }
+  .total-row.grand {
+    font-size: 22px; font-weight: bold;
+    border-top: 2px solid rgba(255,255,255,0.3);
+    padding-top: 10px; margin-top: 6px;
+  }
+  .toggle-group {
+    display: flex; gap: 12px; align-items: center;
+    margin-top: 10px; padding: 10px;
+    background: #f8fafc; border-radius: 8px;
+  }
+  .toggle-group label {
+    margin: 0; cursor: pointer; display: flex;
+    align-items: center; gap: 8px;
+    text-transform: none; letter-spacing: 0;
+    font-size: 13px; color: #0f172a; font-weight: 500;
+  }
+  .toggle-group.dark { background: rgba(255,255,255,0.1); }
+  .toggle-group.dark label { color: white; }
+  .actions { background: white; border-radius: 16px; padding: 16px; text-align: center; }
+  .footer-info { text-align: center; color: rgba(255,255,255,0.7); font-size: 11px; margin-top: 12px; }
+  .hidden { display: none !important; }
+
+  /* Catalog & lists */
+  .item-list { display: flex; flex-direction: column; gap: 6px; }
+  .item-row {
+    display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px;
+    padding: 10px 12px;
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+    align-items: center;
+  }
+  .item-row .info { min-width: 0; }
+  .item-row .name { font-weight: 600; font-size: 14px; color: #0f172a; word-wrap: break-word; }
+  .item-row .meta { font-size: 11px; color: #64748b; margin-top: 2px; }
+  .item-row .price { font-weight: bold; color: #1e3a8a; font-size: 14px; white-space: nowrap; }
+  .qty-input { width: 60px; padding: 5px 8px; font-size: 13px; text-align: center; }
+
+  .category-pill {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    background: #eef2ff; color: #1e3a8a; margin-right: 4px;
+  }
+
+  .search-bar {
+    position: relative; margin-bottom: 12px;
+  }
+  .search-bar input { padding-left: 36px; }
+  .search-bar::before {
+    content: "🔍"; position: absolute; left: 11px; top: 50%;
+    transform: translateY(-50%); font-size: 14px;
+  }
+
+  .cat-filter {
+    display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;
+  }
+  .cat-chip {
+    padding: 5px 10px; border-radius: 16px;
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;
+    transition: all 0.15s; user-select: none;
+  }
+  .cat-chip:hover { background: #eef2ff; color: #1e3a8a; }
+  .cat-chip.active { background: #1e3a8a; color: white; border-color: #1e3a8a; }
+
+  .modal-bg {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100; padding: 16px;
+  }
+  .modal {
+    background: white; border-radius: 16px; padding: 20px;
+    max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto;
+  }
+  .modal h3 { margin: 0 0 14px; color: #1e3a8a; }
+
+  .empty-state {
+    text-align: center; padding: 30px 20px; color: #94a3b8;
+    background: #f8fafc; border-radius: 8px;
+    border: 2px dashed #e2e8f0;
+  }
+  .empty-state .icon { font-size: 32px; margin-bottom: 8px; }
+
+  .history-row {
+    padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px;
+    background: #f8fafc; margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px;
+  }
+  .history-row .info { min-width: 0; flex: 1; }
+  .history-row .title { font-weight: 600; color: #0f172a; }
+  .history-row .meta { font-size: 11px; color: #64748b; margin-top: 2px; }
+  .history-row .total { font-weight: bold; color: #1e3a8a; }
+
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; }
+    .item-row { grid-template-columns: 1fr; gap: 6px; }
+    .item-row > * { width: 100%; }
+    .item-row .price { text-align: right; }
+    .hero { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <img id="logo" alt="Teknobot">
+    <div>
+      <h1>TEKNOBOT</h1>
+      <p>📍 Ponce, PR &nbsp;•&nbsp; 📧 teknobotpr@gmail.com &nbsp;•&nbsp; 🌐 facebook.com/teknobotpr</p>
+      <p style="margin-top:4px;font-weight:600;color:#2563eb;">Sistema de Cotizaciones</p>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="quote">📝 Cotización</button>
+    <button class="tab" data-tab="catalog">📦 Catálogo</button>
+    <button class="tab" data-tab="categories">🏷️ Categorías</button>
+    <button class="tab" data-tab="history">📋 Historial</button>
+    <button class="tab" data-tab="print3d">🖨️ 3D Print</button>
+    <button class="tab" data-tab="settings">⚙️ Ajustes</button>
+  </div>
+
+  <!-- ========== TAB: QUOTE ========== -->
+  <div id="tab-quote" class="tab-content">
+
+    <div class="card">
+      <h2>📋 Información del Proyecto</h2>
+      <div class="grid">
+        <div>
+          <label style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Cliente</span>
+            <button type="button" class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="openClientPicker()">👤 Existente</button>
+          </label>
+          <input type="text" id="clientName" placeholder="Ej: Juan Pérez">
+        </div>
+        <div>
+          <label>Proyecto</label>
+          <input type="text" id="projectName" placeholder="Ej: Guancha Ponce">
+        </div>
+        <div>
+          <label>Dirección</label>
+          <input type="text" id="clientAddress" placeholder="Ponce, PR">
+        </div>
+        <div>
+          <label>Contacto</label>
+          <input type="text" id="clientContact" placeholder="787-555-0000">
+        </div>
+        <div>
+          <label>Fecha</label>
+          <input type="date" id="quoteDate">
+        </div>
+        <div>
+          <label>Cotización #</label>
+          <input type="text" id="quoteNum">
+        </div>
+      </div>
+      <div style="margin-top:10px;">
+        <label>Notas del proyecto</label>
+        <textarea id="projectNotes" placeholder="Detalles del espacio, tipo de instalación..."></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>
+        <span>🛒 Items de la Cotización</span>
+        <button class="btn btn-primary" onclick="openCatalogPicker()">+ Agregar del Catálogo</button>
+      </h2>
+      <div id="quoteItems"></div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="addCustomItem()">+ Item Personalizado</button>
+      </div>
+    </div>
+
+    <div class="card total-card">
+      <h2>💰 Total</h2>
+      <div class="total-row">
+        <span>Subtotal</span>
+        <span id="subtotal">$0.00</span>
+      </div>
+      <div class="toggle-group dark">
+        <label>
+          <input type="checkbox" id="applyIVU">
+          <span>Aplicar IVU (11.5%)</span>
+        </label>
+      </div>
+      <div class="total-row" id="ivuRow" style="display:none;">
+        <span>IVU (11.5%)</span>
+        <span id="ivuAmount">$0.00</span>
+      </div>
+      <div class="total-row grand">
+        <span>TOTAL</span>
+        <span id="grandTotal">$0.00</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div id="editingBanner" class="hidden" style="background:#fef3c7;color:#92400e;padding:10px;border-radius:8px;margin-bottom:10px;font-size:13px;font-weight:600;">
+        ✏️ Editando cotización guardada — <span id="editingTitle"></span>
+      </div>
+      <button class="btn btn-success" onclick="generatePDF()">📄 Generar PDF</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="saveQuoteToHistory()" style="margin-left:6px;">💾 Guardar</button>
+      <button class="btn btn-secondary" id="saveAsNewBtn" onclick="saveQuoteAsNew()" style="margin-left:6px;display:none;">📋 Guardar como nueva</button>
+      <button class="btn btn-secondary" onclick="resetQuote()" style="margin-left:6px;">🗑️ Nueva</button>
+    </div>
+  </div>
+
+  <!-- ========== TAB: CATALOG ========== -->
+  <div id="tab-catalog" class="tab-content hidden">
+    <div class="card">
+      <h2>
+        <span>📦 Catálogo de Productos y Servicios</span>
+        <button class="btn btn-primary" onclick="openProductModal()">+ Nuevo</button>
+      </h2>
+      <div class="search-bar">
+        <input type="text" id="catalogSearch" placeholder="Buscar por nombre o SKU..." oninput="renderCatalog()">
+      </div>
+      <div class="cat-filter" id="catalogFilter"></div>
+      <div id="catalogList"></div>
+    </div>
+    <div class="card">
+      <h2>📤 Backup del Catálogo</h2>
+      <p style="font-size:12px;color:#64748b;margin:0 0 10px;">Exporta tu catálogo para tenerlo de respaldo o pasarlo a otro dispositivo.</p>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="exportCatalog()">⬇️ Exportar Catálogo</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('importCatalogFile').click()">⬆️ Importar Catálogo</button>
+        <input type="file" id="importCatalogFile" accept=".json" style="display:none;" onchange="importCatalog(event)">
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: CATEGORIES ========== -->
+  <div id="tab-categories" class="tab-content hidden">
+    <div class="card">
+      <h2>
+        <span>🏷️ Categorías</span>
+        <button class="btn btn-primary" onclick="addCategory()">+ Nueva</button>
+      </h2>
+      <p style="font-size:12px;color:#64748b;margin:0 0 12px;">Las categorías te ayudan a organizar y filtrar el catálogo.</p>
+      <div id="categoriesList"></div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: HISTORY ========== -->
+  <div id="tab-history" class="tab-content hidden">
+    <div class="card">
+      <h2>📋 Cotizaciones Guardadas</h2>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: 3D PRINT ========== -->
+  <div id="tab-print3d" class="tab-content hidden">
+    <div class="card">
+      <h2>🖨️ Cotizador 3D Print</h2>
+      <p style="font-size:13px;color:#64748b;margin:0 0 12px;">Calcula el costo de impresión por pieza: material + electricidad + mantenimiento + mano de obra + margen.</p>
+
+      <div class="form-grid">
+        <div>
+          <label>Nombre / descripción de la pieza</label>
+          <input type="text" id="p3dName" placeholder="Ej: Soporte para teléfono">
+        </div>
+        <div>
+          <label>Cantidad</label>
+          <input type="number" id="p3dQty" min="1" step="1" value="1">
+        </div>
+        <div>
+          <label>Impresora</label>
+          <select id="p3dPrinter"></select>
+        </div>
+        <div>
+          <label>Filamento</label>
+          <select id="p3dFilament"></select>
+        </div>
+        <div>
+          <label>Gramos de material</label>
+          <input type="number" id="p3dGrams" min="0" step="0.1" placeholder="Ej: 25">
+        </div>
+        <div>
+          <label>Horas de impresión</label>
+          <input type="number" id="p3dHours" min="0" step="0.1" placeholder="Ej: 2.5">
+        </div>
+        <div>
+          <label>Mano de obra (min)</label>
+          <input type="number" id="p3dLaborMin" min="0" step="1" placeholder="15">
+        </div>
+        <div>
+          <label>Tier de margen</label>
+          <select id="p3dMargin">
+            <option value="mayorista">Mayorista (27%)</option>
+            <option value="regular" selected>Regular (35%)</option>
+            <option value="retail">Retail (48%)</option>
+            <option value="custom">Custom...</option>
+          </select>
+        </div>
+        <div id="p3dCustomMarginWrap" class="hidden">
+          <label>Margen custom (%)</label>
+          <input type="number" id="p3dCustomMargin" min="0" step="0.1" placeholder="35">
+        </div>
+      </div>
+
+      <div id="p3dBreakdown" style="margin-top:16px;padding:12px;background:#f1f5f9;border-radius:8px;font-size:13px;line-height:1.8;">
+        <div style="color:#64748b;">Llena los campos para ver el desglose...</div>
+      </div>
+
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="calc3D()">🧮 Calcular</button>
+        <button class="btn btn-secondary" onclick="add3DToQuote()">➕ Añadir a Cotización</button>
+        <button class="btn btn-secondary" onclick="reset3DForm()">🔄 Limpiar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🧵 Filamentos</h2>
+      <p style="font-size:13px;color:#64748b;margin:0 0 12px;">Catálogo de filamentos disponibles. Edita precios desde aquí.</p>
+      <button class="btn btn-primary" onclick="openFilamentForm()" style="font-size:12px;padding:6px 12px;">+ Añadir filamento</button>
+      <div id="filamentsList" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>🖨️ Impresoras</h2>
+      <p style="font-size:13px;color:#64748b;margin:0 0 12px;">Configura watts y costo de mantenimiento por hora.</p>
+      <button class="btn btn-primary" onclick="openPrinterForm()" style="font-size:12px;padding:6px 12px;">+ Añadir impresora</button>
+      <div id="printersList" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>⚙️ Ajustes 3D</h2>
+      <div class="form-grid">
+        <div>
+          <label>Costo eléctrico ($/kWh)</label>
+          <input type="number" id="s3dKwh" min="0" step="0.01" onchange="save3DSetting('3d_electricity_rate', this.value)">
+        </div>
+        <div>
+          <label>Mano de obra ($/hora)</label>
+          <input type="number" id="s3dLabor" min="0" step="0.01" onchange="save3DSetting('3d_labor_rate', this.value)">
+        </div>
+        <div>
+          <label>Margen Mayorista (%)</label>
+          <input type="number" id="s3dMargMay" min="0" step="0.1" onchange="save3DSetting('3d_margin_mayorista', this.value/100)">
+        </div>
+        <div>
+          <label>Margen Regular (%)</label>
+          <input type="number" id="s3dMargReg" min="0" step="0.1" onchange="save3DSetting('3d_margin_regular', this.value/100)">
+        </div>
+        <div>
+          <label>Margen Retail (%)</label>
+          <input type="number" id="s3dMargRet" min="0" step="0.1" onchange="save3DSetting('3d_margin_retail', this.value/100)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: FILAMENT FORM ========== -->
+  <div id="filamentModal" class="modal-bg hidden">
+    <div class="modal">
+      <h3 id="filamentModalTitle">Añadir filamento</h3>
+      <div class="form-grid">
+        <div><label>Nombre</label><input type="text" id="flName" placeholder="Ej: PLA Basic"></div>
+        <div><label>Material</label><input type="text" id="flMaterial" placeholder="PLA, PETG, ABS..."></div>
+        <div><label>Color (opcional)</label><input type="text" id="flColor" placeholder="Rojo"></div>
+        <div><label>Marca</label><input type="text" id="flBrand" value="Bambu Lab"></div>
+        <div><label>$ por kg</label><input type="number" id="flPrice" min="0" step="0.01"></div>
+        <div><label>Densidad (g/cm³)</label><input type="number" id="flDensity" min="0" step="0.001" value="1.24"></div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="saveFilament()">Guardar</button>
+        <button class="btn btn-secondary" onclick="closeFilamentForm()">Cancelar</button>
+        <button class="btn btn-danger" id="flDeleteBtn" onclick="deleteFilament()" style="display:none;">🗑️ Borrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: PRINTER FORM ========== -->
+  <div id="printerModal" class="modal-bg hidden">
+    <div class="modal">
+      <h3 id="printerModalTitle">Añadir impresora</h3>
+      <div class="form-grid">
+        <div><label>Nombre</label><input type="text" id="prName" placeholder="Ej: Bambu Lab A1"></div>
+        <div><label>Watts</label><input type="number" id="prWatts" min="0" step="1" value="200"></div>
+        <div><label>Mantenimiento $/h</label><input type="number" id="prMaint" min="0" step="0.01" value="0.50"></div>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="savePrinter()">Guardar</button>
+        <button class="btn btn-secondary" onclick="closePrinterForm()">Cancelar</button>
+        <button class="btn btn-danger" id="prDeleteBtn" onclick="deletePrinter()" style="display:none;">🗑️ Borrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB: SETTINGS ========== -->
+  <div id="tab-settings" class="tab-content hidden">
+    <div class="card">
+      <h2>⚙️ Backup Completo</h2>
+      <p style="font-size:13px;color:#64748b;margin:0 0 12px;">Exporta o importa toda tu data (catálogo, categorías, cotizaciones).</p>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="exportAll()">⬇️ Exportar Todo</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('importAllFile').click()">⬆️ Importar Todo</button>
+        <input type="file" id="importAllFile" accept=".json" style="display:none;" onchange="importAll(event)">
+      </div>
+    </div>
+    <div class="card">
+      <h2>🔄 Reset</h2>
+      <p style="font-size:13px;color:#64748b;margin:0 0 12px;">Borra todos los datos y vuelve al catálogo por defecto.</p>
+      <button class="btn btn-danger" onclick="factoryReset()" style="font-size:13px;padding:10px 16px;">🗑️ Restaurar a valores por defecto</button>
+    </div>
+    <div class="card">
+      <h2>ℹ️ Info</h2>
+      <p style="font-size:12px;color:#64748b;line-height:1.6;">
+        <b>Versión:</b> 3.0 (cloud)<br>
+        <b>Almacenamiento:</b> Supabase (compartido entre empleados)<br>
+        <b>Usuario:</b> <span id="userBadge">—</span>
+        <button class="btn btn-danger" style="font-size:11px;padding:4px 10px;margin-left:10px;" onclick="doLogout()">Cerrar sesión</button><br>
+        <b>Productos:</b> <span id="statProducts">0</span> &nbsp;•&nbsp;
+        <b>Categorías:</b> <span id="statCategories">0</span> &nbsp;•&nbsp;
+        <b>Cotizaciones:</b> <span id="statQuotes">0</span><br><br>
+        Hecho con 🍡 por Mochi para Teknobot.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== MODAL: LOGIN ========== -->
+<div id="loginModal" class="modal-bg">
+  <div class="modal" style="max-width:380px;">
+    <h3 style="text-align:center;margin-bottom:16px;">🔐 Acceder a Teknobot</h3>
+    <p style="font-size:12px;color:#64748b;margin:0 0 14px;text-align:center;">Inicia sesión con tu cuenta de empleado.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <label>Email</label>
+        <input type="email" id="loginEmail" autocomplete="username" placeholder="empleado@teknobot.com">
+      </div>
+      <div>
+        <label>Contraseña</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <div id="loginError" style="color:#b91c1c;font-size:12px;display:none;"></div>
+      <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="doLogin()">Iniciar sesión</button>
+      <div style="font-size:11px;color:#94a3b8;text-align:center;margin-top:6px;">
+        ¿Olvidaste tu contraseña? Pídele al admin que la resetee.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MODAL: PRODUCT EDIT ========== -->
+<div id="productModal" class="modal-bg hidden">
+  <div class="modal">
+    <h3 id="productModalTitle">Nuevo Producto</h3>
+    <input type="hidden" id="productId">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <label>Nombre *</label>
+        <input type="text" id="productName" placeholder="Ej: U7 Pro Access Point">
+      </div>
+      <div>
+        <label>SKU / Modelo</label>
+        <input type="text" id="productSku" placeholder="U7-Pro">
+      </div>
+      <div class="grid">
+        <div>
+          <label>Categoría</label>
+          <select id="productCategory"></select>
+        </div>
+        <div>
+          <label>Precio *</label>
+          <input type="number" id="productPrice" step="0.01" min="0" placeholder="0.00">
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>Unidad</label>
+          <input type="text" id="productUnit" placeholder="c/u, hora, ft, trabajo">
+        </div>
+        <div>
+          <label>Tipo</label>
+          <select id="productType">
+            <option value="service">Servicio</option>
+            <option value="equipment">Equipo</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label>Descripción</label>
+        <textarea id="productDesc" placeholder="Detalles del producto/servicio..."></textarea>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:16px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="closeProductModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveProduct()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MODAL: CLIENT PICKER ========== -->
+<div id="clientPickerModal" class="modal-bg hidden">
+  <div class="modal" style="max-width:600px;">
+    <h3>👤 Clientes Existentes</h3>
+    <p style="font-size:12px;color:#64748b;margin:0 0 10px;">Tomados de tus cotizaciones guardadas. Click para autocompletar.</p>
+    <div class="search-bar">
+      <input type="text" id="clientPickerSearch" placeholder="Buscar por nombre, contacto, dirección..." oninput="renderClientPicker()">
+    </div>
+    <div id="clientPickerList" style="max-height:50vh;overflow-y:auto;"></div>
+    <div class="btn-row" style="margin-top:14px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="closeClientPicker()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MODAL: CATALOG PICKER ========== -->
+<div id="pickerModal" class="modal-bg hidden">
+  <div class="modal" style="max-width:600px;">
+    <h3>📦 Agregar del Catálogo</h3>
+    <div class="search-bar">
+      <input type="text" id="pickerSearch" placeholder="Buscar..." oninput="renderPicker()">
+    </div>
+    <div class="cat-filter" id="pickerFilter"></div>
+    <div id="pickerList" style="max-height:50vh;overflow-y:auto;"></div>
+    <div class="btn-row" style="margin-top:14px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="closeCatalogPicker()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== LOGO =====
+const LOGO_DATA = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAGQARQDASIAAhEBAxEB/8QAHQAAAgIDAQEBAAAAAAAAAAAAAAQBBQYHCAMCCf/EAFIQAAEDAQYEAgUHBgsFBwUAAAEAAgMEBQYREhNhBxQhMUFRUnGBkbEVIiMyQmKhCHJzssHRFiUzNENjZIKUouIkU3SS4SY1NqPC0vFEZYTD8P/EABoBAQEBAQEBAQAAAAAAAAAAAAABAgQFAwb/xAAtEQEAAQMDBAAFAwUBAAAAAAAAAQIDEQQTMQUSIUEUIlFhkXGB0QahscHh8P/aAAwDAQACEQMRAD8A7LQhCAQhCAQhCAQheVTUQ07M00gaPAeJQeqhxDRi4gAeJVTLak8xy0cOA9J37l5toKmpOaplc7YlXH1D89p0cRwMuc+TBilX2yXdIKV7t3HBe8FlwR9xiV7tjgZ0DAnhFaa205fqRMZ7MVGW1pO85b6gArYPYOwCnVaPJMioNFaD/r1Uv/MVHyTO7607z/eVxrBRrDZMyuFR8ivPeR3vR8h/1hVvrDZGsEzIpzYjgekjveo+R5x1bO8f3lcGcbI1xsmZFMaC0mfUq5R/eKjC24u1Q535wBVzrjzUa42TIpxaVrQ/ykEcg/NwXpHeBrThUUkrN2nFWZlYe4afYvGRlNIMHRhMwiaa1rPnwDahrXHwf80/ingQRiDiFRVFlUc2OX5hKUdQ2lZ5zUdQ8N9HHEe7smFZQhY9S3hfE4R2jTlh/wB4wdPd+5XtNUQ1MQlglbIw+LSpgeiEIQCEIQCEIQCEIQCEIQCEIQCEKotSudI80lKdnvHwCsRketfaYY4w0oD5Oxd4N/elaeifM/VqXl7j5r1oaVkTQSOqcz4JnHCPqGKKIYNAXrnXhnRnUV750hVudC7H7J7FMZ18yZXsLHjFp7hAlzW6g1I81X2jHJSSdSXRu+q79hSnNbqpldc1ug1O6pOa3Uc1uhld81uoNUqXmd1HM7oZXfMqOa3VLzO6jmt0MrvmlHNbqk5ndHNboLrmtwo5ndUvNbr6ilfLII4ml73dgEFxzJJAHUnwVxBmEDWv6nDqq6zqQU4EkpD5fwb6k7nUV51dFBUNIc0KinoayzJjUUMrm+Y8D6x4rIM6hzg4YEYhXIXsS3Ia5wp52iCqH2T2d6v3K4WJ21ZjXjWh+a8dQQm7tW26d4s+vOFS3ox5/pNvX8UwMhQhCgEIQgEIQgEIQgEIUPc1jHPccGtGJKBC2qswRCGI/SyfgPNI0UTY24nuvDUdU1b6h/ieg8gmQ/DstceEM51GdeGdRqKKYzozpfOjOgYzozpfOo1N0HrO1k8LopRma4YFYbX6lHVyU7ziWnofMeBWW51h1+Zgy04fMw9feUhHnzW6Oa3VGardRzW6uEXnNbqOa3VGardHN7pgXfNbo5rdUfN7o5vdMC75rdHNbqj5rdQavAY4pgZJQNmrqgQQDE9yT2aPMrLrOpIaKLLH855+s893f9FX3cpW0dlxdPpZWh8h3I6D2Ky1FFMZ90Z90tqbo1N0Mmc+6M+6W1EaiGTBdiMCqK3qE/ziDFr2nEEdwVa6i+ZCHsLT2KGTd17V+U6HCUgVMXzZR5+Tvarda+jqHWLbkdU3HRccsoHi09/3+xbAa4OaHNIIIxBHikqlCEKAQhCAQhCAVdeCfToxED1lOHs8VYrHrflz14Z4RtA9p6/uVjkl4QnK1fedLZ0am6qGc6M6W1N0am6gZzozpbU3RqbqhjPujOltRGooGc6wTiRLp2pSnwdAfwcVmWdYJxZBbHZ9UOwL4ifcR8CrAx41W6jmt1R83uo5rdVF5zW6Oa3VFze6OaHmgvOa3QardUXNbqOa3QXvNboFSXuDAerjgPaqLmt1a3QY60LyUNMOrdUSP/Nb84/BBu2I5I2Mx+q0D3BfWfdLZyeqjOsqaz7qM6Wz7oz7oZM51GcJfPujPuhkznCjOEvn3UZ0HhbkQmpSR3CvLjVxq7EbE92MlM7Sdj3w+z+HT2KnlIfG5vmF43GqOWvFPRk4NnjJA+83r8MVRniEIWVCEIQCEIQCxG0Zc9ZM/wA3nBZa85WOd5DFYPUv64+fVahJfedRnS+dGdEMZ0Z0vnKjOUDOdGdLZ0Z0DGcozlLZ90Z90DOcqkvvZr7Xu5UUsQxnZhLCPN7fD2jEe1WWfdGfdBz46pIJBxBBwIPcKOa3Wzb63DprZnfX2dO2jrX9ZGubjHKfM4dWncd/Ja9r7kXtpHEfJbqho+1TyNeD+OP4KhPmt1Bqt14y2FeSP69hWmP/AMdx+CWloLZj/lLKtBnrpn/uQPc1ujm91WtprTccG2dXE+Qp3/uVnZ117017gILEq2tP25m6bR7XYIPnm91tXhNY8lLRPtmrYWS1TcsDSOoj75v7x/Abqruhw5ipJWVlvzR1UjTi2mj6xg/eJ+t6u3rWxc47KZDOfdGdLZwjOEDGdGdL51GdAznCM4S2ojOgZzqM6XzozoGM6rIZuUvPQ1GOA1mh3qPQ/FNZ1UW64tcyUdC04hBtxC+IHiWFkg7PaHe8L7WWghCEAhCEHlWnLRzO8o3fBYJWvweBis4tM4WfUH+rPwWAWi/CXBajhJRn3Rn3SucIzhA1n3Rn3SudGoiGc6NRLGRrY3SyPbHGwYue44Bo8yVhlv3+ZC50Fh0oqHDpzEwIZ/db3PrOC6NPpbuonFuHPqNXa01Obk4/yz0EnoASpwf6DvctH2jb15q8nXtiqY0/YhdptHsbgqwutLNm+UK3N5678fivWo6DXMfNXEf+/Z41f9Q0RPy25n98fy6BLiD1GCjOtH2feC89A4GC2Kl7R9iY6jT7HYrMbA4gxyubBblMKZx6cxECWf3m9x7MVz6jo1+1Gafmj7c/h06frenuz21Zpn78fln+dRnCWZKySNssT2yRvGLXtOIcPMFGdeTw9gzqKdU+kfeldRGdA1qu9N3vUF+6WzlGcoGNRGol85XxLURwxmSWRkbB3c5wAHtKcnBvURnWM1V8ruUzi19qwvI7iMOf8BgvCO/V2nuw+Usu74ngfBdEaPUTGYon8S5p1umicTcj8wyzOUZyqugtaz69uairYKgf1bwSPZ3TYkx8V8KqZpnFUYdFNVNUZpnMGdQo1Etn3Rn3UaM51GfdL591GfdEM5yq63DjAmM6StZ2MKQra9gv1LDoZPSp4z/lCdVXdF2a7Fmn+zM+CtFlQhCEAhCEC1q/921H6MrXVqvwqCtjWmMbOqP0bvgtaW27CoWo4SXhnRnSufdGfdEM5yvuM5icSA0dST2ASefdL29JI2y20sR+kqnZT+aO/wCxfS1bm5XFMPnduRbomufTHLz2lPbc5p4HOZZ0TvmgdNUj7R/YPBVHIADANwCydlniNgY1vQINF91fqLVVNqmKKeH5O9TXermuvzMsWNDsvk0P3VlJotl8GiHor6774zp2Lmh+6vh1ACMC3ospNF91fJovurUahn4dWXYtSosKcU8znSWdI75ze+kfSH7R4+tZ+XggOa4OaRiCOxCw+Wz2vYWOb0Ks7sTychJQzHF9K7BuPoHt7l4/U7NNcbtPPt7nSr9VM7NXHr+F5n3Rn3SudGdeI9w1n3UB+KW1FXXhtCSjpGxU386n+azD7I8XfuX0tW5uVxTT7Yu3KbVE11cQ8Lz3nZZznUdCwVNb2OP1I/X5nb3rA7SFo2pLrWlVSzu8Gk/Nb6h2Cv6ezBEzqMzz1c4+JX2aH7q/U6Sza00fLHn6vyOsv3tVPzT4+nr/AKxP5OA+yF8mzx6AWVmh+6vk0P3V3RqHB8MxRtA6OQSROfHI3qHNJBHtWTWDe20bPe2C1s1VT9hNh9I31+l8V9mh+6vh9AHAgtxB8MF8b8WtRT23Iy+2nqu6arutzhn9LVw1MDJ4JGyRvGLXNPQhemoFgNg1MtiV4p5HE0U7umP2Hef71mgeV+U1emnT19vMen7DR6qNTb7uJ9mtQIzhLZyo1N1yuozqJW0n4wqdTdK2i/6JBt653/hazf8AhmfBWyrLqNyXas0f2WP9UKzWWghCEAhCEHjXjGhnH9W74LVt4XYTg7LalSMaeQebCPwWp7znCVp2C1CSrs6jUS2ojOqhoPBICYlh17Up2+EcJI9uKrWyYEK/swCSvp3+nGWe1dGmq7a8ufVU91vD4NHsvk0eyyA0uyg0uy7955myx40ey+TSbLIeV2XyaTZa3k2GPGj2UGj+6shNJsvk0myu8mwx40f3UjFDy9uuwGAlgOPs/wDhZaaTZUFqsDLZcR/RQYH1n/5WLt3NuYbsWsXKZ+5UvOJRqJYydT1UZ915D2jbHZngJCKA1tsVNS7q2HCNn/8Ae/3pmmf9M3r4qwuzTZ6KV+HUzOx/BduimKaplw6+JqpikkaPZfJotlkZpPur5NJsvS3nlbDHDRbL5NFssjNIPJfJpNld9Nhjhotl8mi2WSGk2XwaTZa32dhidpWZr0UjMvzsMW+sL3sSpdPZsLnnF4GV3rCyTk+o6LErKGk2ojHZs7gFx66qK7f6O3p9M27uPqttTdGfdLZ0Z15L2TOfdK17/oj6kZ0vVOzgN8+iDfNhtyWLQs9GmjH+UJxedMzTp44/RYB7gvRYaCEIQCEIQQ8YtI8wtRXu+a5nqW3lqK/AyexxH4rVKSxzPuoz7pbURqKoZ1N1d2HU5mNa0/SRuDmexY3qL1pKp8Ewe04YFWJxOUmMxht2kEdVTMnj+q8dvI+S9OW2WMXXtxsZx+tE/wDlGDuD5hZvTGGqhE0EjZGHxH7fJfXcfHaVxptl8mm2VuYFBg2V3E2lQabZfJptlcGDZec7Y4InSzPbHG0Yuc44AJuJtKepZHTwPmlOVjBi4rX1p1Bc6WZ3SSZ2bDyHgFf3rttlT9HHi2mYcQD0Mh8ztssIq6ozSlxPRZruZjDdu3icvTOo1Etn3Rn3XyfY7BLllad1ldzcrnVdN45hK3cHof2LBxJgcVe2BaTqWrhqmfOMfR7fSae4X0t19svldo7oZ4aXZfJpdlbUhhqqaOop3h8UgxaQvs048l991z7Sl5XZfJpdldmn2UGnHkruptKQ0uy+eV2V3y+yg0+yu6myx+rjZTU0tRJgGRMLz7Atb0pLYcx+s9xefas04iWkxjPkeB4L3YOqCPst7hvrPdYO94xwHYL53rmYw+ti12z3GNTdGpuls6jOuZ1GtTdTSN17SpYe+edjfe4BKZ1Z3RZr3ssqM9Qaph9xx/Yit+oQhYUIQhAIQhALU3EJuV0u0rx+K2ytU8SxldUbTOVhJYFnCjUS2pujU3WkM6iNRK590am6CxpK2SmkDoyQsosW9DoXhzZXQyeJb2PrHisG1N0am6DdFDfMOaNaKGXdjsp93ZPfwuosuJpZcfz2rRrKqVn1ZCF98/Uf70oNw119GtaRBTxRnzkfm/ALD7dvPJUvzSzumcPqjs0eoLCn1UrvrSOK8zIT3JQWNXWy1DyXHol9TdLZ0Z0DOpujU3SucozoGtTdekFS6J4cCkM6M6DPbqXmls6TBoEtO84yQk4dfNp8Ctk2Ralm2qwGkqGl/jE7o9vs/cufI53RnFpwT9Naz2EZu47HHqFcpiHQmiPJQYR5LTVFfS1adobFadQAOweQ8f5sV7zX9ttzcDabh+bGwH4KZkxDbczY4ozLK9sbGjq55AA9pWE3qvpTQRvprHcJZT0NQR8xn5vpHft61r207fqq52aqqp6g+Go8kD2dlVTVb5D3VzJ2wbqqove5znue9xJc4nEk+ZS+pultRGfdRTOpujU3SufdGpugazhZJwyj1r8WcPRL3+5jliOpus44NR6t8Q/vpUsjveWj9qSN1oQhYaCEIQCEIQBWquKIwdVbS/sC2qtWcVuhq/zx+qFYSWq86NRLF/VRnWkNaiNRK50Z0DOco1N0tnKjOga1N0am6VzozoGc6NTdLZ0Z90DOpujU3SufdGpuga1N1GfdLam6NTdAxnRnS+puoz7oGc6M6WzozoGc/rRn9aWzozoGM6M6Xz+tRnQM50Z0tnRnQM50Z0tnUF6BoP6rZnAlma3a+X0KUN97/wDotVMf84Lb/AGPF1rzeQhZ+uVJ4G1kIQstBCEIBCEIBap4tnDm/wA8fqhbWWpOL78Oc/PH6oVhJahL+qjOli/qjOtIZzozpXOjOgazqM/qS2dGdAzn9SM6WzqM6BrOjOlc6M6BrOoz7pbOjUQMam6NTdLam6NTdAzqbo1N0tqbo1N0DOfdRnS2fdGdAznRnS2dGdAzn9aNQpbOozoGc6M6WzqM6BrOjOlc6M6ByJ/zwt3cAG/xbar/ADnjb7mf9VomB/0gW++AA/7P2i7zqwP8jVJ4VspCELKhCEIBCEIBaX4yS4Cr6/0xHuAW6FoXjNUgibr9aaQ/irCS1bnRnSupujUWkM50Z0rqDzUam6BvOjOlNTdGpugazlRqJbU3UaiBrOjOldRGogazoz7pXURn2QM6m6NTdK6iNRA1qbo1N0rqI1EDWpuo1B5pbUUGQoGtTdGpuldTdGpuga1N0am6V1N0am6BnUG6NRK6h80am6BrURqJTU3RqboHqd/0rV0J+T6cbtWh/wAb/wDraucqaT6ZvVdDfk7PzWHajPKqafewfuUnhW0kIQsqEIQgEIQghxAaSew6rmzjBUk6bSersXe8ldHVzslFO7yjcfwK5c4wTYVkTPJgWoSWEZ1GoldRGpuqhrURqbpTURqKBvU3Uam6V1EaioaMm6jU3SupujU3QNam6NTdK6m6NTdQNam6DIldTdRqbqhrURqJXU3RqbqBrURqJXU3RqboGtRQZNkrqbozqhrURqJXOjOoGtRGolNTdGogaMiNTdKZ0Z0DepujU3SmdBegfppPpm9V0V+TgcbJtc/2iP8AUXNlG/Goaul/yb2H+Dtpy+lWBvujb+9J4VtRCELKhCEIBCFX2na1NQOyyEEj62LgAPagYtT/ALtqv0L/ANUrlHjG/C1I/wA0fBdRttCnr6KaNjsr3xOwaT36HsfFct8ahlrIZPNgWoSWAaiNRKaiNRA3qI1EpqI1EQ3qKDIlNVGqim9RGolNVGqgb1EaiU1VGqgb1EaiT1EaqBzURqJPVRqoHNRRqlKaqjVQN6hRqJTVRqoG9RGolNVRqIHDIo1N0nqo1UDmpujU3SeqjVQOam6NTdJ6qjUQW1mOzVTRj4rqv8nmHTuJJKR1lrpXD1ANb+wrlC73z6xvrXS10r30V1OGdl08YjmrpI3zvDnYMiD3uILj54YdO/qT0NwIWlLtcXKqptbLUzQVVMHfSMZEGlrfEtI8vIrdMb2yRtkY4OY4AtI7EFZV9IQhAHoFzf8AlO3xnsOgibBIQ+QmQ4HzPRdG1By08jvJpP4Li38sWpJtamp8T0jarHA+OEPHGemrWUNsOc6B7sPnHtuFn/Gex/le7cd5LCPN0bGZpmx9XRt9LDyHj5epcdNLmuDmkgjsQt18C+LNVYFUyzLSeZaST5rmuPQhWJJhS6m6NTdbP4ocP6aagdfC5TNezZAZKqjiGJg8S5g9Hzb4dx07ak1d0Q5qbo1N0nqlRqFFOam6NTdJ6iNRA5qbo1N0nqFGp6kQ5qDzUam6T1N0am6Kc1EaiT1N0am6Ic1Ao1N0nqbhGpugb1EaiT1N0am6Kc1EaiT1N0am6Bsy7o1d0nqbo1N0DmqjVSepujU3RDmqoMu6T1EaiKb1d0aiU1FllxrsfKgNqWnjDZUJxJJwMxHgPu+Z9gQW1wLJBpX2zaJ0qFmJaXdNT1bfFYnxR4iSVMzrPsx2SBnQBvRfXFi/RnPyTZZEVNGMrWs6AAdFqV5e9xc44k9yplYhs/gvblRJeJkM8hdnOBx3XenD6pdV3LsuZ5xdoBhP5pLf2L86uEznR3spiPTHxX6DcIn57i0n3ZJW/wCcp6SeWWoQhQeNb0o5/wBG74LiX8rwF96ogBicjRh7Au2q/wDmU/6N3wXHX5R8MU1/oWzYZcWd/UFY4PbXvD3hNaF44I6qpfy8UpwjGUuc8+TWgEn2BXt7+B1dZEBkop5ddrS8RSxPje4DuWhwGOG2K3nwxr6agpHGEND2uMIPosb0DfUTi4+ZKteIFtxVFkyxyvGIaXMI7scOocPIgr0bfTrlzER7eTe6xbtzV9pw5y4RcT7Tujagsu03OMAdle1x6LPuIfDygvLZ7723Bax73jUqrNjwGY9y6MeB829j4dei0jxVZCb1yTwNawysbI5remBIBI/FW3C7iPal1K+MGZzqfHAgnEYeRXn/AGl63Kqe9zHFjwWuaSCCMCCO4I8Co1Vvq8d2bscWLPNs2BUQWbeLLi8HpHUnyeB4/eHXzxWhrxWTat3rVlsu2aKWjq4+7JB9Yek09nNPmOiD51Uau6Q1t1Gtugf1UaqQ1Ua26gf1d0au6r9bdRrDzQWGqo1d0hrbo1kD+rujV3SGtuoM26Cw1h5qNYeaQ1t1GtugsNXdRq7pDW3RrIH9VGsFX626jWQWOso1t1X626NbdBYaqNVV4mJIAxJPQDzWy7mXGipaZtu3uGjTtGaKif0c/wAi/wAh933+SBe4l0jacYti2SaeyY/nAOOBnw8vJu/j4ea+OIt+G1Dm2NZAbHAwZGNYMBgOnYJLiVf6SvcbPs46dOz5oa3oAPYsFu3lkt+mdOcwMgxx9aLEM/uXwntS9DtRlPUVErgHFsTcS0HsSTgB7SEpxA4TWpdoO1aeeGQNLskrMMwHcgjEEeoldL8LLVp6K69EynLWl8YlkI+089yfh6gEhxftinrLvVUcpa9zBqMJ+y4dsPX29RXpU9NrmP2y8aesW+7ER7w5T4ZsdHeqBrhgQ8A+9foBwaONxoP08v65XCt2GRNv2RFhl1umHrXdXBj/AMB0x85pv1yvN9PYnlmaEIUHjXfzKf8ARu+C4w/Kqc6O9cUkZIdlacfYu0K3+Zzfo3fBcaflVR43lhP3G/BajgYtdLiBJSQtZJK1kuAD2yEhr8BgHAjscAB2wOA7J+8V/wCOqp3CWWPIR1jieXOfsTgAB59z6lqzS2KNLZdlHUNRRb26avH9/wAuOvp+nrublVPkWxVzWlaEtZOcXyOx9ST005oqNJcTtWV1LyWnd6tZUUdQ9oaccAVvqxr5XR4k2KyxL40sbpQPoqgfNkid6TXdwfwPiCuc9JelO6anlEkL3McOxCZGxOI/B+37txvtOxXOt6xcMwmgbjNE377B3H3m4jzAWr9Yea2xw/4r2vYT2QVMhlgx6hxxCza1rC4acTo3VQwsO2ZBiammwaHu++z6rvX0O6qOcNYI1t1nN+ODl9bth9TT0gtuz29RU0ALnAebo/rD2Yjda2dKWvcxwIc04OaRgQdx4KKf1kaqr9bdGtuoqw1UayrtZGsgsNZGsq/WUa26osdZRrKv1lGtuoLHWUayr9bdGtugsNbdGtuq7W3Tdk0doWtWNo7Mo6itqHdo4WFx9uHYblB6626s7uWPa14a8UVk0j6iT7bh0ZGPNzuzQs7uvwjMEba++doMpIh15OCQF52c/sPU3H1q8tq+tkXes75JuzRw0sLOgEbcMT57nc4lVMvuxbvXd4f0wtC1J4rQtgDFpI+ZCfuA+P3j18sFgV+b611u1DmMkLYccAB2wVPbNq1tqTukqZXOxPbFV2TZAqW4kknEr6iLopGyMODmnEJjT2Rk2QZ7dTiJV2ZTCAuaWDrkeTgD4kEdsfJeV7b/AFTakRjDmgdwxmOGPgST3w8lg2TZGTZdfx2o2tru8f6/Xly/A6fc3e35l9w6zSXphe84kvBJ9q734NDDh9Qn0nyn/wAxy4R4bxH+EUJA7OC7z4QNy8OrJPpNkPvkcuT06Z5ZYhCFB51f81l/Md8FyB+VDAXW3BJh002/Bdf1X81l/MPwXJH5S7i62YGeAjb8FqOBo3R2UaKf01GmgR0VGjsn9MI0ggQ0VGjsn9NGkgQ0T5L3o56qjkElPK+Nw8imNIKNJBnN0+KVuWQWRzSuliHgeoWX1ltcN79xgXnsGldVOGHMxjTlH99uDveStL6SlrHNOLSQdkGwLY4C3etMOnuje8wk9W09c0SD1Z24O94KwS3uCXESyy4x2TFacQ+3Q1DXk/3Tg78E1Q2raVG4GGqkGHhismsviLeCiAaah7mjwJxTwuZaYtWwbcsp5ZadjWjREd9elewe8jBVuZuOGYY+tdPUXF6syBlVA2RviCF6zX4ujaQ/jO7Nl1BPcyUrHH8Qpg7nLvVHXddLyS8J6rrNc2ygT6MIb8MF4Oo+D5OP8E6Meou/9yYXuc34FfJc0d3Ae1dJtZwmg+dFdGzSR6TM3xJXrHeq5lndbNuxZcBHYspWA+/BMJ3Od7LsW2LUeGWbZVdWE9tCnc8e8DBZpYfBy+9o5X1VHT2VEe7qyYBwH5jcT78Fs6u4o1GQspIGxt8AB0WMWrfa2q3EGd7WnwBTBmTtmcKLm2G0TXktqW05W9TDEdKL8CXH3hWtVfaxLAojQXasymo4R0wijDcdzh39uK13VVVXUuJmme7HdKmLzCqH7fvNalrSudLM8NPhiqF0ZccXEk7p7S2RpbKCv0tkaOyf0tkaWyCv0tkaWysNLZRohAhpbKNLZP6Q8kaWyC64cR5baYcPFd08KG5eHdijzp83vcSuIbgx5bUDl3Lw1ZkuDYY/sUZ94xSeE9shQhCivGuOFFOf6t3wXJv5RLc9vRbMaPwXWFpnCzqg/wBU74LlPj03PeAbAfBajhGo9HZGirDR2RooK7RUaOysdFGigrtHZGjsrDRRooK4w7I0dlYaKNFBXaOyNHZWGijRQV2jsjR2Vho7I0dkFdo7I0dlY6OyjRPkgr9H1qNI7qx0T5KNHZBX6R3UaKsdHZRo7IK/SUaSsdHZRo7IK/SRpKw0dio0dkVX6RRpFWGlso0dkRX6R2RpHyVho7KNHZFIaR8lGkfJWGlso0dkCGkfJGlsn9HZGjsgsbmMy1ZOHgV3HcVmS5diN8qCD9QLiS7LMkrz90/Bdw3TbkutZLPRooR/5bVJT2s0IQopS2DhZdT+jK5b40/SXicMOy6ktrrZVT+jK5k4twF14HP81qOElrfR2UaOyoeIMd6aaeCqsSSoNMWZJI4GZnNfiepGBOBHjssPqrXvvSQmeqltOCIEAvkgytGPbqWosQ2dpbKNHZawo7ZvpWRGWkqLRqIwcpdFDmAPliGrKLiV96JbVNHbNJWPglaSJpoS3TcB2xwAwPkhhk+jso0R5LC77XzlZWGgsObTETsJagAEucOmVuPhv4qs+UL/ABGOW1f8L/pUydrY+iPJRo7LWlVbF96WAzVMtowxNwxfJThoGPbqWrJrLvPWyXDrLWlijkqqSQQ5j2eThg4j+928cFTDJdEKNEeSp+GddXWtZVXNX1L6h7KjK0uA6DKDh0WQ2pU0lmUMlbWyCKGMdT4k+AA8SfJEwW0QoMIWuK29V4rVtOQWS6oiYQdOngZncGjxPQ4nzWZ3lvAywbFpdVupaU8DSyNwwwOAxc7YHw8Si4WmgFGiFrWktq+lZGZaSavnjzEF0VOHNx8ujV7c/f30bV/wv+lQw2Joo0Vhlxbx2vVXhbZdoyOqBNmb89oa6NzQT4DbAgr6vve+SKqdZ9jSmMxOwmqAOpcPstx8B4lUwzAwqNFa6FdfogEC1SD1H+z/AOleclv3ss2ohkrpapgJxEdRFlbIB3HYfgodrZOgo0VT19vMrrj1drWZI+CeINa4faifmGI36HusNpLZvfWMc+kqK+oa04OMUWYA+RwCEQ2VoqNFa852/Xla3+HP/tXjLeC9VnVETq2eqYfrCOoiwDwO/TAdEydrZOio0dgq68V44LKsSmqtMOq6uESQw49BiASSfIY+1YRS2zfCta6Wknr52B2BMUOZoPl0CERlsgw+pRo7LXc1pX1hidLM60442DFznQYADzJyrJLiXn+Unts20Xf7Z/RSYfyo74Hyd8UMMg0dlGjssPvEb6UdrTx08lbLTucXQuhjzNyk9B26EdsFTVluXro3NbWVdbTlwxaJYw3EbYhDDZOjso0dlr2OvvtJG2SM2m9jgC1wgxBB8R81ZtcqotWts2Rtr0ssU8Lw0PkjLDICMccMO47ITGF9Y8eQSHzaV3BY0elZFHFhhkgjb7mhcW2VAX1MUIHWSRrAPW4BduMaGsDR2AwCSkJQhCil7Tbns2pb5xO+C504pQF1piTDoQPgukZGh8bmHs4ELRHEijJLXEdW/NPsOC1CS1hobLEuLsWS4tUf66H9cLYRp9liXFyz6qquNVQUdNNUzGaEiOJhc4gPGPQKyRyxzgnGX3VqT/bHfqNWdtgJcOniFScJLvWhY11NO0otGaonM4iP1mNLQAHeR6Y4eCy8U+BxSCeXPtxIIJ+JbIqhjHtE85aH9swzFvtx7LLeJNXeujtinjsEVxp3U+Z+hBqDPmPc4HrhgqriPcC0rKtP5WsKGpqaaaXPlhBdLTyE4+HUtx7Hw7FIi2+JwGH8d/4L/Qstc+SFp1F+7So30ddT2rNA8guYaMgHA4js1XfyJXWRwjtI2hFoy1E8czYz9ZjczAM3kenZJ/LfE7/71/gv9CymvoL11nCavNtMqKq0KiWOSGER4ytjzN6FrR36E4eHig11dysvTT0srbBFfoGTGTl4M4zYeJwPXBed5Ky8dSYWW86tGGJibURlg3IGAxW4eEF37Rse7UvyjEYJaqfWbEfrMblAGYeBOGOCyG8t3aG37MfQV8Zc09WSD68TvBzT5/FXBnywvhTR2KLviezX6tU7AVjnjCRrvRw8G+Xn37rFuN7dO26D/hHH/OUjU3dvpdK252WXBXufkIZU0cReyVh7eBHsPYrJuLd27ctKism1aakmqyyjbFURxsJla8/OxLR4YkjYqej2zK7tHFBYFnxwxtjZy0ZDWjAYloJPvKfbAcw790zYlK9li0DHsc17aWIOa4YEEMGIKbbB84dPFaZaHuUzNxVa3+11H/rXjdWGGbig2KoYx7OdnwD+2YF5b7ccFklw7sWyeI1Tas1FLTUlNUTu1JmFupmLg0Nx798ce2CX4k3Br6K0HWxYUNRUwTS55IogXSQyE44jDqWk+PgstZbL0fWsX4pU0P8AAurklawujcwxF3cOzAdN8MVhYtXiaABltrp50X+lKV1Hfy8dRTUlfR2pPg/CPWgMcbSe5JwAHrKuUiHtd5mPC+8TvKeP/wBKauK60I7iW9NZQmNY2ePS0m5n44DHAerFZXadz3WFwwtKzaJs1bWTBkkpjaSXvzN+q3yAH7VgFjMv1Y0UkVmUVr0zJXZ3htITiQMMerT4KLyY+UOIvo2z/hf9Ko7yz29PNE63hViURkRcxHkOXHrh0HTFZH8rcTfRtr/Bf6UhaFnX3vHXU7K+gtKom/ko3zU5Y1gJx6nAADxxKKa4lty0N3N7NB/Bq2VdOmhjuzZop2MbGaZjvmdiSASfXjikr43EfbF3KGKGVotKz6ZsUZxwZLg0YtPliR0PvWu7LN/rHp3UdBS2xTwh5OmKUuAPjhi0/grwnMNycvm+aRiD0IPitN3XjibxQihga0RNrZmsDPqgAPww2XvU1/Eeop5IJY7aMcjS1wFIW4g9+obiFk3Cy4tRSzRW9a8b4Jm4mmpyMHNxGGZ48OhOA9pTk4ZqINlrDjUzJaNmjzp5P1luTQ2WtOMFhWrats2TDZtDPUF0L2FzWHIwl4+s7sPakpTyye7sON37OPnSRfqBPaGybsmz30dlUdJI5rnwQMjcW9iWtAJHuTDocGkqo9bhUXOX6sOjwxElfFmGzXZj+AK7AC5o/J+s41/E1tVlxjs+mkmJPbM4ZG/rH3LpdZkgIQhRQtZcR7OxqKhuXo46jfUe/wCOK2aqC+lBzNBzLG4vhxzDzYe/u7+9WCWhH0pa4gjso5Y+AWS2lQZJiQOhSnK7LTKk5bZRy2yuzS7KOV2QUnL+QwRy53V0aXZHK7IKXQO/vXzy2yu+V2UctsgpeW2UctsrrltlHLbIKXl8PAo5dXRptlBpdkFKabZQabZXXK7KOV2QUxp1HLq65bZQaXZBTcud1BpyrnltlBptkFNy+yOXKueW2UGl2QU3LlQac+SueW2QaXZBS8vsjlzurnltlHLbIKY053UcvsrnltkctsgpjT7KOX2Vzy2yjltkFNy+yStctp6ZxPQ4LI5omxsL39AFQ2RZNXfS+FNYFDmEbnZqiUDpFEPrO/YNyEJbe/JosJ1DdOpt2dmEtqTYx4j+iZiG+9xcfctsLws6jp7Ps+noaSIRU9PG2KJg7Na0YAL3WFgIQhFCCAQQQCD3BQhBr69liGinMrGE0sh+YfQPon9ixw0gx6BbhniinhdDMxr43jBzSOhWEW9dupoXOqKFrp6fuWd3s/eFqJRinKfdUcpsrOnlif8ANd0KbbTtcPm4FEUBpNlHKbLITR7KDR7JkY9yuyOV2WQcnsoNHsmVY/ymyjldlkHJ7KOU2TKMf5TZRyuyyDlNlBo9kyKDldlHK7K/NJsjk/upkY+aTZRymyyDk9lHKbJkY/ymyjlNlkBo9lHKbJkY/wApsjlNlfmj2UGk2TIoDSHyUcrsr/k9lHKbK5FAaXZRyuyvzSbKOU2TKqA0uyOV2V/ymy8Z2QwtLpHtaNymUUppdl41LYqeMvlcGgLxt+9Fm2exwbI1zx4BUdiWLe/iFU/xbTupLNLsH1s4LY8PHL4uOw9pCGVbaldXW5asViWFTyVVXO7Ixkf4nYDuSegXQHCe4tLcqwzG5zJ7UqcH1lQB3Pgxv3R19ZxKY4eXDsS5dC6OhYZ6yUAVFZKBqSbD0W/dHtxPVZWszKxAQhCihCEIBCEIBCEIKe2bu2daRMjozBOf6WLoT6x2Kxetu5blnuLqUtrYh6Bwdh6j+zFbAQrkawbbD6aTSraeSF47h7SD+KsKa1KCbD6RoPrWdVNPT1LNOogjmZ6L2hw/FUdbc2wanqKV1O4+MLy38OoTKYV8bqWQfNlb717Np43dnNPtSdRcFzMTQ2zPH5NkZj+IISUt1b2U/WntClnHgC4tP4hBdcmD2wKOS2WPPpL9Uw/mDZh5slaf2rydaV8IP5Swaw4eLYyfggyXkj5KDRHyWMOvVbsP8tYda3Dzgd+5eRvzWxnGSy6lo3iI/Ygyvkj5KOSPksTdxFy/WoZR62rzdxJYP/pH+4K+Rl5oj5KDRH0Vhx4lt8KOQ+xfDuJMjujLOnJ2Zih4ZnyZ8lBoz6Kwc8QLUcfo7GrXeqFx/YoN87zy9ILt2k71Uz/3IjODRnyXyaTZYKba4gVH8jde0uvnA4fEKBDxTrD9HYUkQP8AvJGN+LkGcOp2N+sWj2rwkdSRjF8zB7Vh4uhxRrThLLQ0oPp1AOH/ACgr3i4TXsqiPlG9dPE09xDG9/xyoLmrtiyacEvqWdN1QWnfqxKUEMka8jyOKt6PgjZGbNadu2pWHxDMsYP4E/isksnhfcezi1zLChqJG/bqnOlPuccPwUzBiWoZ7+V9pzctYdmVNZKegbDEXn8AU5QXC4kXlcH1+lYtM7uah+L8NmNxPvIW/wCjpKWjhENJTQ08Q7MiYGNHsC9kyuGtrpcHLr2RI2qtMSW3WA45qofRA7Rjp/zYrY8UbIo2xxsaxjRg1rRgAPIBfSFFwEIQgEIQgEIQg//Z";
+document.getElementById('logo').src = LOGO_DATA;
+
+// ===== DEFAULT DATA =====
+const DEFAULT_CATEGORIES = [
+  { id: 'cat-net', name: 'Redes', color: '#2563eb' },
+  { id: 'cat-cam', name: 'Cámaras', color: '#dc2626' },
+  { id: 'cat-cable', name: 'Cableado', color: '#ea580c' },
+  { id: 'cat-rack', name: 'Racks', color: '#7c3aed' },
+  { id: 'cat-svc', name: 'Servicios', color: '#16a34a' },
+  { id: 'cat-soporte', name: 'Soporte', color: '#0891b2' },
+];
+
+const DEFAULT_PRODUCTS = [
+  { name: 'Configuración Cloud Gateway (UDM-Pro)', sku: 'UDM-PRO-CFG', categoryId: 'cat-svc', price: 500, unit: 'trabajo', type: 'service', desc: 'Setup inicial, redes, VLANs, firewall, WiFi SSIDs' },
+  { name: 'Configuración Switch Ubiquiti', sku: 'SW-CFG', categoryId: 'cat-svc', price: 200, unit: 'trabajo', type: 'service', desc: 'Adopción, perfiles de puertos, PoE' },
+  { name: 'Instalación Access Point', sku: 'AP-INST', categoryId: 'cat-svc', price: 175, unit: 'c/u', type: 'service', desc: 'Montaje en techo, cableado, adopción' },
+  { name: 'Instalación Cámara Bullet/Dome', sku: 'CAM-INST', categoryId: 'cat-cam', price: 250, unit: 'c/u', type: 'service', desc: 'Montaje, cableado, ajuste de ángulo' },
+  { name: 'Instalación Cámara PTZ', sku: 'PTZ-INST', categoryId: 'cat-cam', price: 400, unit: 'c/u', type: 'service', desc: 'Montaje, cableado, configuración de presets' },
+  { name: 'Montaje Rack + organización', sku: 'RACK-INST', categoryId: 'cat-rack', price: 275, unit: 'trabajo', type: 'service', desc: 'Rack, organización, etiquetado' },
+  { name: 'Cableado Cat6', sku: 'CAT6-100', categoryId: 'cat-cable', price: 65, unit: 'por 100ft', type: 'service', desc: 'Cable Cat6 + conectores + terminado' },
+  { name: 'Cableado fibra óptica', sku: 'FIBER-100', categoryId: 'cat-cable', price: 150, unit: 'por 100ft', type: 'service', desc: 'Fibra + fusión + pruebas' },
+  { name: 'Configuración de red', sku: 'NET-CFG', categoryId: 'cat-net', price: 300, unit: 'trabajo', type: 'service', desc: 'VLANs, WiFi, firewall, optimización' },
+  { name: 'NVR setup + grabación', sku: 'NVR-CFG', categoryId: 'cat-cam', price: 200, unit: 'trabajo', type: 'service', desc: 'Configuración NVR, grabación, retención' },
+  { name: 'Site survey / WiFi planning', sku: 'SURVEY', categoryId: 'cat-net', price: 150, unit: 'visita', type: 'service', desc: 'Visita técnica, planificación WiFi' },
+  { name: 'Soporte técnico', sku: 'SUPPORT-HR', categoryId: 'cat-soporte', price: 85, unit: 'hora', type: 'service', desc: 'Soporte técnico por hora' },
+  // Common equipment
+  { name: 'Dream Machine Pro', sku: 'UDM-Pro', categoryId: 'cat-net', price: 0, unit: 'c/u', type: 'equipment', desc: 'Cloud Gateway Ubiquiti' },
+  { name: 'Pro Max 16 PoE Switch', sku: 'USW-Pro-Max-16-PoE', categoryId: 'cat-net', price: 0, unit: 'c/u', type: 'equipment', desc: 'Switch 16 puertos PoE' },
+  { name: 'U7 Pro Access Point', sku: 'U7-Pro', categoryId: 'cat-net', price: 0, unit: 'c/u', type: 'equipment', desc: 'WiFi 7 AP' },
+  { name: 'G6 Pro Bullet Camera', sku: 'UVC-G6-Pro-Bullet-W', categoryId: 'cat-cam', price: 0, unit: 'c/u', type: 'equipment', desc: 'Cámara bullet G6 Pro' },
+  { name: 'Network Video Recorder', sku: 'UNVR', categoryId: 'cat-cam', price: 0, unit: 'c/u', type: 'equipment', desc: 'NVR Ubiquiti' },
+  { name: 'Toolless Mini Rack 6U', sku: 'U-Rack-6U-TL', categoryId: 'cat-rack', price: 0, unit: 'c/u', type: 'equipment', desc: 'Rack 6U sin herramientas' },
+];
+
+// ===== SUPABASE =====
+const SUPABASE_URL = 'https://kiauzuhwgbsupoxtmkes.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpYXV6dWh3Z2JzdXBveHRta2VzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNjc3NzgsImV4cCI6MjA5Mzk0Mzc3OH0.ftbtRZVeLYItWo9TSTSUF8mB-wjkLDH0fwj1UCYwHxE';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Mapping: keep the rest of the code untouched (it uses 'products', 'categories',
+// 'quotes', 'settings' as store names and reads/writes records with id + camelCase
+// fields). We translate to Postgres tables (snake_case columns) here.
+
+function toRow(store, val) {
+  const v = { ...val };
+  if (store === 'products') {
+    return {
+      id: v.id,
+      sku: v.sku || null,
+      name: v.name,
+      category_id: v.categoryId || null,
+      price: Number(v.price) || 0,
+      unit: v.unit || null,
+      type: v.type || 'service',
+      description: v.desc || null,
+    };
+  }
+  if (store === 'categories') {
+    return { id: v.id, name: v.name, icon: v.color || v.icon || null };
+  }
+  if (store === 'quotes') {
+    const row = {
+      client: v.clientName || null,
+      project: v.projectName || null,
+      address: v.clientAddress || null,
+      contact: v.clientContact || null,
+      quote_date: v.quoteDate || null,
+      quote_num: v.quoteNum || null,
+      notes: v.projectNotes || null,
+      items: v.items || [],
+      apply_ivu: !!v.applyIVU,
+      saved_at: v.savedAt || new Date().toISOString(),
+    };
+    if (v.id != null) row.id = v.id;
+    return row;
+  }
+  if (store === 'settings') {
+    return { key: v.key, value: v.value ?? null };
+  }
+  return v;
+}
+
+function fromRow(store, row) {
+  if (!row) return row;
+  if (store === 'products') {
+    return {
+      id: row.id, sku: row.sku, name: row.name,
+      categoryId: row.category_id, price: Number(row.price) || 0,
+      unit: row.unit, type: row.type, desc: row.description,
+    };
+  }
+  if (store === 'categories') {
+    return { id: row.id, name: row.name, color: row.icon || row.color || null };
+  }
+  if (store === 'quotes') {
+    // Recompute total from items since the column doesn't exist server-side.
+    const items = row.items || [];
+    const total = items.reduce((s, it) => s + (Number(it.qty)||0) * (Number(it.price)||0), 0);
+    return {
+      id: row.id,
+      clientName: row.client, projectName: row.project,
+      clientAddress: row.address, clientContact: row.contact,
+      quoteDate: row.quote_date, quoteNum: row.quote_num,
+      projectNotes: row.notes, items,
+      applyIVU: !!row.apply_ivu, total,
+      savedAt: row.saved_at, createdAt: row.saved_at,
+    };
+  }
+  if (store === 'settings') {
+    return { key: row.key, value: row.value };
+  }
+  return row;
+}
+
+function primaryKey(store) {
+  return (store === 'settings' || store === 'categories') ? 'key_text' : 'id';
+}
+
+async function dbGet(store, key) {
+  const pk = (store === 'settings') ? 'key' : 'id';
+  const { data, error } = await sb.from(store).select('*').eq(pk, key).maybeSingle();
+  if (error) throw error;
+  return fromRow(store, data);
+}
+
+async function dbAll(store) {
+  const { data, error } = await sb.from(store).select('*');
+  if (error) throw error;
+  return (data || []).map(r => fromRow(store, r));
+}
+
+async function dbPut(store, val) {
+  const row = toRow(store, val);
+  // For autoincrement tables, omit id when null/undefined so Postgres assigns one.
+  if ((store === 'products' || store === 'quotes') && (row.id == null)) {
+    delete row.id;
+  }
+  const { data, error } = await sb.from(store).upsert(row).select().single();
+  if (error) throw error;
+  // Mimic IndexedDB put() return: the key of the inserted/updated record.
+  if (store === 'settings') return data.key;
+  return data.id;
+}
+
+async function dbDel(store, key) {
+  const pk = (store === 'settings') ? 'key' : 'id';
+  const { error } = await sb.from(store).delete().eq(pk, key);
+  if (error) throw error;
+}
+
+async function dbClear(store) {
+  // Supabase delete requires a filter; use a permissive one.
+  const pk = (store === 'settings') ? 'key' : 'id';
+  const filterVal = (store === 'settings') ? '' : 0;
+  const { error } = (store === 'settings')
+    ? await sb.from(store).delete().neq(pk, '___never___')
+    : await sb.from(store).delete().neq(pk, -1);
+  if (error) throw error;
+}
+
+async function openDB() { /* no-op; Supabase client is ready */ return true; }
+
+// ===== STATE =====
+let categories = [];
+let products = [];
+let quoteItems = [];
+let currentFilter = 'all';
+let pickerFilter = 'all';
+
+// ===== AUTH =====
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+  if (!email || !password) {
+    errEl.textContent = 'Llena email y contraseña.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) {
+    errEl.textContent = error.message || 'Error al iniciar sesión.';
+    errEl.style.display = 'block';
+    return;
+  }
+  document.getElementById('loginModal').classList.add('hidden');
+  await bootApp();
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+async function bootApp() {
+  await openDB();
+  await seedDefaults();
+  await loadAll();
+  await loadCurrentQuote();
+  document.getElementById('quoteDate').valueAsDate = new Date();
+  if (!document.getElementById('quoteNum').value) {
+    document.getElementById('quoteNum').value = generateQuoteNum();
+  }
+  updateStats();
+  // Show user email if available
+  const { data: { user } } = await sb.auth.getUser();
+  const u = document.getElementById('userBadge');
+  if (u && user) u.textContent = user.email;
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', async () => {
+  setupTabs();
+  document.getElementById('applyIVU').addEventListener('change', updateTotals);
+  document.body.addEventListener('input', e => {
+    if (e.target.closest('#tab-quote')) {
+      saveCurrentQuote();
+      if (e.target.id === 'projectName' || e.target.id === 'quoteNum') updateEditingUI();
+    }
+  });
+  // Allow Enter in login modal to submit
+  ['loginEmail','loginPassword'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  });
+  // Check existing session
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    document.getElementById('loginModal').classList.add('hidden');
+    await bootApp();
+  }
+});
+
+window.addEventListener('DOMContentLoaded_DISABLED_OLD', async () => {
+  await openDB();
+  await seedDefaults();
+  await loadAll();
+  setupTabs();
+  await loadCurrentQuote();
+  document.getElementById('quoteDate').valueAsDate = new Date();
+  if (!document.getElementById('quoteNum').value) {
+    document.getElementById('quoteNum').value = generateQuoteNum();
+  }
+  document.getElementById('applyIVU').addEventListener('change', updateTotals);
+  document.body.addEventListener('input', e => {
+    if (e.target.closest('#tab-quote')) {
+      saveCurrentQuote();
+      if (e.target.id === 'projectName' || e.target.id === 'quoteNum') updateEditingUI();
+    }
+  });
+  updateStats();
+});
+
+async function seedDefaults() {
+  const cats = await dbAll('categories');
+  if (cats.length === 0) {
+    for (const c of DEFAULT_CATEGORIES) await dbPut('categories', c);
+    for (const p of DEFAULT_PRODUCTS) await dbPut('products', p);
+  }
+}
+
+async function loadAll() {
+  categories = await dbAll('categories');
+  products = await dbAll('products');
+  renderCatalog();
+  renderCategories();
+  renderHistory();
+  populateProductCategorySelect();
+}
+
+function generateQuoteNum() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ===== TABS =====
+function setupTabs() {
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === btn));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+      document.getElementById('tab-' + target).classList.remove('hidden');
+      if (target === 'history') renderHistory();
+      if (target === 'settings') updateStats();
+      if (target === 'print3d') init3DTab();
+    });
+  });
+}
+
+// ===== CATALOG =====
+function renderCatalog() {
+  const list = document.getElementById('catalogList');
+  const search = (document.getElementById('catalogSearch').value || '').toLowerCase();
+  const filter = document.getElementById('catalogFilter');
+
+  // Render filter chips
+  filter.innerHTML = '';
+  const allChip = document.createElement('span');
+  allChip.className = 'cat-chip' + (currentFilter === 'all' ? ' active' : '');
+  allChip.textContent = `Todos (${products.length})`;
+  allChip.onclick = () => { currentFilter = 'all'; renderCatalog(); };
+  filter.appendChild(allChip);
+  categories.forEach(c => {
+    const count = products.filter(p => p.categoryId === c.id).length;
+    if (count === 0) return;
+    const chip = document.createElement('span');
+    chip.className = 'cat-chip' + (currentFilter === c.id ? ' active' : '');
+    chip.textContent = `${c.name} (${count})`;
+    chip.style.borderColor = c.color;
+    if (currentFilter === c.id) chip.style.background = c.color;
+    chip.onclick = () => { currentFilter = c.id; renderCatalog(); };
+    filter.appendChild(chip);
+  });
+
+  let filtered = products;
+  if (currentFilter !== 'all') filtered = filtered.filter(p => p.categoryId === currentFilter);
+  if (search) {
+    filtered = filtered.filter(p =>
+      (p.name||'').toLowerCase().includes(search) ||
+      (p.sku||'').toLowerCase().includes(search)
+    );
+  }
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">📦</div>No hay productos. Agrega uno con el botón "+ Nuevo".</div>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  list.className = 'item-list';
+  filtered.forEach(p => {
+    const cat = categories.find(c => c.id === p.categoryId);
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `
+      <div class="info">
+        <div class="name">${escapeHtml(p.name)}</div>
+        <div class="meta">
+          ${cat ? `<span class="category-pill" style="background:${cat.color}20;color:${cat.color}">${escapeHtml(cat.name)}</span>` : ''}
+          ${p.sku ? `<span>SKU: ${escapeHtml(p.sku)}</span>` : ''}
+          ${p.unit ? `<span> • ${escapeHtml(p.unit)}</span>` : ''}
+          ${p.type === 'equipment' ? '<span> • 📦 Equipo</span>' : '<span> • 🛠️ Servicio</span>'}
+        </div>
+      </div>
+      <div class="price">$${(p.price||0).toFixed(2)}</div>
+      <button class="btn btn-secondary" onclick="editProduct(${p.id})">✏️</button>
+      <button class="btn btn-danger" onclick="deleteProduct(${p.id})">✕</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function openProductModal() {
+  document.getElementById('productModalTitle').textContent = 'Nuevo Producto';
+  document.getElementById('productId').value = '';
+  document.getElementById('productName').value = '';
+  document.getElementById('productSku').value = '';
+  document.getElementById('productPrice').value = '';
+  document.getElementById('productUnit').value = 'c/u';
+  document.getElementById('productDesc').value = '';
+  document.getElementById('productType').value = 'service';
+  populateProductCategorySelect();
+  document.getElementById('productModal').classList.remove('hidden');
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.add('hidden');
+}
+
+function populateProductCategorySelect() {
+  const sel = document.getElementById('productCategory');
+  if (!sel) return;
+  sel.innerHTML = '';
+  categories.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+}
+
+async function editProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  populateProductCategorySelect();
+  document.getElementById('productModalTitle').textContent = 'Editar Producto';
+  document.getElementById('productId').value = p.id;
+  document.getElementById('productName').value = p.name || '';
+  document.getElementById('productSku').value = p.sku || '';
+  document.getElementById('productPrice').value = p.price || 0;
+  document.getElementById('productUnit').value = p.unit || '';
+  document.getElementById('productDesc').value = p.desc || '';
+  document.getElementById('productType').value = p.type || 'service';
+  document.getElementById('productCategory').value = p.categoryId || categories[0]?.id;
+  document.getElementById('productModal').classList.remove('hidden');
+}
+
+async function saveProduct() {
+  const idVal = document.getElementById('productId').value;
+  const product = {
+    name: document.getElementById('productName').value.trim(),
+    sku: document.getElementById('productSku').value.trim(),
+    categoryId: document.getElementById('productCategory').value,
+    price: parseFloat(document.getElementById('productPrice').value) || 0,
+    unit: document.getElementById('productUnit').value.trim(),
+    type: document.getElementById('productType').value,
+    desc: document.getElementById('productDesc').value.trim(),
+  };
+  if (!product.name) { alert('El nombre es requerido'); return; }
+  if (idVal) product.id = parseInt(idVal);
+  await dbPut('products', product);
+  await loadAll();
+  closeProductModal();
+}
+
+async function deleteProduct(id) {
+  if (!confirm('¿Eliminar este producto?')) return;
+  await dbDel('products', id);
+  await loadAll();
+}
+
+// ===== CATEGORIES =====
+function renderCategories() {
+  const list = document.getElementById('categoriesList');
+  if (!list) return;
+  list.innerHTML = '';
+  list.className = 'item-list';
+  if (categories.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🏷️</div>No hay categorías.</div>`;
+    return;
+  }
+  categories.forEach(c => {
+    const count = products.filter(p => p.categoryId === c.id).length;
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `
+      <div class="info">
+        <div class="name">
+          <span class="category-pill" style="background:${c.color}20;color:${c.color}">●</span>
+          ${escapeHtml(c.name)}
+        </div>
+        <div class="meta">${count} producto${count !== 1 ? 's' : ''}</div>
+      </div>
+      <input type="color" value="${c.color}" onchange="updateCategoryColor('${c.id}', this.value)" style="width:50px;padding:2px;">
+      <button class="btn btn-secondary" onclick="renameCategory('${c.id}')">✏️</button>
+      <button class="btn btn-danger" onclick="deleteCategory('${c.id}')">✕</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+async function addCategory() {
+  const name = prompt('Nombre de la nueva categoría:');
+  if (!name) return;
+  const id = 'cat-' + Date.now();
+  const cat = { id, name: name.trim(), color: '#' + Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0') };
+  await dbPut('categories', cat);
+  await loadAll();
+}
+
+async function renameCategory(id) {
+  const c = categories.find(x => x.id === id);
+  if (!c) return;
+  const name = prompt('Nuevo nombre:', c.name);
+  if (!name) return;
+  c.name = name.trim();
+  await dbPut('categories', c);
+  await loadAll();
+}
+
+async function updateCategoryColor(id, color) {
+  const c = categories.find(x => x.id === id);
+  if (!c) return;
+  c.color = color;
+  await dbPut('categories', c);
+  await loadAll();
+}
+
+async function deleteCategory(id) {
+  const count = products.filter(p => p.categoryId === id).length;
+  if (count > 0) {
+    if (!confirm(`Esta categoría tiene ${count} productos. ¿Eliminar de todos modos? Los productos quedarán sin categoría.`)) return;
+  } else if (!confirm('¿Eliminar esta categoría?')) return;
+  await dbDel('categories', id);
+  await loadAll();
+}
+
+// ===== QUOTE ITEMS =====
+// ===== CLIENT PICKER (existing) =====
+async function getUniqueClients() {
+  // 1) Pull clients from dedicated clients table (imported from Faturator)
+  const map = new Map(); // key: lowercased name → client info
+  try {
+    const { data: rows, error } = await sb.from('clients').select('*').order('name');
+    if (!error && rows) {
+      for (const r of rows) {
+        const name = (r.name || '').trim();
+        if (!name) continue;
+        const key = name.toLowerCase();
+        map.set(key, {
+          name,
+          address: r.address || '',
+          contact: [r.contact, r.phone].filter(Boolean).join(' • ') || r.phone || '',
+          _date: r.updated_at || r.created_at || '',
+        });
+      }
+    }
+  } catch (e) { console.warn('clients table read failed', e); }
+
+  // 2) Augment / override with anything seen in past quotes (more recent wins)
+  try {
+    const quotes = await dbAll('quotes');
+    for (const q of quotes) {
+      const name = (q.clientName || q.client || '').trim();
+      if (!name) continue;
+      const key = name.toLowerCase();
+      const prev = map.get(key);
+      const date = q.savedAt || q.createdAt || q.saved_at || '';
+      if (!prev || (date && date > (prev._date || ''))) {
+        map.set(key, {
+          name,
+          address: q.clientAddress || q.address || (prev && prev.address) || '',
+          contact: q.clientContact || q.contact || (prev && prev.contact) || '',
+          _date: date,
+        });
+      }
+    }
+  } catch (e) { console.warn('quotes read for clients failed', e); }
+
+  return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'es'));
+}
+
+async function openClientPicker() {
+  document.getElementById('clientPickerModal').classList.remove('hidden');
+  document.getElementById('clientPickerSearch').value = '';
+  await renderClientPicker();
+}
+
+function closeClientPicker() {
+  document.getElementById('clientPickerModal').classList.add('hidden');
+}
+
+async function renderClientPicker() {
+  const list = document.getElementById('clientPickerList');
+  const search = (document.getElementById('clientPickerSearch').value || '').toLowerCase().trim();
+  const clients = await getUniqueClients();
+  const filtered = search
+    ? clients.filter(c =>
+        c.name.toLowerCase().includes(search) ||
+        c.address.toLowerCase().includes(search) ||
+        c.contact.toLowerCase().includes(search))
+    : clients;
+
+  list.innerHTML = '';
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">👥</div>${clients.length === 0 ? 'No hay clientes guardados todavía. Crea tu primera cotización.' : 'Sin resultados.'}</div>`;
+    return;
+  }
+  filtered.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.style.cursor = 'pointer';
+    row.onclick = () => pickClient(c);
+    row.innerHTML = `
+      <div class="info">
+        <div class="name">${escapeHtml(c.name)}</div>
+        <div class="meta">
+          ${c.address ? `📍 ${escapeHtml(c.address)}` : ''}
+          ${c.address && c.contact ? ' • ' : ''}
+          ${c.contact ? `📞 ${escapeHtml(c.contact)}` : ''}
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="event.stopPropagation();pickClient(${JSON.stringify(c).replace(/"/g,'&quot;')})">Usar</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function pickClient(c) {
+  if (typeof c === 'string') c = JSON.parse(c);
+  document.getElementById('clientName').value = c.name || '';
+  document.getElementById('clientAddress').value = c.address || '';
+  document.getElementById('clientContact').value = c.contact || '';
+  saveCurrentQuote();
+  closeClientPicker();
+}
+
+function openCatalogPicker() {
+  document.getElementById('pickerSearch').value = '';
+  pickerFilter = 'all';
+  renderPicker();
+  document.getElementById('pickerModal').classList.remove('hidden');
+}
+
+function closeCatalogPicker() {
+  document.getElementById('pickerModal').classList.add('hidden');
+}
+
+function renderPicker() {
+  const list = document.getElementById('pickerList');
+  const search = (document.getElementById('pickerSearch').value || '').toLowerCase();
+  const filter = document.getElementById('pickerFilter');
+
+  filter.innerHTML = '';
+  const allChip = document.createElement('span');
+  allChip.className = 'cat-chip' + (pickerFilter === 'all' ? ' active' : '');
+  allChip.textContent = 'Todos';
+  allChip.onclick = () => { pickerFilter = 'all'; renderPicker(); };
+  filter.appendChild(allChip);
+  categories.forEach(c => {
+    const count = products.filter(p => p.categoryId === c.id).length;
+    if (count === 0) return;
+    const chip = document.createElement('span');
+    chip.className = 'cat-chip' + (pickerFilter === c.id ? ' active' : '');
+    chip.textContent = c.name;
+    chip.style.borderColor = c.color;
+    if (pickerFilter === c.id) chip.style.background = c.color;
+    chip.onclick = () => { pickerFilter = c.id; renderPicker(); };
+    filter.appendChild(chip);
+  });
+
+  let filtered = products;
+  if (pickerFilter !== 'all') filtered = filtered.filter(p => p.categoryId === pickerFilter);
+  if (search) {
+    filtered = filtered.filter(p =>
+      (p.name||'').toLowerCase().includes(search) ||
+      (p.sku||'').toLowerCase().includes(search)
+    );
+  }
+
+  list.innerHTML = '';
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state">Sin resultados</div>`;
+    return;
+  }
+  filtered.forEach(p => {
+    const cat = categories.find(c => c.id === p.categoryId);
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.style.cursor = 'pointer';
+    row.onclick = () => { addItemFromCatalog(p); };
+    row.innerHTML = `
+      <div class="info">
+        <div class="name">${escapeHtml(p.name)}</div>
+        <div class="meta">
+          ${cat ? `<span class="category-pill" style="background:${cat.color}20;color:${cat.color}">${escapeHtml(cat.name)}</span>` : ''}
+          ${p.sku ? `SKU: ${escapeHtml(p.sku)} • ` : ''}${escapeHtml(p.unit||'')}
+        </div>
+      </div>
+      <div class="price">$${(p.price||0).toFixed(2)}</div>
+      <button class="btn btn-primary" onclick="event.stopPropagation();addItemFromCatalog(${JSON.stringify(p).replace(/"/g,'&quot;')})">+</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function addItemFromCatalog(p) {
+  if (typeof p === 'string') p = JSON.parse(p);
+  quoteItems.push({
+    productId: p.id,
+    name: p.name,
+    sku: p.sku || '',
+    unit: p.unit || '',
+    type: p.type || 'service',
+    qty: 1,
+    price: p.price || 0,
+  });
+  renderQuoteItems();
+  updateTotals();
+  saveCurrentQuote();
+}
+
+function addCustomItem() {
+  quoteItems.push({ name: '', sku: '', unit: 'trabajo', type: 'service', qty: 1, price: 0 });
+  renderQuoteItems();
+}
+
+function removeQuoteItem(i) {
+  quoteItems.splice(i, 1);
+  renderQuoteItems();
+  updateTotals();
+  saveCurrentQuote();
+}
+
+function renderQuoteItems() {
+  const list = document.getElementById('quoteItems');
+  list.innerHTML = '';
+  list.className = 'item-list';
+  if (quoteItems.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🛒</div>No hay items. Agrega del catálogo o uno personalizado.</div>`;
+    return;
+  }
+  quoteItems.forEach((it, i) => {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.style.gridTemplateColumns = '1fr 70px 90px auto';
+    row.innerHTML = `
+      <div class="info">
+        <input type="text" value="${escapeHtml(it.name)}" placeholder="Nombre" onchange="quoteItems[${i}].name=this.value;saveCurrentQuote()">
+        <div class="meta" style="margin-top:4px;">
+          ${it.sku ? `SKU: ${escapeHtml(it.sku)} • ` : ''}
+          <span>${it.type === 'equipment' ? '📦 Equipo' : '🛠️ Servicio'}</span> •
+          <span>${escapeHtml(it.unit||'')}</span>
+        </div>
+      </div>
+      <input type="number" min="0" step="0.5" class="qty-input" value="${it.qty}" onchange="quoteItems[${i}].qty=parseFloat(this.value)||0;updateTotals();saveCurrentQuote()">
+      <input type="number" min="0" step="0.01" value="${it.price}" onchange="quoteItems[${i}].price=parseFloat(this.value)||0;updateTotals();saveCurrentQuote()">
+      <button class="btn btn-danger" onclick="removeQuoteItem(${i})">✕</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function updateTotals() {
+  const sub = quoteItems.reduce((s, it) => s + (it.qty * it.price), 0);
+  const applyIVU = document.getElementById('applyIVU').checked;
+  const ivu = applyIVU ? sub * 0.115 : 0;
+  const total = sub + ivu;
+  document.getElementById('subtotal').textContent = '$' + sub.toFixed(2);
+  document.getElementById('ivuAmount').textContent = '$' + ivu.toFixed(2);
+  document.getElementById('ivuRow').style.display = applyIVU ? 'flex' : 'none';
+  document.getElementById('grandTotal').textContent = '$' + total.toFixed(2);
+}
+
+// ===== CURRENT QUOTE PERSISTENCE =====
+let editingQuoteId = null; // when set, we're editing an existing quote
+
+function getCurrentQuote() {
+  return {
+    clientName: document.getElementById('clientName').value,
+    projectName: document.getElementById('projectName').value,
+    clientAddress: document.getElementById('clientAddress').value,
+    clientContact: document.getElementById('clientContact').value,
+    quoteDate: document.getElementById('quoteDate').value,
+    quoteNum: document.getElementById('quoteNum').value,
+    projectNotes: document.getElementById('projectNotes').value,
+    applyIVU: document.getElementById('applyIVU').checked,
+    items: quoteItems,
+    editingId: editingQuoteId,
+  };
+}
+
+function updateEditingUI() {
+  const banner = document.getElementById('editingBanner');
+  const saveBtn = document.getElementById('saveBtn');
+  const saveAsNewBtn = document.getElementById('saveAsNewBtn');
+  if (editingQuoteId) {
+    banner.classList.remove('hidden');
+    document.getElementById('editingTitle').textContent =
+      (document.getElementById('projectName').value || 'sin nombre') + ' (#' + (document.getElementById('quoteNum').value||'') + ')';
+    saveBtn.textContent = '💾 Actualizar';
+    saveAsNewBtn.style.display = 'inline-block';
+  } else {
+    banner.classList.add('hidden');
+    saveBtn.textContent = '💾 Guardar';
+    saveAsNewBtn.style.display = 'none';
+  }
+}
+
+function setCurrentQuote(data) {
+  document.getElementById('clientName').value = data.clientName || '';
+  document.getElementById('projectName').value = data.projectName || '';
+  document.getElementById('clientAddress').value = data.clientAddress || '';
+  document.getElementById('clientContact').value = data.clientContact || '';
+  document.getElementById('quoteDate').value = data.quoteDate || new Date().toISOString().slice(0,10);
+  document.getElementById('quoteNum').value = data.quoteNum || generateQuoteNum();
+  document.getElementById('projectNotes').value = data.projectNotes || '';
+  document.getElementById('applyIVU').checked = !!data.applyIVU;
+  quoteItems = data.items || [];
+  editingQuoteId = data.editingId || null;
+  renderQuoteItems();
+  updateTotals();
+  updateEditingUI();
+}
+
+// Current quote (work-in-progress) is per-user, stored locally so each
+// employee can have their own draft without overwriting others.
+async function saveCurrentQuote() {
+  try {
+    localStorage.setItem('teknobot_current_quote', JSON.stringify(getCurrentQuote()));
+  } catch (e) { /* ignore quota errors */ }
+}
+
+async function loadCurrentQuote() {
+  try {
+    const raw = localStorage.getItem('teknobot_current_quote');
+    if (raw) setCurrentQuote(JSON.parse(raw));
+  } catch (e) { /* ignore */ }
+}
+
+async function resetQuote() {
+  if (!confirm('¿Comenzar nueva cotización? Se perderá lo que tengas sin guardar.')) return;
+  quoteItems = [];
+  editingQuoteId = null;
+  setCurrentQuote({ quoteNum: generateQuoteNum() });
+  await saveCurrentQuote();
+}
+
+// ===== HISTORY =====
+async function saveQuoteToHistory() {
+  const q = getCurrentQuote();
+  if (!q.clientName || !q.projectName) {
+    alert('Llena cliente y proyecto antes de guardar.');
+    return;
+  }
+  const total = quoteItems.reduce((s, it) => s + it.qty * it.price, 0);
+  const record = {
+    ...q,
+    total,
+    savedAt: new Date().toISOString(),
+  };
+  delete record.editingId;
+
+  try {
+    if (editingQuoteId) {
+      // UPDATE existing
+      record.id = editingQuoteId;
+      const existing = await dbGet('quotes', editingQuoteId);
+      if (existing && existing.createdAt) record.createdAt = existing.createdAt;
+      else record.createdAt = record.savedAt;
+      await dbPut('quotes', record);
+      alert('✓ Cotización actualizada');
+    } else {
+      // CREATE new
+      record.createdAt = record.savedAt;
+      const id = await dbPut('quotes', record);
+      editingQuoteId = id;
+      updateEditingUI();
+      alert('✓ Cotización guardada');
+    }
+    // Also save client to clients table if it's new
+    try { await upsertClientFromQuote(record); } catch (e) { console.warn('client upsert', e); }
+    await saveCurrentQuote();
+    renderHistory();
+  } catch (err) {
+    console.error('saveQuoteToHistory error:', err);
+    alert('❌ Error al guardar: ' + (err.message || err));
+  }
+}
+
+async function upsertClientFromQuote(record) {
+  const name = (record.clientName || '').trim();
+  if (!name) return;
+  // Look up existing by lowercased name
+  const { data: existing } = await sb.from('clients').select('id').ilike('name', name).limit(1);
+  const row = {
+    name,
+    address: record.clientAddress || null,
+    contact: record.clientContact || null,
+  };
+  if (existing && existing.length > 0) {
+    await sb.from('clients').update(row).eq('id', existing[0].id);
+  } else {
+    await sb.from('clients').insert(row);
+  }
+}
+
+async function saveQuoteAsNew() {
+  const q = getCurrentQuote();
+  if (!q.clientName || !q.projectName) {
+    alert('Llena cliente y proyecto antes de guardar.');
+    return;
+  }
+  if (!confirm('¿Crear una copia nueva en el historial? La original se mantendrá intacta.')) return;
+  const total = quoteItems.reduce((s, it) => s + it.qty * it.price, 0);
+  const newQuoteNum = q.quoteNum + '-COPIA';
+  document.getElementById('quoteNum').value = newQuoteNum;
+  const record = {
+    ...q,
+    quoteNum: newQuoteNum,
+    total,
+    savedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+  };
+  delete record.editingId;
+  delete record.id;
+  try {
+    const newId = await dbPut('quotes', record);
+    editingQuoteId = newId;
+    updateEditingUI();
+    try { await upsertClientFromQuote(record); } catch (e) { console.warn('client upsert', e); }
+    await saveCurrentQuote();
+    alert('✓ Copia guardada como cotización nueva');
+  } catch (err) {
+    console.error('saveQuoteAsNew error:', err);
+    alert('❌ Error al guardar: ' + (err.message || err));
+  }
+  renderHistory();
+}
+
+async function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (!list) return;
+  const quotes = (await dbAll('quotes')).sort((a,b) => (b.savedAt||'').localeCompare(a.savedAt||''));
+  if (quotes.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">📋</div>No hay cotizaciones guardadas.</div>`;
+    return;
+  }
+  list.innerHTML = '';
+  quotes.forEach(q => {
+    const total = q.applyIVU ? q.total * 1.115 : q.total;
+    const isEditing = (q.id === editingQuoteId);
+    const updatedNote = (q.savedAt && q.createdAt && q.savedAt !== q.createdAt)
+      ? ` • <span style="color:#16a34a;">Actualizada ${new Date(q.savedAt).toLocaleDateString('es-PR')}</span>` : '';
+    const row = document.createElement('div');
+    row.className = 'history-row';
+    if (isEditing) row.style.borderColor = '#f59e0b', row.style.background = '#fffbeb';
+    row.innerHTML = `
+      <div class="info">
+        <div class="title">${isEditing ? '✏️ ' : ''}${escapeHtml(q.projectName||'Sin nombre')}</div>
+        <div class="meta">
+          ${escapeHtml(q.clientName||'—')} •
+          ${q.quoteNum||''} •
+          ${formatDate(q.quoteDate)} •
+          ${q.items?.length || 0} items${updatedNote}
+        </div>
+      </div>
+      <div class="total">$${total.toFixed(2)}</div>
+      <button class="btn btn-secondary" onclick='loadQuoteFromHistory(${q.id})' title="Editar">✏️</button>
+      <button class="btn btn-secondary" onclick='duplicateQuote(${q.id})' title="Duplicar">📋</button>
+      <button class="btn btn-danger" onclick="deleteQuoteFromHistory(${q.id})">✕</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+async function duplicateQuote(id) {
+  const q = await dbGet('quotes', id);
+  if (!q) return;
+  delete q.id;
+  q.quoteNum = (q.quoteNum||'') + '-COPIA';
+  q.savedAt = new Date().toISOString();
+  q.createdAt = q.savedAt;
+  await dbPut('quotes', q);
+  renderHistory();
+  alert('✓ Cotización duplicada');
+}
+
+async function loadQuoteFromHistory(id) {
+  const q = await dbGet('quotes', id);
+  if (!q) return;
+  q.editingId = id;
+  setCurrentQuote(q);
+  await saveCurrentQuote();
+  document.querySelector('.tab[data-tab="quote"]').click();
+}
+
+async function deleteQuoteFromHistory(id) {
+  if (!confirm('¿Eliminar esta cotización del historial?')) return;
+  await dbDel('quotes', id);
+  if (editingQuoteId === id) {
+    editingQuoteId = null;
+    updateEditingUI();
+    await saveCurrentQuote();
+  }
+  renderHistory();
+}
+
+// ===== PDF =====
+function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const data = getCurrentQuote();
+
+  if (!data.clientName || !data.projectName) {
+    alert('Por favor llena al menos el cliente y nombre del proyecto.');
+    return;
+  }
+
+  const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+  const W = doc.internal.pageSize.getWidth();
+  const margin = 40;
+  let y = margin;
+
+  // Header
+  doc.addImage(LOGO_DATA, 'JPEG', margin, y, 50, 65);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(22);
+  doc.setTextColor(30, 58, 138);
+  doc.text('TEKNOBOT', margin + 65, y + 22);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(100, 116, 139);
+  doc.text('Ponce, PR  •  teknobotpr@gmail.com', margin + 65, y + 38);
+  doc.text('facebook.com/teknobotpr', margin + 65, y + 50);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(20);
+  doc.setTextColor(30, 58, 138);
+  doc.text('COTIZACIÓN', W - margin, y + 22, { align: 'right' });
+  doc.setFontSize(9);
+  doc.setTextColor(100, 116, 139);
+  doc.text(`Fecha: ${formatDate(data.quoteDate)}`, W - margin, y + 38, { align: 'right' });
+  doc.text(`No. ${data.quoteNum}`, W - margin, y + 50, { align: 'right' });
+  y += 80;
+
+  doc.setDrawColor(30, 58, 138);
+  doc.setLineWidth(2);
+  doc.line(margin, y, W - margin, y);
+  y += 20;
+
+  // Client box
+  doc.setFillColor(248, 250, 252);
+  doc.rect(margin, y, W - 2*margin, 60, 'F');
+  doc.setDrawColor(226, 232, 240);
+  doc.rect(margin, y, W - 2*margin, 60, 'S');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(30, 58, 138);
+  doc.text('CLIENTE', margin + 12, y + 16);
+  doc.text('PROYECTO', margin + 280, y + 16);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(15, 23, 42);
+  doc.text(data.clientName, margin + 12, y + 32);
+  doc.text(data.projectName, margin + 280, y + 32);
+  doc.setFontSize(9);
+  doc.setTextColor(100, 116, 139);
+  if (data.clientAddress) doc.text(data.clientAddress, margin + 12, y + 46);
+  if (data.clientContact) doc.text(data.clientContact, margin + 12, y + 56);
+  y += 80;
+
+  // Notes
+  if (data.projectNotes) {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(30, 58, 138);
+    doc.text('Notas del Proyecto', margin, y);
+    y += 14;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(15, 23, 42);
+    const notes = doc.splitTextToSize(data.projectNotes, W - 2*margin);
+    doc.text(notes, margin, y);
+    y += notes.length * 12 + 12;
+  }
+
+  // Split equipment vs services
+  const equipment = data.items.filter(it => it.type === 'equipment');
+  const services = data.items.filter(it => it.type !== 'equipment');
+
+  // Equipment table
+  if (equipment.length > 0) {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(30, 58, 138);
+    doc.text('Equipos', margin, y);
+    y += 8;
+    doc.autoTable({
+      startY: y,
+      head: [['Equipo', 'SKU', 'Cant.', 'Precio', 'Subtotal']],
+      body: equipment.map(it => [
+        it.name, it.sku || '—', String(it.qty),
+        '$' + it.price.toFixed(2),
+        '$' + (it.qty * it.price).toFixed(2),
+      ]),
+      theme: 'grid',
+      headStyles: { fillColor: [30, 58, 138], textColor: 255, fontSize: 10 },
+      bodyStyles: { fontSize: 10 },
+      columnStyles: {
+        2: { halign: 'center', cellWidth: 45 },
+        3: { halign: 'right', cellWidth: 65 },
+        4: { halign: 'right', cellWidth: 75 },
+      },
+      margin: { left: margin, right: margin },
+    });
+    y = doc.lastAutoTable.finalY + 12;
+  }
+
+  // Services table
+  if (services.length > 0) {
+    if (y > 600) { doc.addPage(); y = margin; }
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(30, 58, 138);
+    doc.text('Servicios de Instalación', margin, y);
+    y += 8;
+    doc.autoTable({
+      startY: y,
+      head: [['Concepto', 'Unidad', 'Cant.', 'Precio', 'Subtotal']],
+      body: services.map(it => [
+        it.name, it.unit || '', String(it.qty),
+        '$' + it.price.toFixed(2),
+        '$' + (it.qty * it.price).toFixed(2),
+      ]),
+      theme: 'grid',
+      headStyles: { fillColor: [30, 58, 138], textColor: 255, fontSize: 10 },
+      bodyStyles: { fontSize: 10 },
+      columnStyles: {
+        1: { halign: 'center', cellWidth: 60 },
+        2: { halign: 'center', cellWidth: 45 },
+        3: { halign: 'right', cellWidth: 65 },
+        4: { halign: 'right', cellWidth: 75 },
+      },
+      margin: { left: margin, right: margin },
+    });
+    y = doc.lastAutoTable.finalY + 12;
+  }
+
+  // Totals
+  if (y > 650) { doc.addPage(); y = margin; }
+  const sub = data.items.reduce((s, it) => s + it.qty * it.price, 0);
+  const ivu = data.applyIVU ? sub * 0.115 : 0;
+  const total = sub + ivu;
+  const totalsX = W - margin - 200;
+  doc.setFontSize(10);
+  doc.setTextColor(15, 23, 42);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Subtotal', totalsX, y);
+  doc.text('$' + sub.toFixed(2), W - margin, y, { align: 'right' });
+  y += 16;
+  if (data.applyIVU) {
+    doc.text('IVU (11.5%)', totalsX, y);
+    doc.text('$' + ivu.toFixed(2), W - margin, y, { align: 'right' });
+    y += 16;
+  }
+  doc.setDrawColor(30, 58, 138);
+  doc.setLineWidth(1.5);
+  doc.line(totalsX, y, W - margin, y);
+  y += 16;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(30, 58, 138);
+  doc.text('TOTAL', totalsX, y);
+  doc.text('$' + total.toFixed(2), W - margin, y, { align: 'right' });
+  y += 30;
+
+  // Terms
+  if (y > 680) { doc.addPage(); y = margin; }
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.setTextColor(30, 58, 138);
+  doc.text('Términos', margin, y);
+  y += 14;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(15, 23, 42);
+  ['• 50% al aceptar la cotización y comenzar el proyecto',
+   '• 50% al completar la instalación y entrega',
+   '• Cotización válida por 30 días desde la fecha emitida',
+   '• Garantía de 15 días en mano de obra',
+   '• No hay garantía de equipos por fluctuaciones de voltaje'].forEach(t => { doc.text(t, margin, y); y += 12; });
+  y += 18;
+
+  if (y > 700) { doc.addPage(); y = margin + 100; }
+  doc.setDrawColor(100, 116, 139);
+  doc.setLineWidth(0.5);
+  doc.line(margin, y, margin + 200, y);
+  doc.line(W - margin - 200, y, W - margin, y);
+  y += 12;
+  doc.setFontSize(9);
+  doc.setTextColor(100, 116, 139);
+  doc.text('Aceptado por (Cliente)', margin, y);
+  doc.text('Por Teknobot', W - margin, y, { align: 'right' });
+
+  doc.setFontSize(8);
+  doc.text(`Generado ${new Date().toLocaleDateString('es-PR')} • Teknobot`, W/2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
+
+  const fileName = `Cotizacion_${(data.projectName || 'proyecto').replace(/\s+/g,'_')}.pdf`;
+  doc.save(fileName);
+}
+
+// ===== EXPORT / IMPORT =====
+async function exportCatalog() {
+  const data = {
+    type: 'teknobot_catalog',
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    categories,
+    products,
+  };
+  downloadJSON(data, 'teknobot-catalogo.json');
+}
+
+async function importCatalog(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  try {
+    const data = JSON.parse(text);
+    if (!data.categories || !data.products) throw new Error('Formato inválido');
+    if (!confirm('Esto reemplazará tu catálogo actual. ¿Continuar?')) return;
+    await dbClear('categories');
+    await dbClear('products');
+    for (const c of data.categories) await dbPut('categories', c);
+    for (const p of data.products) {
+      delete p.id;
+      await dbPut('products', p);
+    }
+    await loadAll();
+    alert('✓ Catálogo importado');
+  } catch (e) { alert('Error al importar: ' + e.message); }
+}
+
+async function exportAll() {
+  const quotes = await dbAll('quotes');
+  const data = {
+    type: 'teknobot_full_backup',
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    categories, products, quotes,
+  };
+  downloadJSON(data, 'teknobot-backup-completo.json');
+}
+
+async function importAll(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  try {
+    const data = JSON.parse(text);
+    if (!confirm('Esto reemplazará TODOS los datos. ¿Continuar?')) return;
+    await dbClear('categories');
+    await dbClear('products');
+    await dbClear('quotes');
+    for (const c of data.categories || []) await dbPut('categories', c);
+    for (const p of data.products || []) { delete p.id; await dbPut('products', p); }
+    for (const q of data.quotes || []) { delete q.id; await dbPut('quotes', q); }
+    await loadAll();
+    updateStats();
+    alert('✓ Backup importado');
+  } catch (e) { alert('Error al importar: ' + e.message); }
+}
+
+async function factoryReset() {
+  if (!confirm('⚠️ Esto borrará TODO en la NUBE (catálogo, categorías, cotizaciones) para TODOS los empleados y restaurará los valores por defecto. ¿Continuar?')) return;
+  if (!confirm('¿Estás 100% seguro? Afecta a todos los empleados. No se puede deshacer.')) return;
+  await dbClear('quotes');
+  await dbClear('products');
+  await dbClear('categories');
+  for (const c of DEFAULT_CATEGORIES) await dbPut('categories', c);
+  for (const p of DEFAULT_PRODUCTS) await dbPut('products', p);
+  try { localStorage.removeItem('teknobot_current_quote'); } catch (e) {}
+  await loadAll();
+  quoteItems = [];
+  setCurrentQuote({ quoteNum: generateQuoteNum() });
+  updateStats();
+  alert('✓ Restaurado a valores por defecto');
+}
+
+function downloadJSON(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function updateStats() {
+  document.getElementById('statProducts').textContent = products.length;
+  document.getElementById('statCategories').textContent = categories.length;
+  const quotes = await dbAll('quotes');
+  document.getElementById('statQuotes').textContent = quotes.length;
+}
+
+// ===== UTILS =====
+function formatDate(iso) {
+  if (!iso) return '';
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function escapeHtml(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ============================================================
+// ===== 3D PRINT MODULE =====
+// ============================================================
+let filaments3D = [];
+let printers3D = [];
+let settings3D = {
+  electricity_rate: 0.27,
+  labor_rate: 15,
+  default_labor_min: 15,
+  margin_mayorista: 0.27,
+  margin_regular: 0.35,
+  margin_retail: 0.48,
+};
+let edit3DContext = { filamentId: null, printerId: null };
+
+async function init3DTab() {
+  await loadFilaments();
+  await loadPrinters();
+  await load3DSettings();
+  renderFilamentsList();
+  renderPrintersList();
+  populate3DSelectors();
+  populate3DSettingsForm();
+  // Set default labor min
+  const laborEl = document.getElementById('p3dLaborMin');
+  if (laborEl && !laborEl.value) laborEl.value = settings3D.default_labor_min;
+  // Hook margin select
+  document.getElementById('p3dMargin').onchange = (e) => {
+    document.getElementById('p3dCustomMarginWrap').classList.toggle('hidden', e.target.value !== 'custom');
+  };
+  // Auto-calc on input change
+  ['p3dGrams','p3dHours','p3dLaborMin','p3dQty','p3dFilament','p3dPrinter','p3dMargin','p3dCustomMargin'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => calc3D(true));
+  });
+}
+
+async function loadFilaments() {
+  const { data, error } = await sb.from('filaments').select('*').eq('active', true).order('material').order('name');
+  if (error) { console.warn(error); filaments3D = []; return; }
+  filaments3D = data || [];
+}
+
+async function loadPrinters() {
+  const { data, error } = await sb.from('printers').select('*').eq('active', true).order('name');
+  if (error) { console.warn(error); printers3D = []; return; }
+  printers3D = data || [];
+}
+
+async function load3DSettings() {
+  const keys = ['3d_electricity_rate','3d_labor_rate','3d_default_labor_min','3d_margin_mayorista','3d_margin_regular','3d_margin_retail'];
+  const { data, error } = await sb.from('settings').select('*').in('key', keys);
+  if (error) { console.warn(error); return; }
+  for (const row of (data || [])) {
+    const short = row.key.replace(/^3d_/, '');
+    settings3D[short] = parseFloat(row.value);
+  }
+}
+
+async function save3DSetting(key, value) {
+  const v = parseFloat(value);
+  if (isNaN(v)) return;
+  // Upsert
+  const { error } = await sb.from('settings').upsert({ key, value: v });
+  if (error) { alert('Error guardando: ' + error.message); return; }
+  const short = key.replace(/^3d_/, '');
+  settings3D[short] = v;
+}
+
+function populate3DSettingsForm() {
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  set('s3dKwh', settings3D.electricity_rate);
+  set('s3dLabor', settings3D.labor_rate);
+  set('s3dMargMay', (settings3D.margin_mayorista * 100).toFixed(1));
+  set('s3dMargReg', (settings3D.margin_regular * 100).toFixed(1));
+  set('s3dMargRet', (settings3D.margin_retail * 100).toFixed(1));
+}
+
+function populate3DSelectors() {
+  const ps = document.getElementById('p3dPrinter');
+  if (ps) {
+    ps.innerHTML = '<option value="">-- Selecciona --</option>' +
+      printers3D.map(p => `<option value="${p.id}">${escapeHtml(p.name)} (${p.watts}W)</option>`).join('');
+  }
+  const fs = document.getElementById('p3dFilament');
+  if (fs) {
+    // Group by material
+    const groups = {};
+    for (const f of filaments3D) {
+      const key = f.material || 'Otros';
+      (groups[key] = groups[key] || []).push(f);
+    }
+    let html = '<option value="">-- Selecciona --</option>';
+    for (const m of Object.keys(groups).sort()) {
+      html += `<optgroup label="${escapeHtml(m)}">`;
+      html += groups[m].map(f => `<option value="${f.id}">${escapeHtml(f.name)} — $${parseFloat(f.price_per_kg).toFixed(2)}/kg</option>`).join('');
+      html += '</optgroup>';
+    }
+    fs.innerHTML = html;
+  }
+}
+
+function renderFilamentsList() {
+  const list = document.getElementById('filamentsList');
+  if (!list) return;
+  if (filaments3D.length === 0) { list.innerHTML = '<div class="empty-state">No hay filamentos.</div>'; return; }
+  list.innerHTML = filaments3D.map(f => `
+    <div class="item-row" style="cursor:pointer;" onclick="editFilament(${f.id})">
+      <div class="info">
+        <div class="name">${escapeHtml(f.name)} <span style="color:#64748b;font-weight:400;">— ${escapeHtml(f.material || '')}</span></div>
+        <div class="meta">$${parseFloat(f.price_per_kg).toFixed(2)}/kg • densidad ${parseFloat(f.density || 1.24).toFixed(3)}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderPrintersList() {
+  const list = document.getElementById('printersList');
+  if (!list) return;
+  if (printers3D.length === 0) { list.innerHTML = '<div class="empty-state">No hay impresoras.</div>'; return; }
+  list.innerHTML = printers3D.map(p => `
+    <div class="item-row" style="cursor:pointer;" onclick="editPrinter(${p.id})">
+      <div class="info">
+        <div class="name">${escapeHtml(p.name)}</div>
+        <div class="meta">${p.watts}W • $${parseFloat(p.maintenance_per_hour).toFixed(2)}/h mantenimiento</div>
+      </div>
+    </div>`).join('');
+}
+
+function openFilamentForm() {
+  edit3DContext.filamentId = null;
+  document.getElementById('filamentModalTitle').textContent = 'Añadir filamento';
+  document.getElementById('flName').value = '';
+  document.getElementById('flMaterial').value = '';
+  document.getElementById('flColor').value = '';
+  document.getElementById('flBrand').value = 'Bambu Lab';
+  document.getElementById('flPrice').value = '';
+  document.getElementById('flDensity').value = '1.24';
+  document.getElementById('flDeleteBtn').style.display = 'none';
+  document.getElementById('filamentModal').classList.remove('hidden');
+}
+
+function editFilament(id) {
+  const f = filaments3D.find(x => x.id === id);
+  if (!f) return;
+  edit3DContext.filamentId = id;
+  document.getElementById('filamentModalTitle').textContent = 'Editar filamento';
+  document.getElementById('flName').value = f.name || '';
+  document.getElementById('flMaterial').value = f.material || '';
+  document.getElementById('flColor').value = f.color || '';
+  document.getElementById('flBrand').value = f.brand || 'Bambu Lab';
+  document.getElementById('flPrice').value = f.price_per_kg;
+  document.getElementById('flDensity').value = f.density;
+  document.getElementById('flDeleteBtn').style.display = '';
+  document.getElementById('filamentModal').classList.remove('hidden');
+}
+
+function closeFilamentForm() { document.getElementById('filamentModal').classList.add('hidden'); }
+
+async function saveFilament() {
+  const row = {
+    name: document.getElementById('flName').value.trim(),
+    material: document.getElementById('flMaterial').value.trim(),
+    color: document.getElementById('flColor').value.trim() || null,
+    brand: document.getElementById('flBrand').value.trim() || 'Bambu Lab',
+    price_per_kg: parseFloat(document.getElementById('flPrice').value) || 0,
+    density: parseFloat(document.getElementById('flDensity').value) || 1.24,
+    active: true,
+  };
+  if (!row.name) { alert('Nombre requerido'); return; }
+  let res;
+  if (edit3DContext.filamentId) {
+    res = await sb.from('filaments').update(row).eq('id', edit3DContext.filamentId);
+  } else {
+    res = await sb.from('filaments').insert(row);
+  }
+  if (res.error) { alert('Error: ' + res.error.message); return; }
+  await loadFilaments();
+  renderFilamentsList();
+  populate3DSelectors();
+  closeFilamentForm();
+}
+
+async function deleteFilament() {
+  if (!edit3DContext.filamentId) return;
+  if (!confirm('¿Borrar este filamento?')) return;
+  const { error } = await sb.from('filaments').delete().eq('id', edit3DContext.filamentId);
+  if (error) { alert('Error: ' + error.message); return; }
+  await loadFilaments();
+  renderFilamentsList();
+  populate3DSelectors();
+  closeFilamentForm();
+}
+
+function openPrinterForm() {
+  edit3DContext.printerId = null;
+  document.getElementById('printerModalTitle').textContent = 'Añadir impresora';
+  document.getElementById('prName').value = '';
+  document.getElementById('prWatts').value = '200';
+  document.getElementById('prMaint').value = '0.50';
+  document.getElementById('prDeleteBtn').style.display = 'none';
+  document.getElementById('printerModal').classList.remove('hidden');
+}
+
+function editPrinter(id) {
+  const p = printers3D.find(x => x.id === id);
+  if (!p) return;
+  edit3DContext.printerId = id;
+  document.getElementById('printerModalTitle').textContent = 'Editar impresora';
+  document.getElementById('prName').value = p.name || '';
+  document.getElementById('prWatts').value = p.watts;
+  document.getElementById('prMaint').value = p.maintenance_per_hour;
+  document.getElementById('prDeleteBtn').style.display = '';
+  document.getElementById('printerModal').classList.remove('hidden');
+}
+
+function closePrinterForm() { document.getElementById('printerModal').classList.add('hidden'); }
+
+async function savePrinter() {
+  const row = {
+    name: document.getElementById('prName').value.trim(),
+    watts: parseInt(document.getElementById('prWatts').value) || 200,
+    maintenance_per_hour: parseFloat(document.getElementById('prMaint').value) || 0,
+    active: true,
+  };
+  if (!row.name) { alert('Nombre requerido'); return; }
+  let res;
+  if (edit3DContext.printerId) {
+    res = await sb.from('printers').update(row).eq('id', edit3DContext.printerId);
+  } else {
+    res = await sb.from('printers').insert(row);
+  }
+  if (res.error) { alert('Error: ' + res.error.message); return; }
+  await loadPrinters();
+  renderPrintersList();
+  populate3DSelectors();
+  closePrinterForm();
+}
+
+async function deletePrinter() {
+  if (!edit3DContext.printerId) return;
+  if (!confirm('¿Borrar esta impresora?')) return;
+  const { error } = await sb.from('printers').delete().eq('id', edit3DContext.printerId);
+  if (error) { alert('Error: ' + error.message); return; }
+  await loadPrinters();
+  renderPrintersList();
+  populate3DSelectors();
+  closePrinterForm();
+}
+
+function get3DInputs() {
+  const filId = parseInt(document.getElementById('p3dFilament').value);
+  const prtId = parseInt(document.getElementById('p3dPrinter').value);
+  const fil = filaments3D.find(f => f.id === filId);
+  const prt = printers3D.find(p => p.id === prtId);
+  const grams = parseFloat(document.getElementById('p3dGrams').value) || 0;
+  const hours = parseFloat(document.getElementById('p3dHours').value) || 0;
+  const laborMin = parseFloat(document.getElementById('p3dLaborMin').value) || 0;
+  const qty = parseInt(document.getElementById('p3dQty').value) || 1;
+  const marginTier = document.getElementById('p3dMargin').value;
+  let margin = settings3D[`margin_${marginTier}`];
+  if (marginTier === 'custom') {
+    margin = (parseFloat(document.getElementById('p3dCustomMargin').value) || 0) / 100;
+  }
+  return { fil, prt, grams, hours, laborMin, qty, margin, marginTier };
+}
+
+function compute3D(inp) {
+  if (!inp.fil || !inp.prt) return null;
+  const materialCost = (inp.grams / 1000) * parseFloat(inp.fil.price_per_kg);
+  const elecCost = inp.hours * (parseFloat(inp.prt.watts) / 1000) * settings3D.electricity_rate;
+  const maintCost = inp.hours * parseFloat(inp.prt.maintenance_per_hour);
+  const laborCost = (inp.laborMin / 60) * settings3D.labor_rate;
+  const baseCost = materialCost + elecCost + maintCost + laborCost;
+  const subtotal = baseCost * inp.qty;
+  const profit = subtotal * inp.margin;
+  const total = subtotal + profit;
+  const unitPrice = inp.qty > 0 ? total / inp.qty : 0;
+  return { materialCost, elecCost, maintCost, laborCost, baseCost, subtotal, profit, total, unitPrice };
+}
+
+function calc3D(silent) {
+  const inp = get3DInputs();
+  const box = document.getElementById('p3dBreakdown');
+  if (!inp.fil || !inp.prt) {
+    if (!silent) alert('Selecciona impresora y filamento');
+    box.innerHTML = '<div style="color:#64748b;">Selecciona impresora y filamento para calcular...</div>';
+    return null;
+  }
+  if (inp.grams <= 0 && inp.hours <= 0) {
+    box.innerHTML = '<div style="color:#64748b;">Ingresa gramos y/o horas...</div>';
+    return null;
+  }
+  const r = compute3D(inp);
+  const fmt = v => '$' + v.toFixed(2);
+  box.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;">
+      <div>🧵 Material (${inp.grams}g de ${escapeHtml(inp.fil.name)}):</div><div style="text-align:right;font-family:monospace;">${fmt(r.materialCost)}</div>
+      <div>⚡ Electricidad (${inp.hours}h × ${inp.prt.watts}W × ${fmt(settings3D.electricity_rate)}/kWh):</div><div style="text-align:right;font-family:monospace;">${fmt(r.elecCost)}</div>
+      <div>🔧 Mantenimiento (${inp.hours}h × ${fmt(parseFloat(inp.prt.maintenance_per_hour))}/h):</div><div style="text-align:right;font-family:monospace;">${fmt(r.maintCost)}</div>
+      <div>👨‍💼 Mano de obra (${inp.laborMin}min × ${fmt(settings3D.labor_rate)}/h):</div><div style="text-align:right;font-family:monospace;">${fmt(r.laborCost)}</div>
+      <div style="border-top:1px solid #cbd5e1;padding-top:6px;"><b>Costo por unidad:</b></div><div style="text-align:right;font-family:monospace;border-top:1px solid #cbd5e1;padding-top:6px;">${fmt(r.baseCost)}</div>
+      <div>× Cantidad: ${inp.qty}</div><div style="text-align:right;font-family:monospace;">${fmt(r.subtotal)}</div>
+      <div>📈 Margen (${(inp.margin*100).toFixed(1)}% — ${inp.marginTier}):</div><div style="text-align:right;font-family:monospace;">${fmt(r.profit)}</div>
+      <div style="border-top:2px solid #1e3a8a;padding-top:8px;font-size:16px;"><b>TOTAL:</b></div><div style="text-align:right;font-family:monospace;border-top:2px solid #1e3a8a;padding-top:8px;font-size:16px;color:#1e3a8a;"><b>${fmt(r.total)}</b></div>
+      <div style="color:#64748b;">→ Precio por pieza:</div><div style="text-align:right;font-family:monospace;color:#64748b;">${fmt(r.unitPrice)}</div>
+    </div>`;
+  return { inp, r };
+}
+
+async function add3DToQuote() {
+  const res = calc3D();
+  if (!res) return;
+  const { inp, r } = res;
+  const name = (document.getElementById('p3dName').value || '').trim() || `Impresión 3D (${inp.fil.name})`;
+  const desc = `Impresión 3D — ${inp.fil.name} | ${inp.grams}g • ${inp.hours}h • ${escapeHtml(inp.prt.name)} | margen ${(inp.margin*100).toFixed(0)}% (${inp.marginTier})`;
+  const item = {
+    id: 'p3d-' + Date.now(),
+    name,
+    description: desc,
+    desc,
+    qty: inp.qty,
+    price: r.unitPrice,
+    unit: 'c/u',
+    type: 'service',
+    categoryId: 'cat-3d',
+  };
+  // Push into the current quote items
+  if (typeof quoteItems !== 'undefined' && Array.isArray(quoteItems)) {
+    quoteItems.push(item);
+  } else if (typeof window.quoteItems !== 'undefined') {
+    window.quoteItems.push(item);
+  }
+  if (typeof renderQuoteItems === 'function') renderQuoteItems();
+  if (typeof saveCurrentQuote === 'function') saveCurrentQuote();
+  // Switch to quote tab
+  const tabBtn = document.querySelector('.tab[data-tab="quote"]');
+  if (tabBtn) tabBtn.click();
+  alert(`✅ Añadido a la cotización: ${name} — $${r.unitPrice.toFixed(2)} c/u (×${inp.qty})`);
+}
+
+function reset3DForm() {
+  ['p3dName','p3dGrams','p3dHours','p3dCustomMargin'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('p3dQty').value = '1';
+  document.getElementById('p3dLaborMin').value = settings3D.default_labor_min;
+  document.getElementById('p3dMargin').value = 'regular';
+  document.getElementById('p3dCustomMarginWrap').classList.add('hidden');
+  document.getElementById('p3dBreakdown').innerHTML = '<div style="color:#64748b;">Llena los campos para ver el desglose...</div>';
+}
+</script>
+
+</body>
+</html>

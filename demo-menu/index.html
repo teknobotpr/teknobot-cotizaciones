@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Coquí Bistró — Menú Digital</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a0a0a; color: #fff;
+      user-select: none;
+    }
+
+    /* Header */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 10vh; min-height: 80px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+      border-bottom: 4px solid #d97706;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4vw;
+      z-index: 10;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .logo-icon {
+      font-size: 5vh; line-height: 1;
+    }
+    .logo-text {
+      display: flex; flex-direction: column;
+    }
+    .logo-name {
+      font-size: 3.5vh; font-weight: 800; letter-spacing: 1px;
+      color: #fbbf24;
+      text-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+    }
+    .logo-sub {
+      font-size: 1.6vh; color: #9ca3af; letter-spacing: 3px; text-transform: uppercase;
+    }
+    .category-pills {
+      display: flex; gap: 12px;
+    }
+    .pill {
+      padding: 0.8vh 1.6vw; border-radius: 999px;
+      font-size: 1.8vh; font-weight: 600;
+      background: rgba(255,255,255,0.05);
+      color: #6b7280;
+      transition: all 0.5s ease;
+    }
+    .pill.active {
+      background: #d97706; color: #fff;
+      box-shadow: 0 0 20px rgba(217, 119, 6, 0.5);
+    }
+
+    /* Main */
+    .main {
+      position: fixed; top: 10vh; left: 0; right: 0; bottom: 5vh;
+      padding: 3vh 4vw;
+      overflow: hidden;
+    }
+    .category-title {
+      font-size: 5vh; font-weight: 800;
+      color: #fbbf24;
+      margin-bottom: 2vh;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: slideDown 0.8s ease;
+    }
+    .category-icon {
+      font-size: 6vh; margin-right: 12px;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2vh 2vw;
+      height: calc(100% - 8vh);
+    }
+    .item-card {
+      background: linear-gradient(135deg, #1f1f1f 0%, #2a1c10 100%);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+      animation: fadeUp 0.8s ease;
+      animation-fill-mode: both;
+    }
+    .item-card:nth-child(1) { animation-delay: 0.1s; }
+    .item-card:nth-child(2) { animation-delay: 0.2s; }
+    .item-card:nth-child(3) { animation-delay: 0.3s; }
+    .item-card:nth-child(4) { animation-delay: 0.4s; }
+    .item-card:nth-child(5) { animation-delay: 0.5s; }
+    .item-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .item-image {
+      flex: 1;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      min-height: 0;
+    }
+    .item-price {
+      position: absolute; top: 12px; right: 12px;
+      background: #d97706;
+      padding: 6px 14px; border-radius: 12px;
+      font-size: 2.4vh; font-weight: 800;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .item-info {
+      padding: 1.6vh 1.4vw;
+    }
+    .item-name {
+      font-size: 2.2vh; font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 4px;
+    }
+    .item-desc {
+      font-size: 1.4vh;
+      color: #9ca3af;
+      line-height: 1.4;
+    }
+
+    /* Featured / hero layouts */
+    .grid.featured {
+      grid-template-columns: 1.5fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+    .grid.featured .item-card:first-child {
+      grid-row: 1 / 3;
+    }
+    .grid.featured .item-card:first-child .item-name {
+      font-size: 3vh;
+    }
+    .grid.featured .item-card:first-child .item-desc {
+      font-size: 1.7vh;
+    }
+    .grid.featured .item-card:first-child .item-price {
+      font-size: 3.2vh; padding: 8px 18px;
+    }
+
+    /* Footer ticker */
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 5vh; min-height: 40px;
+      background: #d97706;
+      display: flex; align-items: center; overflow: hidden;
+    }
+    .ticker {
+      display: flex; gap: 6vw;
+      animation: tickerScroll 40s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker > span {
+      font-size: 1.8vh; font-weight: 600; color: #fff;
+      padding: 0 2vw;
+    }
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* Demo controls (only visible on hover, hidden on TV) */
+    .demo-controls {
+      position: fixed; bottom: 6vh; right: 1vw;
+      background: rgba(0,0,0,0.8); padding: 12px; border-radius: 12px;
+      opacity: 0; transition: opacity 0.3s;
+      z-index: 100;
+      font-size: 12px;
+      pointer-events: auto;
+    }
+    body:hover .demo-controls { opacity: 1; }
+    .demo-controls button {
+      background: #d97706; color: white; border: none;
+      padding: 6px 12px; border-radius: 6px; margin: 2px;
+      cursor: pointer; font-weight: 600; font-size: 11px;
+    }
+    .demo-controls button:hover { background: #b45309; }
+    .demo-controls .label {
+      color: #fbbf24; font-size: 10px; margin-bottom: 4px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🐸</div>
+    <div class="logo-text">
+      <div class="logo-name">El Coquí Bistró</div>
+      <div class="logo-sub">Cocina Boricua • Ponce, PR</div>
+    </div>
+  </div>
+  <div class="category-pills" id="pills"></div>
+</div>
+
+<div class="main">
+  <div class="category-title" id="catTitle">
+    <span class="category-icon">🌅</span><span id="catName">Desayunos</span>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="footer">
+  <div class="ticker">
+    <span>🐸 EL COQUÍ BISTRÓ • COCINA BORICUA AUTÉNTICA</span>
+    <span>📍 PONCE, PR • ABIERTO 7 DÍAS</span>
+    <span>🍳 DESAYUNOS DE 7AM A 11AM</span>
+    <span>🍽️ ALMUERZOS DE 11AM A 4PM</span>
+    <span>🍹 HAPPY HOUR 5PM A 7PM • 2X1 EN BEBIDAS</span>
+    <span>📞 RESERVAS: 787-555-0123</span>
+    <!-- duplicate for seamless loop -->
+    <span>🐸 EL COQUÍ BISTRÓ • COCINA BORICUA AUTÉNTICA</span>
+    <span>📍 PONCE, PR • ABIERTO 7 DÍAS</span>
+    <span>🍳 DESAYUNOS DE 7AM A 11AM</span>
+    <span>🍽️ ALMUERZOS DE 11AM A 4PM</span>
+    <span>🍹 HAPPY HOUR 5PM A 7PM • 2X1 EN BEBIDAS</span>
+    <span>📞 RESERVAS: 787-555-0123</span>
+  </div>
+</div>
+
+<div class="demo-controls">
+  <div class="label">⚙️ Demo Controls</div>
+  <button onclick="prevCat()">◀ Anterior</button>
+  <button onclick="nextCat()">Siguiente ▶</button>
+  <button onclick="toggleAuto()" id="autoBtn">⏸ Pausar</button>
+  <button onclick="toggleFullscreen()">⛶ Pantalla completa</button>
+</div>
+
+<script>
+const MENU = [
+  {
+    name: 'Desayunos',
+    icon: '🌅',
+    featured: true,
+    items: [
+      {
+        name: 'Mallorca Coquí',
+        price: 12,
+        desc: 'Mallorca tostada con jamón ahumado, queso suizo, huevos revueltos y azúcar en polvo. Servida con café.',
+        img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&q=80'
+      },
+      {
+        name: 'Mofongo con Huevos',
+        price: 14,
+        desc: 'Mofongo de plátano verde con huevos al gusto y bistec encebollado.',
+        img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&q=80'
+      },
+      {
+        name: 'Pancakes Boricua',
+        price: 9,
+        desc: 'Stack de 3 pancakes con guayaba, queso crema y sirope.',
+        img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80'
+      },
+      {
+        name: 'Tostadas Francesas',
+        price: 8,
+        desc: 'Pan dulce con canela, fruta fresca y miel local.',
+        img: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&q=80'
+      },
+      {
+        name: 'Sandwich Cubano',
+        price: 11,
+        desc: 'Pan cubano, jamón, pernil, queso suizo, pickles y mostaza.',
+        img: 'https://images.unsplash.com/photo-1539252554453-80ab65ce3586?w=600&q=80'
+      }
+    ]
+  },
+  {
+    name: 'Almuerzos',
+    icon: '🍽️',
+    featured: true,
+    items: [
+      {
+        name: 'Pernil con Arroz y Habichuelas',
+        price: 18,
+        desc: 'Pernil asado al estilo boricua con arroz blanco, habichuelas rosadas, ensalada y tostones.',
+        img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=80'
+      },
+      {
+        name: 'Churrasco a la Parrilla',
+        price: 26,
+        desc: 'Churrasco 10oz con chimichurri casero, arroz mamposteao y vegetales.',
+        img: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?w=600&q=80'
+      },
+      {
+        name: 'Camarones al Ajillo',
+        price: 22,
+        desc: 'Camarones jumbo salteados en ajo, vino blanco y mantequilla. Con arroz amarillo.',
+        img: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=80'
+      },
+      {
+        name: 'Bistec Encebollado',
+        price: 19,
+        desc: 'Bistec de res en salsa criolla con cebollas caramelizadas. Arroz y habichuelas.',
+        img: 'https://images.unsplash.com/photo-1546833998-877b37c2e5c6?w=600&q=80'
+      },
+      {
+        name: 'Pollo Frito Criollo',
+        price: 16,
+        desc: '4 piezas de pollo frito marinado con tostones y ensalada.',
+        img: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=600&q=80'
+      }
+    ]
+  },
+  {
+    name: 'Bebidas',
+    icon: '🍹',
+    featured: false,
+    items: [
+      {
+        name: 'Piña Colada',
+        price: 9,
+        desc: 'La original boricua. Ron Bacardí, piña y coco.',
+        img: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&q=80'
+      },
+      {
+        name: 'Mojito de Parcha',
+        price: 10,
+        desc: 'Ron blanco, parcha local, menta fresca y limón.',
+        img: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=600&q=80'
+      },
+      {
+        name: 'Sangría Boricua',
+        price: 8,
+        desc: 'Vino tinto, frutas tropicales y un toque de canela.',
+        img: 'https://images.unsplash.com/photo-1605870445919-838d190e8e1b?w=600&q=80'
+      },
+      {
+        name: 'Limonada de Albahaca',
+        price: 5,
+        desc: 'Limonada natural con albahaca fresca y miel.',
+        img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80'
+      },
+      {
+        name: 'Café Boricua',
+        price: 4,
+        desc: 'Café puro de Yauco, recién molido.',
+        img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80'
+      },
+      {
+        name: 'Maví Artesanal',
+        price: 4,
+        desc: 'Bebida fermentada tradicional, refrescante y especiada.',
+        img: 'https://images.unsplash.com/photo-1437418747212-8d9709afab22?w=600&q=80'
+      }
+    ]
+  },
+  {
+    name: 'Postres',
+    icon: '🍰',
+    featured: false,
+    items: [
+      {
+        name: 'Flan de Coco',
+        price: 7,
+        desc: 'Flan cremoso de coco con caramelo casero.',
+        img: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80'
+      },
+      {
+        name: 'Tembleque',
+        price: 6,
+        desc: 'Postre clásico boricua de coco con canela.',
+        img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80'
+      },
+      {
+        name: 'Tres Leches',
+        price: 8,
+        desc: 'Bizcocho empapado en tres leches con merengue.',
+        img: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80'
+      },
+      {
+        name: 'Quesito',
+        price: 5,
+        desc: 'Pasta hojaldrada rellena de queso crema dulce.',
+        img: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=600&q=80'
+      },
+      {
+        name: 'Brazo Gitano',
+        price: 6,
+        desc: 'Bizcocho enrollado con dulce de guayaba.',
+        img: 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=600&q=80'
+      }
+    ]
+  }
+];
+
+const ROTATION_MS = 12000; // 12 segundos por categoría
+let currentIdx = 0;
+let autoTimer = null;
+let isAuto = true;
+
+function render() {
+  const cat = MENU[currentIdx];
+  // Pills
+  const pills = document.getElementById('pills');
+  pills.innerHTML = MENU.map((c, i) =>
+    `<div class="pill ${i === currentIdx ? 'active' : ''}">${c.icon} ${c.name}</div>`
+  ).join('');
+  // Title
+  document.querySelector('.category-icon').textContent = cat.icon;
+  document.getElementById('catName').textContent = cat.name;
+  // Force re-animation of title
+  const titleEl = document.getElementById('catTitle');
+  titleEl.style.animation = 'none';
+  void titleEl.offsetWidth;
+  titleEl.style.animation = 'slideDown 0.8s ease';
+  // Grid
+  const grid = document.getElementById('grid');
+  grid.className = 'grid' + (cat.featured ? ' featured' : '');
+  grid.innerHTML = cat.items.map(it => `
+    <div class="item-card">
+      <div class="item-image" style="background-image:url('${it.img}')">
+        <div class="item-price">$${it.price.toFixed(2)}</div>
+      </div>
+      <div class="item-info">
+        <div class="item-name">${it.name}</div>
+        <div class="item-desc">${it.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function nextCat() {
+  currentIdx = (currentIdx + 1) % MENU.length;
+  render();
+}
+function prevCat() {
+  currentIdx = (currentIdx - 1 + MENU.length) % MENU.length;
+  render();
+}
+function startAuto() {
+  stopAuto();
+  autoTimer = setInterval(nextCat, ROTATION_MS);
+  isAuto = true;
+  const btn = document.getElementById('autoBtn');
+  if (btn) btn.textContent = '⏸ Pausar';
+}
+function stopAuto() {
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  isAuto = false;
+  const btn = document.getElementById('autoBtn');
+  if (btn) btn.textContent = '▶ Auto';
+}
+function toggleAuto() {
+  if (isAuto) stopAuto(); else startAuto();
+}
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') { nextCat(); if(isAuto) startAuto(); }
+  if (e.key === 'ArrowLeft')  { prevCat(); if(isAuto) startAuto(); }
+  if (e.key === ' ')         { e.preventDefault(); toggleAuto(); }
+  if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+});
+
+// Initial
+render();
+startAuto();
+</script>
+
+</body>
+</html>

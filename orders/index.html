@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Órdenes — El Coquí Bistró</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0a0a0a; color: #fff;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .topbar {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+      border-bottom: 4px solid #d97706;
+      padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { font-size: 28px; }
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-name { font-size: 18px; font-weight: 800; color: #fbbf24; letter-spacing: 0.5px; }
+    .brand-sub  { font-size: 10px; color: #9ca3af; letter-spacing: 2px; text-transform: uppercase; }
+    .userbox { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #9ca3af; }
+    .btn {
+      background: #d97706; color: #fff; border: none;
+      padding: 8px 14px; border-radius: 8px;
+      font-weight: 700; cursor: pointer; font-size: 13px;
+      transition: background .2s;
+    }
+    .btn:hover { background: #b45309; }
+    .btn.sec { background: #1f1f1f; color: #fbbf24; }
+    .btn.sec:hover { background: #2a1c10; }
+    .btn.danger { background: #dc2626; }
+
+    /* Filters */
+    .filters {
+      padding: 14px 24px;
+      display: flex; gap: 10px; flex-wrap: wrap;
+      background: #0d0d0d;
+      border-bottom: 1px solid #1f1f1f;
+    }
+    .filters input {
+      background: #1a1a1a; border: 1px solid #2a1c10;
+      color: #fff; padding: 8px 12px;
+      border-radius: 8px; font-size: 14px;
+      flex: 1; min-width: 200px;
+    }
+    .filters input:focus { outline: none; border-color: #d97706; }
+    .chip {
+      padding: 6px 12px; border-radius: 999px;
+      background: #1a1a1a; border: 1px solid #2a1c10;
+      color: #9ca3af; cursor: pointer;
+      font-size: 13px; font-weight: 600;
+      transition: all .2s;
+    }
+    .chip:hover { color: #fbbf24; border-color: #d97706; }
+    .chip.active { background: #d97706; color: #fff; border-color: #d97706; }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      padding: 16px 24px;
+    }
+    .stat {
+      background: linear-gradient(135deg, #1f1f1f, #2a1c10);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .stat-label { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; }
+    .stat-val { font-size: 24px; font-weight: 800; color: #fbbf24; margin-top: 4px; }
+
+    /* Orders list */
+    .orders {
+      padding: 8px 24px 60px 24px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    }
+    .order-card {
+      background: linear-gradient(135deg, #1a1a1a, #1f1410);
+      border: 1px solid #2a1c10;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      transition: transform .2s, border-color .2s;
+      position: relative;
+    }
+    .order-card:hover { transform: translateY(-2px); border-color: #d97706; }
+    .order-card.new { border-color: #ef4444; box-shadow: 0 0 24px rgba(239, 68, 68, 0.3); }
+    .order-card.flash {
+      animation: flash 1.2s ease 0s 2;
+    }
+    @keyframes flash {
+      0%,100% { background: linear-gradient(135deg, #1a1a1a, #1f1410); }
+      50%     { background: linear-gradient(135deg, #2a1c10, #3d2517); }
+    }
+
+    .order-head {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 8px; margin-bottom: 10px;
+    }
+    .order-id { font-size: 13px; color: #6b7280; font-family: monospace; }
+    .order-time { font-size: 11px; color: #6b7280; }
+    .status-badge {
+      padding: 4px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .s-new        { background: #ef4444; color: #fff; }
+    .s-preparing  { background: #f59e0b; color: #111; }
+    .s-ready      { background: #16a34a; color: #fff; }
+    .s-delivered  { background: #6b7280; color: #fff; }
+    .s-cancelled  { background: #1f1f1f; color: #9ca3af; }
+
+    .order-customer { font-weight: 800; font-size: 16px; color: #fbbf24; margin-bottom: 4px; }
+    .order-meta { font-size: 13px; color: #9ca3af; margin-bottom: 8px; line-height: 1.5; }
+    .order-type-badge {
+      display: inline-block;
+      background: rgba(217, 119, 6, 0.15);
+      color: #fbbf24;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px; font-weight: 700;
+      margin-right: 6px;
+    }
+    .pay-badge {
+      display: inline-block;
+      padding: 2px 8px; border-radius: 6px;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase;
+    }
+    .pay-paid    { background: rgba(22,163,74,0.18); color: #4ade80; }
+    .pay-pending { background: rgba(245,158,11,0.18); color: #fbbf24; }
+    .pay-failed  { background: rgba(239,68,68,0.18); color: #f87171; }
+
+    .order-items {
+      background: #0d0d0d;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+    .order-items .li {
+      display: flex; justify-content: space-between;
+      padding: 3px 0; color: #d1d5db;
+    }
+    .order-notes {
+      background: rgba(217, 119, 6, 0.1);
+      border-left: 3px solid #d97706;
+      padding: 8px 10px;
+      font-size: 12px; color: #fbbf24;
+      border-radius: 0 6px 6px 0;
+      margin: 10px 0;
+    }
+    .order-total {
+      display: flex; justify-content: space-between;
+      font-size: 16px; font-weight: 800;
+      padding: 8px 0;
+      border-top: 1px solid #2a1c10;
+      color: #fbbf24;
+    }
+
+    .action-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+      margin-top: 10px;
+    }
+    .action-row.full { grid-template-columns: 1fr; }
+    .action-btn {
+      padding: 10px;
+      border: none; border-radius: 8px;
+      font-weight: 800; font-size: 13px;
+      cursor: pointer; transition: opacity .2s;
+    }
+    .action-btn:hover { opacity: 0.9; }
+    .a-preparing { background: #f59e0b; color: #111; }
+    .a-ready     { background: #16a34a; color: #fff; }
+    .a-delivered { background: #6b7280; color: #fff; }
+    .a-cancel    { background: #1f1f1f; color: #f87171; border: 1px solid #dc2626; }
+
+    /* Login screen */
+    .login-screen {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .login-card {
+      background: linear-gradient(135deg, #1a1a1a, #2d1810);
+      border: 1px solid #d97706;
+      border-radius: 16px;
+      padding: 36px 28px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    }
+    .login-card h1 {
+      font-size: 22px; color: #fbbf24; text-align: center;
+      margin-bottom: 4px;
+    }
+    .login-card .sub {
+      text-align: center; color: #9ca3af;
+      font-size: 12px; letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .login-card label { display:block; font-size: 12px; color:#9ca3af; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .login-card input {
+      width: 100%; padding: 12px;
+      background: #0d0d0d;
+      border: 1px solid #2a1c10;
+      border-radius: 8px;
+      color: #fff; font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .login-card input:focus { outline: none; border-color: #d97706; }
+    .login-card button.btn { width: 100%; padding: 12px; font-size: 14px; }
+    .login-err {
+      background: rgba(220,38,38,0.15);
+      border: 1px solid #dc2626;
+      color: #fca5a5;
+      padding: 10px; border-radius: 8px;
+      font-size: 13px; margin-bottom: 12px;
+    }
+
+    .empty {
+      text-align: center; padding: 80px 20px;
+      color: #6b7280;
+    }
+    .empty .em { font-size: 56px; margin-bottom: 12px; }
+
+    /* Toast */
+    .toast {
+      position: fixed; top: 80px; left: 50%;
+      transform: translate(-50%, -120%);
+      background: #16a34a; color: #fff;
+      padding: 12px 20px; border-radius: 10px;
+      font-weight: 700; font-size: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      z-index: 400;
+      transition: transform .3s ease;
+    }
+    .toast.show  { transform: translate(-50%, 0); }
+    .toast.error { background: #dc2626; }
+
+    @media (max-width: 600px) {
+      .orders { grid-template-columns: 1fr; padding: 8px 12px 60px 12px; }
+      .filters { padding: 12px; }
+      .stats { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen" style="display:none;">
+  <div class="login-card">
+    <h1>🐸 El Coquí Bistró</h1>
+    <div class="sub">Panel de Órdenes</div>
+    <div class="login-err" id="loginErr" style="display:none;"></div>
+    <form onsubmit="login(event)">
+      <label>Email</label>
+      <input id="loginEmail" type="email" required autocomplete="email">
+      <label>Contraseña</label>
+      <input id="loginPass" type="password" required autocomplete="current-password">
+      <button class="btn" type="submit">Iniciar sesión</button>
+    </form>
+    <p style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;">
+      Powered by Teknobot · 787-974-1793
+    </p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon">🐸</div>
+      <div class="brand-text">
+        <div class="brand-name">El Coquí Bistró</div>
+        <div class="brand-sub">Panel de Órdenes</div>
+      </div>
+    </div>
+    <div class="userbox">
+      <span id="userEmail"></span>
+      <button class="btn sec" onclick="toggleSound()" id="soundBtn">🔔 Sonido</button>
+      <button class="btn" onclick="logout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <input id="search" placeholder="🔍 Buscar por nombre, teléfono o ID..." oninput="renderOrders()">
+    <div class="chip active" data-filter="all"        onclick="setFilter('all')">Todas</div>
+    <div class="chip"        data-filter="new"        onclick="setFilter('new')">🆕 Nuevas</div>
+    <div class="chip"        data-filter="preparing"  onclick="setFilter('preparing')">🔥 Preparando</div>
+    <div class="chip"        data-filter="ready"      onclick="setFilter('ready')">✅ Listas</div>
+    <div class="chip"        data-filter="delivered"  onclick="setFilter('delivered')">📦 Entregadas</div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="orders" id="ordersGrid">
+    <div class="empty">
+      <div class="em">⏳</div>
+      <div>Cargando órdenes...</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// =====================================================
+// CONFIG
+// =====================================================
+const SUPABASE_URL = 'https://kiauzuhwgbsupoxtmkes.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpYXV6dWh3Z2JzdXBveHRta2VzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNjc3NzgsImV4cCI6MjA5Mzk0Mzc3OH0.ftbtRZVeLYItWo9TSTSUF8mB-wjkLDH0fwj1UCYwHxE';
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  realtime: { params: { eventsPerSecond: 10 } }
+});
+
+// =====================================================
+// STATE
+// =====================================================
+let currentUser = null;
+let orders = [];           // [{...order, items: [...]}]
+let itemsByOrder = {};
+let currentFilter = 'all';
+let soundOn = true;
+let realtimeChannel = null;
+
+// =====================================================
+// AUTH
+// =====================================================
+async function checkSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    showApp();
+  } else {
+    document.getElementById('loginScreen').style.display = '';
+    document.getElementById('app').style.display = 'none';
+  }
+}
+
+async function login(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const pass  = document.getElementById('loginPass').value;
+  const errEl = document.getElementById('loginErr');
+  errEl.style.display = 'none';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if (error) {
+    errEl.textContent = error.message;
+    errEl.style.display = '';
+    return;
+  }
+  currentUser = data.user;
+  showApp();
+}
+
+async function logout() {
+  if (realtimeChannel) {
+    await sb.removeChannel(realtimeChannel);
+    realtimeChannel = null;
+  }
+  await sb.auth.signOut();
+  currentUser = null;
+  orders = [];
+  itemsByOrder = {};
+  document.getElementById('loginScreen').style.display = '';
+  document.getElementById('app').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  document.getElementById('userEmail').textContent = currentUser.email;
+  loadInitial();
+  subscribeRealtime();
+}
+
+// =====================================================
+// LOAD + REALTIME
+// =====================================================
+async function loadInitial() {
+  // Pull last 100 orders for any restaurant the user owns (RLS enforces it).
+  const { data, error } = await sb
+    .from('orders')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(100);
+  if (error) {
+    toast('Error cargando órdenes: ' + error.message, true);
+    return;
+  }
+  orders = data || [];
+
+  // Load items for those orders
+  if (orders.length > 0) {
+    const ids = orders.map(o => o.id);
+    const { data: items } = await sb
+      .from('order_items')
+      .select('*')
+      .in('order_id', ids);
+    itemsByOrder = {};
+    (items || []).forEach(it => {
+      (itemsByOrder[it.order_id] ||= []).push(it);
+    });
+  }
+  renderStats();
+  renderOrders();
+}
+
+function subscribeRealtime() {
+  if (realtimeChannel) sb.removeChannel(realtimeChannel);
+  realtimeChannel = sb.channel('orders-rt')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, async (payload) => {
+      console.log('orders change', payload);
+      if (payload.eventType === 'INSERT') {
+        // Re-fetch with items
+        const row = payload.new;
+        orders.unshift(row);
+        // load its items (small race window)
+        const { data: items } = await sb.from('order_items').select('*').eq('order_id', row.id);
+        itemsByOrder[row.id] = items || [];
+        playDing();
+        flashOrder(row.id);
+        toast('🔔 Nueva orden: ' + row.customer_name);
+      } else if (payload.eventType === 'UPDATE') {
+        const idx = orders.findIndex(o => o.id === payload.new.id);
+        if (idx >= 0) orders[idx] = payload.new;
+      } else if (payload.eventType === 'DELETE') {
+        orders = orders.filter(o => o.id !== payload.old.id);
+        delete itemsByOrder[payload.old.id];
+      }
+      renderStats();
+      renderOrders();
+    })
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'order_items' }, (payload) => {
+      const it = payload.new;
+      (itemsByOrder[it.order_id] ||= []).push(it);
+      renderOrders();
+    })
+    .subscribe();
+}
+
+// =====================================================
+// RENDER
+// =====================================================
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.filter === f);
+  });
+  renderOrders();
+}
+
+function renderStats() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todays = orders.filter(o => new Date(o.created_at) >= today);
+  const stats = {
+    'Nuevas':       orders.filter(o => o.status === 'new').length,
+    'Preparando':   orders.filter(o => o.status === 'preparing').length,
+    'Listas':       orders.filter(o => o.status === 'ready').length,
+    'Hoy':          todays.length,
+    'Ventas (hoy)': '$' + todays.filter(o => o.payment_status === 'paid').reduce((s,o) => s + Number(o.total), 0).toFixed(2),
+  };
+  document.getElementById('stats').innerHTML = Object.entries(stats).map(([k,v]) => `
+    <div class="stat">
+      <div class="stat-label">${k}</div>
+      <div class="stat-val">${v}</div>
+    </div>
+  `).join('');
+}
+
+function renderOrders() {
+  const term = (document.getElementById('search')?.value || '').toLowerCase().trim();
+  let list = orders;
+  if (currentFilter !== 'all') list = list.filter(o => o.status === currentFilter);
+  if (term) {
+    list = list.filter(o =>
+      (o.customer_name || '').toLowerCase().includes(term) ||
+      (o.customer_phone || '').toLowerCase().includes(term) ||
+      o.id.toLowerCase().includes(term)
+    );
+  }
+
+  const grid = document.getElementById('ordersGrid');
+  if (list.length === 0) {
+    grid.innerHTML = `
+      <div class="empty">
+        <div class="em">📋</div>
+        <div>No hay órdenes${currentFilter !== 'all' ? ' en este estado' : ''}.</div>
+        <div style="font-size:13px;margin-top:6px;">Las nuevas órdenes aparecerán aquí en tiempo real.</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(o => renderCard(o)).join('');
+}
+
+function renderCard(o) {
+  const items = itemsByOrder[o.id] || [];
+  const itemsHtml = items.map(it => `
+    <div class="li"><span>${it.quantity}× ${escape(it.item_name)}</span><span>$${Number(it.line_total).toFixed(2)}</span></div>
+  `).join('');
+  const typeLabel = o.type === 'pickup' ? '📦 Pickup'
+                   : o.type === 'delivery' ? '🛵 Delivery'
+                   : `🍽️ Mesa ${o.table_number || '?'}`;
+  return `
+    <div class="order-card ${o.status === 'new' ? 'new' : ''}" id="card-${o.id}">
+      <div class="order-head">
+        <div>
+          <div class="order-id">#${o.id.slice(0,8).toUpperCase()}</div>
+          <div class="order-time">${timeAgo(o.created_at)}</div>
+        </div>
+        <span class="status-badge s-${o.status}">${statusLabel(o.status)}</span>
+      </div>
+      <div class="order-customer">${escape(o.customer_name || 'Sin nombre')}</div>
+      <div class="order-meta">
+        <span class="order-type-badge">${typeLabel}</span>
+        <span class="pay-badge pay-${o.payment_status}">${o.payment_method || '—'} · ${o.payment_status}</span>
+        <br>
+        📞 ${escape(o.customer_phone || '—')}
+        ${o.customer_email ? ' · ✉️ ' + escape(o.customer_email) : ''}
+      </div>
+      ${items.length ? `<div class="order-items">${itemsHtml}</div>` : ''}
+      ${o.notes ? `<div class="order-notes">📝 ${escape(o.notes)}</div>` : ''}
+      <div class="order-total">
+        <span>Total</span>
+        <span>$${Number(o.total).toFixed(2)}</span>
+      </div>
+      ${renderActions(o)}
+    </div>
+  `;
+}
+
+function renderActions(o) {
+  if (o.status === 'new') {
+    return `
+      <div class="action-row">
+        <button class="action-btn a-preparing" onclick="setStatus('${o.id}','preparing')">🔥 Preparar</button>
+        <button class="action-btn a-cancel"    onclick="setStatus('${o.id}','cancelled')">✕ Cancelar</button>
+      </div>`;
+  }
+  if (o.status === 'preparing') {
+    return `
+      <div class="action-row">
+        <button class="action-btn a-ready"  onclick="setStatus('${o.id}','ready')">✅ Lista</button>
+        <button class="action-btn a-cancel" onclick="setStatus('${o.id}','cancelled')">✕ Cancelar</button>
+      </div>`;
+  }
+  if (o.status === 'ready') {
+    return `
+      <div class="action-row full">
+        <button class="action-btn a-delivered" onclick="setStatus('${o.id}','delivered')">📦 Entregada</button>
+      </div>`;
+  }
+  return '';
+}
+
+async function setStatus(id, status) {
+  const { error } = await sb.from('orders').update({ status }).eq('id', id);
+  if (error) { toast('Error: ' + error.message, true); return; }
+  toast('Estado actualizado: ' + statusLabel(status));
+}
+
+function statusLabel(s) {
+  return { new:'Nueva', preparing:'Preparando', ready:'Lista', delivered:'Entregada', cancelled:'Cancelada' }[s] || s;
+}
+
+function flashOrder(id) {
+  setTimeout(() => {
+    const el = document.getElementById('card-' + id);
+    if (el) {
+      el.classList.add('flash');
+      setTimeout(() => el.classList.remove('flash'), 2500);
+    }
+  }, 80);
+}
+
+function timeAgo(iso) {
+  const d = new Date(iso);
+  const s = Math.floor((Date.now() - d.getTime()) / 1000);
+  if (s < 60)     return 'hace ' + s + 's';
+  if (s < 3600)   return 'hace ' + Math.floor(s/60) + ' min';
+  if (s < 86400)  return 'hace ' + Math.floor(s/3600) + ' h';
+  return d.toLocaleString('es-PR');
+}
+
+function escape(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// =====================================================
+// SOUND
+// =====================================================
+let audioCtx;
+function playDing() {
+  if (!soundOn) return;
+  try {
+    audioCtx ||= new (window.AudioContext || window.webkitAudioContext)();
+    // Two-tone bell
+    [880, 1320].forEach((freq, i) => {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.frequency.value = freq;
+      o.type = 'sine';
+      o.connect(g); g.connect(audioCtx.destination);
+      const t0 = audioCtx.currentTime + i * 0.15;
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(0.25, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.5);
+      o.start(t0); o.stop(t0 + 0.55);
+    });
+  } catch (e) { console.warn('audio failed', e); }
+}
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundBtn').textContent = soundOn ? '🔔 Sonido' : '🔕 Silencio';
+  toast(soundOn ? 'Sonido activado' : 'Sonido desactivado');
+}
+
+// =====================================================
+// TOAST
+// =====================================================
+let toastTimer;
+function toast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', isError);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// Boot
+checkSession();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menús Digitales para TV — Teknobot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      padding: 4vh 4vw;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 6vh;
+    }
+    .header .logo {
+      font-size: 56px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 30px rgba(217, 119, 6, 0.3));
+    }
+    .header h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      background: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+    .header .tagline {
+      font-size: clamp(14px, 2vw, 18px);
+      color: #94a3b8;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .header .brand {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 6px 16px;
+      background: rgba(217, 119, 6, 0.15);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      border-radius: 999px;
+      font-size: 13px;
+      color: #fbbf24;
+      letter-spacing: 2px;
+    }
+
+    .demos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .demo-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .demo-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(217, 119, 6, 0.5);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    .demo-preview {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+    .demo-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      pointer-events: none;
+      transform: scale(0.5);
+      transform-origin: top left;
+      width: 200%;
+      height: 200%;
+    }
+    .demo-preview .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(15, 23, 42, 0.95) 100%);
+      pointer-events: none;
+    }
+    .demo-preview .play-btn {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: rgba(217, 119, 6, 0.9);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; color: white;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .demo-card:hover .play-btn { opacity: 1; }
+    .demo-body {
+      padding: 24px;
+    }
+    .demo-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .demo-tag.bistro { background: rgba(217, 119, 6, 0.2); color: #fbbf24; }
+    .demo-tag.cafe { background: rgba(139, 111, 71, 0.3); color: #d6c5a8; }
+    .demo-tag.truck { background: rgba(236, 72, 153, 0.2); color: #f9a8d4; }
+    .demo-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .demo-desc {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .demo-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .demo-meta .chip {
+      font-size: 11px;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 999px;
+      color: #cbd5e1;
+    }
+
+    .footer {
+      max-width: 800px;
+      margin: 8vh auto 4vh;
+      text-align: center;
+      padding: 32px;
+      background: rgba(217, 119, 6, 0.05);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+      border-radius: 16px;
+    }
+    .footer h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #fbbf24;
+    }
+    .footer p {
+      color: #cbd5e1;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .footer .contact {
+      display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .footer .contact a {
+      color: #fbbf24;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      border-radius: 999px;
+      transition: all 0.2s;
+    }
+    .footer .contact a:hover {
+      background: rgba(251, 191, 36, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .tip {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 3px solid #10b981;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #a7f3d0;
+      max-width: 700px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">📺</div>
+  <h1>Menús Digitales para TV</h1>
+  <p class="tagline">
+    Convierte cualquier TV en un menú digital atractivo. Personalizado para tu restaurante,
+    food truck o cafetería. Tres estilos a continuación — escoge el que se sienta como lo tuyo.
+  </p>
+  <div class="brand">🍡 BY TEKNOBOT · PONCE, PR</div>
+</div>
+
+<div class="tip">
+  <b>💡 Tip:</b> Al abrir cada demo, presiona <b>F</b> en el teclado para ver pantalla completa
+  (como saldría en tu TV). Usa <b>flechas ← →</b> para cambiar de categoría manualmente.
+</div>
+
+<div class="demos">
+
+  <a class="demo-card" href="../demo-menu/" target="_blank">
+    <div class="demo-preview">
+      <iframe src="../demo-menu/" loading="lazy" tabindex="-1"></iframe>
+      <div class="overlay"></div>
+      <div class="play-btn">▶</div>
+    </div>
+    <div class="demo-body">
+      <span class="demo-tag bistro">Estilo 1 · Restaurante Boricua</span>
+      <div class="demo-name">El Coquí Bistró</div>
+      <div class="demo-desc">
+        Diseño cálido y moderno. Fondo oscuro, fotos grandes de los platos, layouts dinámicos
+        (featured + grid). Perfecto para restaurantes establecidos.
+      </div>
+      <div class="demo-meta">
+        <span class="chip">🍽️ Restaurante</span>
+        <span class="chip">🌅 4 categorías</span>
+        <span class="chip">📺 Full HD</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="demo-card" href="../demo-menu-2/" target="_blank">
+    <div class="demo-preview">
+      <iframe src="../demo-menu-2/" loading="lazy" tabindex="-1"></iframe>
+      <div class="overlay"></div>
+      <div class="play-btn">▶</div>
+    </div>
+    <div class="demo-body">
+      <span class="demo-tag cafe">Estilo 2 · Minimalista / Premium</span>
+      <div class="demo-name">Café Cordillera</div>
+      <div class="demo-desc">
+        Diseño elegante tipo cafetería de especialidad. Tipografía tipo editorial, paleta clara,
+        listado limpio con fotos circulares. Ideal para cafeterías, fine dining y bistros premium.
+      </div>
+      <div class="demo-meta">
+        <span class="chip">☕ Cafetería</span>
+        <span class="chip">📜 Tipografía editorial</span>
+        <span class="chip">🎨 Paleta tierra</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="demo-card" href="../demo-menu-3/" target="_blank">
+    <div class="demo-preview">
+      <iframe src="../demo-menu-3/" loading="lazy" tabindex="-1"></iframe>
+      <div class="overlay"></div>
+      <div class="play-btn">▶</div>
+    </div>
+    <div class="demo-body">
+      <span class="demo-tag truck">Estilo 3 · Food Truck / Vibrante</span>
+      <div class="demo-name">Tacos El Volcán</div>
+      <div class="demo-desc">
+        Diseño colorido y energético. Gradientes neon, badges (POPULAR/NUEVO/PICANTE), tipografía
+        impactante. Perfecto para food trucks, taquerías, lugares juveniles y de alta rotación.
+      </div>
+      <div class="demo-meta">
+        <span class="chip">🌮 Food Truck</span>
+        <span class="chip">🌶️ Indicador de picante</span>
+        <span class="chip">✨ Badges promo</span>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer">
+  <h3>¿Te gustó alguno? Lo personalizamos para tu negocio</h3>
+  <p>
+    Cada demo se adapta con tu logo, fotos de tus platos, tus precios y branding.<br>
+    Desde <b>$375</b> el diseño + instalación en tu TV (Fire TV Stick incluido).<br>
+    También paquetes completos desde <b>$1,200</b> (TV 43" + bracket + reproductor + diseño).
+  </p>
+  <div class="contact">
+    <a href="tel:+17879741793">📞 787-974-1793</a>
+    <a href="mailto:teknobotpr@gmail.com">✉️ teknobotpr@gmail.com</a>
+  </div>
+</div>
+
+<script>
+  // Stop iframes from auto-playing when scrolling (preserve performance)
+  // They auto-loop already via the demo logic; this just makes thumbnails feel "alive"
+</script>
+
+</body>
+</html>

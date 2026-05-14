@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Menú Digital LIVE</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f1f5f9; color: #0f172a;
+      min-height: 100vh;
+    }
+    .topbar {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2d1810 100%);
+      color: white; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar h1 { font-size: 18px; }
+    .topbar h1 small { color: #fbbf24; font-weight: 400; }
+    .topbar .right { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+    .topbar .user { color: #cbd5e1; }
+    .topbar a, .topbar button {
+      color: #fbbf24; text-decoration: none;
+      padding: 6px 12px; border-radius: 8px;
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      cursor: pointer; font-size: 12px; font-weight: 600;
+    }
+    .topbar a:hover, .topbar button:hover { background: rgba(251, 191, 36, 0.2); }
+    .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .card {
+      background: white; border-radius: 12px; padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px;
+    }
+    .card h2 { font-size: 16px; margin-bottom: 14px; color: #1e3a8a; display: flex; justify-content: space-between; align-items: center; }
+    label { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; margin-top: 8px; font-weight: 600; }
+    input, textarea, select {
+      width: 100%; padding: 10px; border: 1px solid #cbd5e1;
+      border-radius: 8px; font-size: 14px; font-family: inherit;
+      background: #f8fafc;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #1e3a8a; background: white; }
+    textarea { resize: vertical; min-height: 60px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+    .btn {
+      padding: 10px 16px; border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: #1e3a8a; color: white; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-secondary { background: #e2e8f0; color: #0f172a; }
+    .btn-secondary:hover { background: #cbd5e1; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-success { background: #10b981; color: white; }
+    .btn-add { background: #fbbf24; color: #1e3a8a; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+    .item-row {
+      display: grid;
+      grid-template-columns: 60px 1fr auto auto;
+      gap: 12px; align-items: center;
+      padding: 10px; border-radius: 8px;
+      border: 1px solid #e2e8f0; margin-bottom: 8px;
+      background: #fafafa; transition: all 0.15s;
+    }
+    .item-row:hover { background: #f1f5f9; }
+    .item-row .thumb {
+      width: 60px; height: 60px; border-radius: 8px;
+      background-size: cover; background-position: center;
+      background-color: #e2e8f0;
+    }
+    .item-row .info .name { font-weight: 700; font-size: 14px; }
+    .item-row .info .desc { font-size: 12px; color: #64748b; margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50vw; }
+    .item-row .price { font-weight: 800; color: #1e3a8a; font-size: 16px; }
+    .item-row .actions button { font-size: 11px; padding: 4px 8px; margin-left: 4px; }
+
+    .cat-header {
+      padding: 10px 14px; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: white; border-radius: 10px; margin-top: 16px; margin-bottom: 10px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 700; font-size: 14px;
+    }
+    .cat-header .cat-actions button { background: rgba(255,255,255,0.2); color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; margin-left: 4px; }
+    .cat-header .cat-actions button:hover { background: rgba(255,255,255,0.3); }
+
+    /* Modal */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200; padding: 20px;
+    }
+    .modal-bg.hidden { display: none; }
+    .modal {
+      background: white; border-radius: 16px; padding: 24px;
+      max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto;
+    }
+    .modal h3 { font-size: 18px; margin-bottom: 16px; color: #1e3a8a; }
+
+    /* Login */
+    .login-bg {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2d1810 100%);
+      padding: 20px; z-index: 300;
+    }
+    .login-card {
+      background: white; border-radius: 20px; padding: 32px;
+      max-width: 380px; width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .login-card .brand {
+      text-align: center; margin-bottom: 24px;
+    }
+    .login-card .brand .emoji { font-size: 50px; }
+    .login-card .brand h1 { font-size: 20px; margin-top: 8px; }
+    .login-card .brand p { color: #64748b; font-size: 13px; }
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      padding: 12px 20px; border-radius: 12px;
+      background: #10b981; color: white;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      z-index: 400; font-size: 14px; font-weight: 600;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .toast.show { opacity: 1; }
+    .toast.error { background: #ef4444; }
+
+    .tip {
+      background: #dbeafe; border-left: 3px solid #1e3a8a;
+      padding: 12px 14px; border-radius: 8px;
+      font-size: 13px; color: #1e3a8a; margin-bottom: 14px;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- ========== LOGIN ========== -->
+<div id="loginBg" class="login-bg">
+  <div class="login-card">
+    <div class="brand">
+      <div class="emoji">🍽️</div>
+      <h1>Menú Digital — Admin</h1>
+      <p>Inicia sesión para editar el menú en vivo</p>
+    </div>
+    <label>Email</label>
+    <input type="email" id="loginEmail" placeholder="tu@correo.com">
+    <label>Contraseña</label>
+    <input type="password" id="loginPassword" placeholder="••••••••">
+    <button class="btn btn-primary" style="width:100%;margin-top:16px;" onclick="doLogin()">Iniciar sesión</button>
+  </div>
+</div>
+
+<!-- ========== APP ========== -->
+<div id="app" style="display:none;">
+  <div class="topbar">
+    <h1>🍽️ Admin — <small id="topVenueName">…</small></h1>
+    <div class="right">
+      <span class="live-dot"></span>
+      <span style="color: #10b981;">LIVE</span>
+      <a id="tvLink" target="_blank">📺 Ver TV</a>
+      <span class="user" id="topUser">…</span>
+      <button onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="tip">
+      💡 Edita aquí y abre el <b>📺 Ver TV</b> en otra pestaña. Cualquier cambio aparece automáticamente sin recargar.
+    </div>
+
+    <!-- Venue settings -->
+    <div class="card">
+      <h2>🏪 Información del Restaurante</h2>
+      <div class="grid2">
+        <div>
+          <label>Nombre</label>
+          <input type="text" id="vName" onchange="saveVenue()">
+        </div>
+        <div>
+          <label>Tagline / Subtítulo</label>
+          <input type="text" id="vTagline" onchange="saveVenue()">
+        </div>
+        <div>
+          <label>Emoji / Logo</label>
+          <input type="text" id="vEmoji" onchange="saveVenue()">
+        </div>
+        <div>
+          <label>Color primario (hex)</label>
+          <input type="text" id="vColor" placeholder="#d97706" onchange="saveVenue()">
+        </div>
+        <div>
+          <label>Rotación entre categorías (segundos)</label>
+          <input type="number" id="vRotation" min="3" max="60" onchange="saveVenue()">
+        </div>
+        <div>
+          <label>Teléfono</label>
+          <input type="text" id="vPhone" onchange="saveVenue()">
+        </div>
+      </div>
+      <label>Ticker abajo (1 línea por entrada)</label>
+      <textarea id="vTicker" rows="4" onchange="saveVenue()" placeholder="🐸 EL COQUÍ BISTRÓ
+📍 Ponce, PR · Abierto 7 días"></textarea>
+    </div>
+
+    <!-- Categories + items -->
+    <div class="card">
+      <h2>
+        📂 Categorías y Items
+        <button class="btn btn-add" onclick="newCategory()">+ Categoría</button>
+      </h2>
+      <div id="categoriesList"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== MODAL: ITEM ========== -->
+<div id="itemModal" class="modal-bg hidden">
+  <div class="modal">
+    <h3 id="itemModalTitle">Item</h3>
+    <label>Nombre</label>
+    <input type="text" id="itemName">
+    <label>Descripción</label>
+    <textarea id="itemDesc" rows="2"></textarea>
+    <div class="grid2">
+      <div>
+        <label>Precio ($)</label>
+        <input type="number" id="itemPrice" min="0" step="0.01">
+      </div>
+      <div>
+        <label>Badge (opcional)</label>
+        <select id="itemBadge">
+          <option value="">(Ninguno)</option>
+          <option value="popular">🔥 Popular</option>
+          <option value="new">✨ Nuevo</option>
+          <option value="spicy">🌶️ Picante</option>
+        </select>
+      </div>
+    </div>
+    <label>URL de imagen</label>
+    <input type="text" id="itemImg" placeholder="https://...">
+    <p style="font-size:11px;color:#64748b;margin-top:4px;">
+      Tip: usa imágenes de <a href="https://unsplash.com" target="_blank">unsplash.com</a> o sube las tuyas a un host gratis.
+    </p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveItem()">Guardar</button>
+      <button class="btn btn-secondary" onclick="closeItemModal()">Cancelar</button>
+      <button class="btn btn-danger" id="itemDeleteBtn" onclick="deleteItem()" style="display:none;margin-left:auto;">🗑️ Borrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MODAL: CATEGORY ========== -->
+<div id="catModal" class="modal-bg hidden">
+  <div class="modal">
+    <h3 id="catModalTitle">Categoría</h3>
+    <label>Nombre</label>
+    <input type="text" id="catName">
+    <div class="grid2">
+      <div>
+        <label>Emoji / Icono</label>
+        <input type="text" id="catIcon" placeholder="🌅">
+      </div>
+      <div>
+        <label>Orden</label>
+        <input type="number" id="catSort" value="1">
+      </div>
+    </div>
+    <label style="margin-top:14px;">
+      <input type="checkbox" id="catFeatured" style="width:auto;display:inline-block;margin-right:6px;">
+      Layout destacado (1 item grande + grid)
+    </label>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveCategory()">Guardar</button>
+      <button class="btn btn-secondary" onclick="closeCatModal()">Cancelar</button>
+      <button class="btn btn-danger" id="catDeleteBtn" onclick="deleteCategory()" style="display:none;margin-left:auto;">🗑️ Borrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ===== CONFIG =====
+const SUPABASE_URL = 'https://kiauzuhwgbsupoxtmkes.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpYXV6dWh3Z2JzdXBveHRta2VzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNjc3NzgsImV4cCI6MjA5Mzk0Mzc3OH0.ftbtRZVeLYItWo9TSTSUF8mB-wjkLDH0fwj1UCYwHxE';
+const params = new URLSearchParams(location.search);
+const VENUE_ID = params.get('venue') || 'demo-coqui';
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ===== STATE =====
+let venue = null;
+let categories = [];
+let itemsByCat = {};
+let editing = { itemId: null, categoryId: null, catContextId: null };
+
+// ===== AUTH =====
+async function checkAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    document.getElementById('loginBg').style.display = 'none';
+    document.getElementById('app').style.display = '';
+    document.getElementById('topUser').textContent = session.user.email;
+    document.getElementById('tvLink').href = './index.html?venue=' + VENUE_ID;
+    loadAll();
+  } else {
+    document.getElementById('loginBg').style.display = '';
+    document.getElementById('app').style.display = 'none';
+  }
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) { toast('Email y contraseña requeridos', true); return; }
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { toast('Login: ' + error.message, true); return; }
+  checkAuth();
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  location.reload();
+}
+
+// ===== LOAD =====
+async function loadAll() {
+  const { data: v } = await sb.from('venues').select('*').eq('id', VENUE_ID).maybeSingle();
+  venue = v || null;
+  if (!venue) {
+    toast('Venue no encontrado: ' + VENUE_ID, true);
+    return;
+  }
+  document.getElementById('topVenueName').textContent = venue.name;
+  document.getElementById('vName').value = venue.name || '';
+  document.getElementById('vTagline').value = venue.tagline || '';
+  document.getElementById('vEmoji').value = venue.brand_emoji || '';
+  document.getElementById('vColor').value = venue.primary_color || '';
+  document.getElementById('vRotation').value = Math.round((venue.rotation_ms || 12000) / 1000);
+  document.getElementById('vPhone').value = venue.contact_phone || '';
+  document.getElementById('vTicker').value = (venue.ticker || []).join('\n');
+
+  const { data: cats } = await sb.from('menu_categories').select('*').eq('venue_id', VENUE_ID).order('sort_order');
+  categories = cats || [];
+
+  const { data: items } = await sb.from('menu_items').select('*').eq('venue_id', VENUE_ID).order('sort_order');
+  itemsByCat = {};
+  for (const it of (items || [])) {
+    (itemsByCat[it.category_id] = itemsByCat[it.category_id] || []).push(it);
+  }
+  renderCategories();
+}
+
+function renderCategories() {
+  const el = document.getElementById('categoriesList');
+  if (!categories.length) {
+    el.innerHTML = '<p style="color:#64748b;padding:20px;text-align:center;">No hay categorías. Agrega una con el botón de arriba.</p>';
+    return;
+  }
+  el.innerHTML = categories.map(cat => `
+    <div class="cat-header">
+      <div>${escapeHtml(cat.icon || '')} ${escapeHtml(cat.name)} ${cat.featured ? '⭐' : ''}</div>
+      <div class="cat-actions">
+        <button onclick="newItem(${cat.id})">+ Item</button>
+        <button onclick="editCategory(${cat.id})">✏️</button>
+      </div>
+    </div>
+    <div>
+      ${(itemsByCat[cat.id] || []).map(it => `
+        <div class="item-row">
+          <div class="thumb" style="background-image:url('${escapeAttr(it.image_url)}')"></div>
+          <div class="info">
+            <div class="name">${escapeHtml(it.name)} ${it.badge ? '<span style="font-size:10px;background:#fbbf24;color:white;padding:2px 6px;border-radius:4px;margin-left:6px;">' + escapeHtml(it.badge.toUpperCase()) + '</span>' : ''}</div>
+            <div class="desc">${escapeHtml(it.description || '')}</div>
+          </div>
+          <div class="price">$${(parseFloat(it.price) || 0).toFixed(2)}</div>
+          <div class="actions">
+            <button class="btn btn-secondary" onclick="editItem(${it.id})">✏️</button>
+          </div>
+        </div>
+      `).join('') || '<p style="color:#94a3b8;font-size:13px;padding:8px;">Sin items todavía.</p>'}
+    </div>
+  `).join('');
+}
+
+// ===== SAVE VENUE =====
+let venueSaveTimeout = null;
+async function saveVenue() {
+  if (venueSaveTimeout) clearTimeout(venueSaveTimeout);
+  venueSaveTimeout = setTimeout(async () => {
+    const updates = {
+      name: document.getElementById('vName').value.trim(),
+      tagline: document.getElementById('vTagline').value.trim(),
+      brand_emoji: document.getElementById('vEmoji').value.trim(),
+      primary_color: document.getElementById('vColor').value.trim() || '#d97706',
+      rotation_ms: Math.max(3, parseInt(document.getElementById('vRotation').value) || 12) * 1000,
+      contact_phone: document.getElementById('vPhone').value.trim(),
+      ticker: document.getElementById('vTicker').value.split('\n').map(s => s.trim()).filter(Boolean),
+    };
+    const { error } = await sb.from('venues').update(updates).eq('id', VENUE_ID);
+    if (error) { toast('Error: ' + error.message, true); return; }
+    toast('✓ Guardado');
+    document.getElementById('topVenueName').textContent = updates.name;
+  }, 400);
+}
+
+// ===== ITEM CRUD =====
+function newItem(catId) {
+  editing.itemId = null;
+  editing.catContextId = catId;
+  document.getElementById('itemModalTitle').textContent = 'Nuevo item';
+  document.getElementById('itemName').value = '';
+  document.getElementById('itemDesc').value = '';
+  document.getElementById('itemPrice').value = '';
+  document.getElementById('itemBadge').value = '';
+  document.getElementById('itemImg').value = '';
+  document.getElementById('itemDeleteBtn').style.display = 'none';
+  document.getElementById('itemModal').classList.remove('hidden');
+}
+
+function editItem(id) {
+  const allItems = Object.values(itemsByCat).flat();
+  const it = allItems.find(x => x.id === id);
+  if (!it) return;
+  editing.itemId = id;
+  editing.catContextId = it.category_id;
+  document.getElementById('itemModalTitle').textContent = 'Editar item';
+  document.getElementById('itemName').value = it.name || '';
+  document.getElementById('itemDesc').value = it.description || '';
+  document.getElementById('itemPrice').value = it.price;
+  document.getElementById('itemBadge').value = it.badge || '';
+  document.getElementById('itemImg').value = it.image_url || '';
+  document.getElementById('itemDeleteBtn').style.display = '';
+  document.getElementById('itemModal').classList.remove('hidden');
+}
+
+function closeItemModal() { document.getElementById('itemModal').classList.add('hidden'); }
+
+async function saveItem() {
+  const row = {
+    venue_id: VENUE_ID,
+    category_id: editing.catContextId,
+    name: document.getElementById('itemName').value.trim(),
+    description: document.getElementById('itemDesc').value.trim(),
+    price: parseFloat(document.getElementById('itemPrice').value) || 0,
+    badge: document.getElementById('itemBadge').value || null,
+    image_url: document.getElementById('itemImg').value.trim() || null,
+    active: true,
+  };
+  if (!row.name) { toast('Nombre requerido', true); return; }
+  let res;
+  if (editing.itemId) {
+    res = await sb.from('menu_items').update(row).eq('id', editing.itemId);
+  } else {
+    // next sort_order
+    const existing = itemsByCat[editing.catContextId] || [];
+    row.sort_order = (existing.length || 0) + 1;
+    res = await sb.from('menu_items').insert(row);
+  }
+  if (res.error) { toast('Error: ' + res.error.message, true); return; }
+  toast('✓ Item guardado');
+  closeItemModal();
+  loadAll();
+}
+
+async function deleteItem() {
+  if (!editing.itemId) return;
+  if (!confirm('¿Borrar este item?')) return;
+  const { error } = await sb.from('menu_items').delete().eq('id', editing.itemId);
+  if (error) { toast('Error: ' + error.message, true); return; }
+  toast('✓ Borrado');
+  closeItemModal();
+  loadAll();
+}
+
+// ===== CATEGORY CRUD =====
+function newCategory() {
+  editing.categoryId = null;
+  document.getElementById('catModalTitle').textContent = 'Nueva categoría';
+  document.getElementById('catName').value = '';
+  document.getElementById('catIcon').value = '';
+  document.getElementById('catSort').value = (categories.length || 0) + 1;
+  document.getElementById('catFeatured').checked = false;
+  document.getElementById('catDeleteBtn').style.display = 'none';
+  document.getElementById('catModal').classList.remove('hidden');
+}
+
+function editCategory(id) {
+  const cat = categories.find(c => c.id === id);
+  if (!cat) return;
+  editing.categoryId = id;
+  document.getElementById('catModalTitle').textContent = 'Editar categoría';
+  document.getElementById('catName').value = cat.name || '';
+  document.getElementById('catIcon').value = cat.icon || '';
+  document.getElementById('catSort').value = cat.sort_order || 1;
+  document.getElementById('catFeatured').checked = !!cat.featured;
+  document.getElementById('catDeleteBtn').style.display = '';
+  document.getElementById('catModal').classList.remove('hidden');
+}
+
+function closeCatModal() { document.getElementById('catModal').classList.add('hidden'); }
+
+async function saveCategory() {
+  const row = {
+    venue_id: VENUE_ID,
+    name: document.getElementById('catName').value.trim(),
+    icon: document.getElementById('catIcon').value.trim(),
+    sort_order: parseInt(document.getElementById('catSort').value) || 1,
+    featured: document.getElementById('catFeatured').checked,
+    active: true,
+  };
+  if (!row.name) { toast('Nombre requerido', true); return; }
+  let res;
+  if (editing.categoryId) {
+    res = await sb.from('menu_categories').update(row).eq('id', editing.categoryId);
+  } else {
+    res = await sb.from('menu_categories').insert(row);
+  }
+  if (res.error) { toast('Error: ' + res.error.message, true); return; }
+  toast('✓ Categoría guardada');
+  closeCatModal();
+  loadAll();
+}
+
+async function deleteCategory() {
+  if (!editing.categoryId) return;
+  if (!confirm('¿Borrar esta categoría? Todos sus items se perderán.')) return;
+  const { error } = await sb.from('menu_categories').delete().eq('id', editing.categoryId);
+  if (error) { toast('Error: ' + error.message, true); return; }
+  toast('✓ Borrada');
+  closeCatModal();
+  loadAll();
+}
+
+// ===== UTILS =====
+function toast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', !!isError);
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+function escapeHtml(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+// Boot
+checkAuth();
+</script>
+
+</body>
+</html>
