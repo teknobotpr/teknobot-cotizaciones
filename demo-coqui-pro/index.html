@@ -543,6 +543,11 @@
   <div class="header-actions">
     <div class="category-pills" id="pills"></div>
     <button class="mode-btn" id="modeBtn" onclick="toggleMode()">🛒 Ordena Aquí</button>
+    <div class="audio-controls" id="audioControls">
+      <button id="muteBtn" aria-label="Mute audio" title="Mute/Unmute music">
+        🔊
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1109,7 +1114,40 @@ document.addEventListener('keydown', (e) => {
 // Auto-start. If page is opened with ?order=1, start in order mode.
 const initialMode = new URLSearchParams(location.search).get('order') === '1' ? 'order' : 'kiosk';
 setMode(initialMode);
+\n// ===== AUDIO =====\nconst audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-acoustic-guitar-loop-125.mp3');\naudio.loop = true;\naudio.volume = 0.3;\n\nlet isMuted = false;\n\nfunction toggleMute() {\n  isMuted = !isMuted;\n  audio.muted = isMuted;\n  const btn = document.getElementById('muteBtn');\n  btn.textContent = isMuted ? 🔇 : 🔊;\n  btn.setAttribute('aria-label', isMuted ? Unmute
 </script>
 
+    // ===== AUDIO =====
+    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-acoustic-guitar-loop-125.mp3');
+    audio.loop = true;
+    audio.volume = 0.3;
+
+    let isMuted = false;
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      audio.muted = isMuted;
+      const btn = document.getElementById('muteBtn');
+      btn.textContent = isMuted ? '🔇' : '🔊';
+      btn.setAttribute('aria-label', isMuted ? 'Unmute audio' : 'Mute audio');
+      btn.setAttribute('title', isMuted ? 'Unmute music' : 'Mute music');
+    }
+
+    // Start audio when user interacts with the page (required by browsers)
+    function startAudioOnInteraction() {
+      const startAudio = () => {
+        audio.play().catch(e => console.log('Audio play prevented:', e));
+        document.removeEventListener('click', startAudio);
+        document.removeEventListener('keydown', startAudio);
+        document.removeEventListener('touchstart', startAudio);
+      };
+      
+      document.addEventListener('click', startAudio);
+      document.addEventListener('keydown', startAudio);
+      document.addEventListener('touchstart', startAudio);
+    }
+
+    // Mute button click handler
+    document.getElementById('muteBtn').addEventListener('click', toggleMute);
 </body>
 </html>
