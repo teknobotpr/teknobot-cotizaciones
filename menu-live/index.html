@@ -164,6 +164,37 @@
     @keyframes flashIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes flashOut { to { opacity: 0; transform: translateY(-20px); } }
 
+  .audio-controls {
+    position: fixed; top: 1.5vh; right: 4vw;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    width: 6vh; height: 6vh;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 15;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+  }
+  .audio-controls:hover {
+    background: rgba(0,0,0,0.7);
+    transform: scale(1.1);
+  }
+  .audio-controls:active {
+    transform: scale(0.9);
+  }
+  .audio-controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2.8vh;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  .audio-controls button:focus {
+    outline: none;
+  }
+
     .error {
       position: fixed; inset: 0;
       display: flex; align-items: center; justify-content: center;
@@ -193,7 +224,12 @@
       </div>
     </div>
     <div class="category-pills" id="pills"></div>
-  </div>
+    <div class="audio-controls">
+      <button id="muteBtn" aria-label="Mute audio" title="Mute/Unmute music">
+        🔊
+      </button>
+    </div>
+  </div
 
   <div class="main">
     <div class="category-title" id="catTitle">
@@ -384,9 +420,43 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ===== AUDIO =====
+const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-acoustic-guitar-loop-125.mp3');
+audio.loop = true;
+audio.volume = 0.3;
+
+let isMuted = false;
+
+function toggleMute() {
+  isMuted = !isMuted;
+  audio.muted = isMuted;
+  const btn = document.getElementById('muteBtn');
+  btn.textContent = isMuted ? '🔇' : '🔊';
+  btn.setAttribute('aria-label', isMuted ? 'Unmute audio' : 'Mute audio');
+  btn.setAttribute('title', isMuted ? 'Unmute music' : 'Mute music');
+}
+
+// Start audio when user interacts with the page (required by browsers)
+function startAudioOnInteraction() {
+  const startAudio = () => {
+    audio.play().catch(e => console.log('Audio play prevented:', e));
+    document.removeEventListener('click', startAudio);
+    document.removeEventListener('keydown', startAudio);
+    document.removeEventListener('touchstart', startAudio);
+  };
+  
+  document.addEventListener('click', startAudio);
+  document.addEventListener('keydown', startAudio);
+  document.addEventListener('touchstart', startAudio);
+}
+
+// Mute button click handler
+document.getElementById('muteBtn').addEventListener('click', toggleMute);
+
 // ===== BOOT =====
 loadAll();
 setupRealtime();
+startAudioOnInteraction();
 </script>
 
 </body>
