@@ -165,31 +165,33 @@
     @keyframes flashOut { to { opacity: 0; transform: translateY(-20px); } }
 
   .audio-controls {
-    position: fixed; top: 1.5vh; right: 4vw;
-    background: rgba(0,0,0,0.5);
+    position: fixed; top: 2vh; right: 4vw;
+    background: rgba(0,0,0,0.6);
     border-radius: 50%;
-    width: 6vh; height: 6vh;
+    width: 7vh; height: 7vh;
     display: flex; align-items: center; justify-content: center;
-    z-index: 15;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 20;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     transition: all 0.3s ease;
   }
   .audio-controls:hover {
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.8);
     transform: scale(1.1);
   }
   .audio-controls:active {
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
   .audio-controls button {
     background: none;
     border: none;
     color: white;
-    font-size: 2.8vh;
+    font-size: 3.2vh;
     cursor: pointer;
     padding: 0;
     line-height: 1;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   }
   .audio-controls button:focus {
     outline: none;
